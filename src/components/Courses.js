@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import CourseCard from "./CourseCard";
-import axios from "axios";
+// import axios from "axios";
 import jwt_decode from "jwt-decode";
 import ThemeContext from "../ThemeContext";
 const Moment = require("moment");
@@ -12,26 +12,26 @@ export class Courses extends Component {
 		courses: [],
 	};
 
-	handleSelect = (e) => {
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses?theme=${e.target.value}`,
-			method: "GET",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => {
-				this.setState({
-					courses: res.data.payload
-						.sort(
-							(a, b) => new Moment(a.createdDate) - new Moment(b.createdDate)
-						)
-						.reverse(),
-					isFiltering: true,
-				});
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
+	// handleSelect = (e) => {
+	// 	axios({
+	// 		url: `http://91.134.133.143:9090/api/v1/courses?theme=${e.target.value}`,
+	// 		method: "GET",
+	// 		headers: { authorization: localStorage.getItem("token") },
+	// 	})
+	// 		.then((res) => {
+	// 			this.setState({
+	// 				courses: res.data.payload
+	// 					.sort(
+	// 						(a, b) => new Moment(a.createdDate) - new Moment(b.createdDate)
+	// 					)
+	// 					.reverse(),
+	// 				isFiltering: true,
+	// 			});
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err);
+	// 		});
+	// };
 
 	componentDidMount() {
 		this.context.getAllCourses();
@@ -46,6 +46,10 @@ export class Courses extends Component {
 			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
 			.reverse();
 		const enrolledThemes = this.context.enrolledThemes;
+		const isFiltering = this.context.isFiltering;
+		const filteredCourses = this.context.filteredCourses
+			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
+			.reverse();
 
 		return (
 			<div className='container-fluid'>
@@ -54,7 +58,7 @@ export class Courses extends Component {
 						<h4 className='sectionTitle'>Pick a theme:</h4>
 						<select
 							className='form-control mb-5'
-							onChange={this.handleSelect}
+							onChange={(e) => this.context.handleSelect(e.target.value)}
 							defaultValue='DEFAULT'>
 							<option value='DEFAULT' disabled>
 								. . .
@@ -67,8 +71,8 @@ export class Courses extends Component {
 				)}
 				{/* <h4 className='sectionTitle'>All courses:</h4> */}
 				<div className='row justify-content-center'>
-					{this.state.isFiltering
-						? this.state.courses.map((course) => (
+					{isFiltering
+						? filteredCourses.map((course) => (
 								<CourseCard
 									key={course.id}
 									course={course}

@@ -28,7 +28,7 @@ export class CourseCard extends Component {
 
 	handleUnEnroll = () => {
 		this.context.handleUnEnrollCourse(this.props.course.id);
-		this.setState({ isEnrolled: true });
+		this.setState({ isEnrolled: false });
 	};
 
 	checkCourseEnrollment = () => {

@@ -4,7 +4,14 @@ import axios from "axios";
 export const ThemeContext = React.createContext();
 
 class ThemeProvider extends Component {
-	state = { themes: [], courses: [], enrolledCourses: [], enrolledThemes: [] };
+	state = {
+		themes: [],
+		courses: [],
+		enrolledCourses: [],
+		enrolledThemes: [],
+		filteredCourses: [],
+		isFiltering: false,
+	};
 
 	// themes
 
@@ -69,7 +76,10 @@ class ThemeProvider extends Component {
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 		})
-			.then(() => this.setState({}))
+			.then(() => {
+				this.setState({});
+				this.getEnrolledCources();
+			})
 			.catch((err) => console.log(err));
 	};
 
@@ -79,7 +89,10 @@ class ThemeProvider extends Component {
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 		})
-			.then(() => this.setState({}))
+			.then(() => {
+				this.setState({});
+				this.getEnrolledCources();
+			})
 			.catch((err) => console.log(err));
 	};
 
@@ -109,8 +122,32 @@ class ThemeProvider extends Component {
 			.catch((err) => console.log(err));
 	};
 
+	handleSelect = (value) => {
+		axios({
+			url: `http://91.134.133.143:9090/api/v1/courses?theme=${value}`,
+			method: "GET",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => {
+				this.setState({
+					filteredCourses: res.data.payload,
+					isFiltering: true,
+				});
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	render() {
-		const { themes, courses, enrolledCourses, enrolledThemes } = this.state;
+		const {
+			themes,
+			courses,
+			enrolledCourses,
+			enrolledThemes,
+			filteredCourses,
+			isFiltering,
+		} = this.state;
 		const {
 			getAllThemes,
 			getAllCourses,
@@ -120,6 +157,7 @@ class ThemeProvider extends Component {
 			handleUnEnrollCourse,
 			getEnrolledCources,
 			getEnrolledThemes,
+			handleSelect,
 		} = this;
 		return (
 			<ThemeContext.Provider
@@ -128,6 +166,8 @@ class ThemeProvider extends Component {
 					courses,
 					enrolledCourses,
 					enrolledThemes,
+					filteredCourses,
+					isFiltering,
 					getAllThemes,
 					getAllCourses,
 					handleEnrollTheme,
@@ -136,6 +176,7 @@ class ThemeProvider extends Component {
 					handleUnEnrollCourse,
 					getEnrolledCources,
 					getEnrolledThemes,
+					handleSelect,
 				}}>
 				{this.props.children}
 			</ThemeContext.Provider>

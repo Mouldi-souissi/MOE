@@ -2,12 +2,8 @@ import React, { Component } from "react";
 import testi1 from "../assets/testimonials-1.jpg";
 import testi2 from "../assets/testimonials-2.jpg";
 import testi3 from "../assets/testimonials-3.jpg";
-// import article1 from "../assets/article1.jpg";
-// import article2 from "../assets/article2.jpg";
-// import article3 from "../assets/article3.jpg";
 import axios from "axios";
 import ThemeCard from "./ThemeCard";
-// import pic1 from "../assets/pic1.jpg";
 
 import { Link } from "react-router-dom";
 
@@ -140,7 +136,7 @@ export class Landing extends Component {
 					<div className='container py-5'>
 						<div className='row h-100 align-items-center py-5'>
 							<div className='col-lg-6'>
-								<h1 className='display-4'>About us</h1>
+								<h1 className='display-4 mb-3'>About us</h1>
 								<h2 className='lead '>
 									VIRTUAL CLASSROOM SOFTWARE Online Teaching & Training Software
 								</h2>
@@ -164,7 +160,7 @@ export class Landing extends Component {
 					<div className='container py-5'>
 						<div className='row align-items-center mb-5'>
 							<div className='col-lg-6 order-2 order-lg-1'>
-								<h2 className='font-weight-light'>
+								<h2 className='font-weight-light mb-5'>
 									Learning Management System
 								</h2>
 								<p className='font-italic text-muted mb-4'>
@@ -194,7 +190,7 @@ export class Landing extends Component {
 								/>
 							</div>
 							<div className='col-lg-6'>
-								<h2 className='font-weight-light'>
+								<h2 className='font-weight-light mb-5'>
 									Virtual Classroom Software
 								</h2>
 								<p className='font-italic text-muted mb-4'>
@@ -211,7 +207,7 @@ export class Landing extends Component {
 						</div>
 						<div className='row align-items-center mb-5 mt-5'>
 							<div className='col-lg-6 order-2 order-lg-1'>
-								<h2 className='font-weight-light'>
+								<h2 className='font-weight-light mb-5'>
 									Cross-Platform Online Teaching Software
 								</h2>
 								<p className='font-italic text-muted mb-4'>

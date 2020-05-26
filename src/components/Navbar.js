@@ -64,9 +64,13 @@ export class Navbar extends Component {
 						<div className='pl-2'>
 							<ul className='nav navbar-nav'>
 								<li id='home' className='nav-item' role='presentation'>
-									<Link className='nav-link' to='/'>
+									<NavLink
+										exact
+										className='nav-link'
+										to='/'
+										activeClassName='active'>
 										HOME
-									</Link>
+									</NavLink>
 								</li>
 								{localStorage.getItem("token") !== null && (
 									<li id='courses' className='nav-item' role='presentation'>
