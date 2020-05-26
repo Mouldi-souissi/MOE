@@ -1,0 +1,105 @@
+import React, { Component } from "react";
+import CourseCard from "./CourseCard";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
+import ThemeContext from "../ThemeContext";
+const Moment = require("moment");
+
+export class Courses extends Component {
+	static contextType = ThemeContext;
+	state = {
+		isFiltering: false,
+		courses: [],
+	};
+
+	handleSelect = (e) => {
+		axios({
+			url: `http://91.134.133.143:9090/api/v1/courses?theme=${e.target.value}`,
+			method: "GET",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => {
+				this.setState({
+					courses: res.data.payload
+						.sort(
+							(a, b) => new Moment(a.createdDate) - new Moment(b.createdDate)
+						)
+						.reverse(),
+					isFiltering: true,
+				});
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	componentDidMount() {
+		this.context.getAllCourses();
+		this.context.getEnrolledCources();
+		this.context.getEnrolledThemes();
+	}
+	render() {
+		const courses = this.context.courses
+			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
+			.reverse();
+		const enrolledCourses = this.context.enrolledCourses
+			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
+			.reverse();
+		const enrolledThemes = this.context.enrolledThemes;
+
+		return (
+			<div className='container-fluid'>
+				{jwt_decode(localStorage.token).roles[0] === "STUDENT" && (
+					<div>
+						<h4 className='sectionTitle'>Pick a theme:</h4>
+						<select
+							className='form-control mb-5'
+							onChange={this.handleSelect}
+							defaultValue='DEFAULT'>
+							<option value='DEFAULT' disabled>
+								. . .
+							</option>
+							{enrolledThemes.map((theme) => (
+								<option key={theme.value}>{theme.value}</option>
+							))}
+						</select>
+					</div>
+				)}
+				{/* <h4 className='sectionTitle'>All courses:</h4> */}
+				<div className='row justify-content-center'>
+					{this.state.isFiltering
+						? this.state.courses.map((course) => (
+								<CourseCard
+									key={course.id}
+									course={course}
+									handleScores={this.props.handleScores}
+								/>
+						  ))
+						: courses.map((course) => (
+								<CourseCard
+									key={course.id}
+									course={course}
+									handleScores={this.props.handleScores}
+								/>
+						  ))}
+				</div>
+				{jwt_decode(localStorage.token).roles[0] === "STUDENT" && (
+					<div>
+						<h4 className='sectionTitle'>Subscribed courses:</h4>
+						<div className='row justify-content-center'>
+							{enrolledCourses.map((course) => (
+								<CourseCard
+									key={course.id}
+									course={course}
+									handleScores={this.props.handleScores}
+								/>
+							))}
+						</div>
+					</div>
+				)}
+			</div>
+		);
+	}
+}
+
+export default Courses;

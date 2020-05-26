@@ -1,0 +1,14 @@
+export const ai = require("./ai.jpg");
+export const creative = require("./creative.jpg");
+export const dataScience = require("./dataScience.jpg");
+export const entrepreneurship = require("./entrepreneurship.jpg");
+export const Finance = require("./Finance.jpg");
+export const Human = require("./Human.jpg");
+export const Leadership = require("./Leadership.jpg");
+export const Media = require("./Media.jpg");
+export const Personal = require("./Personal.jpg");
+export const programming = require("./programming.jpg");
+export const PROJECT = require("./PROJECT.jpg");
+export const robotics = require("./robotics.jpg");
+export const technology = require("./TECHNOLOGY.jpg");
+export const Young = require("./Young.jpg");
