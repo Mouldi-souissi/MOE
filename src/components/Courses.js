@@ -12,27 +12,6 @@ export class Courses extends Component {
 		courses: [],
 	};
 
-	// handleSelect = (e) => {
-	// 	axios({
-	// 		url: `http://91.134.133.143:9090/api/v1/courses?theme=${e.target.value}`,
-	// 		method: "GET",
-	// 		headers: { authorization: localStorage.getItem("token") },
-	// 	})
-	// 		.then((res) => {
-	// 			this.setState({
-	// 				courses: res.data.payload
-	// 					.sort(
-	// 						(a, b) => new Moment(a.createdDate) - new Moment(b.createdDate)
-	// 					)
-	// 					.reverse(),
-	// 				isFiltering: true,
-	// 			});
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// };
-
 	componentDidMount() {
 		this.context.getAllCourses();
 		this.context.getEnrolledCources();

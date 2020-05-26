@@ -7,6 +7,7 @@ import PicModal from "./PicModal";
 import jwt_decode from "jwt-decode";
 import { Link } from "react-router-dom";
 import { VideoPlayer } from "./VideoPlayer";
+import SessionModal from "./SessionModal";
 
 export class Article extends Component {
 	state = {
@@ -166,6 +167,20 @@ export class Article extends Component {
 			headers: { authorization: localStorage.getItem("token") },
 		})
 			.then(window.location.reload(false), this.setState({ isEditing: false }))
+			.catch((err) => console.log(err));
+	};
+
+	startSession = (autoStartRecording) => {
+		axios({
+			url: `http://91.134.133.143:9090/api/v1/courses/${
+				this.state.courses[0].id
+			}/meetings/create?autoStartRecording=${
+				autoStartRecording === "No" ? false : true
+			}`,
+			method: "get",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => window.open(`${res.data.payload}`, "_blank"))
 			.catch((err) => console.log(err));
 	};
 
@@ -404,7 +419,17 @@ export class Article extends Component {
 							</div>
 
 							<div className='p-3'>
-								<h4 className='mb-5'>Exams of this course</h4>
+								<div className='d-flex align-items-center justify-content-between mb-5'>
+									<h4>Exams of this course</h4>
+									{this.state.courses[0] &&
+										this.state.courses[0].createdBy.id ===
+											jwt_decode(localStorage.token).id && (
+											<Link to={`/addExam${this.props.match.params.id}`}>
+												<button className='btn btn-primary'>Create exam</button>
+											</Link>
+										)}
+								</div>
+
 								<ol className='list-unstyled mb-0'>
 									{this.state.exams &&
 										this.state.exams.map((el) => (
@@ -429,15 +454,26 @@ export class Article extends Component {
 										))}
 								</ol>
 							</div>
-							{this.state.courses[0] &&
-								this.state.courses[0].createdBy.id ===
-									jwt_decode(localStorage.token).id && (
-									<div className='p-3'>
-										<Link to={`/addExam${this.props.match.params.id}`}>
-											<button className='btn btn-primary'>Create exam</button>
-										</Link>
-									</div>
-								)}
+							<div className='p-3'>
+								<div className='d-flex align-items-center justify-content-between mb-5'>
+									<h4>Live Session</h4>
+									{this.state.courses[0] &&
+										this.state.courses[0].createdBy.id ===
+											jwt_decode(localStorage.token).id && (
+											<button
+												className='btn btn-primary '
+												type='button'
+												aria-hidden='true'
+												data-toggle='modal'
+												data-target='#SessionModal'>
+												Create Session
+											</button>
+										)}
+									<SessionModal startSession={this.startSession} />
+								</div>
+
+								<ol className='list-unstyled mb-0'></ol>
+							</div>
 						</aside>
 					</div>
 				</main>

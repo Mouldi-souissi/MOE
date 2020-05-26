@@ -199,6 +199,8 @@ export class FormSteps extends Component {
 
 							<div id='nav-tab-bank' className='tab-pane fade'>
 								<h6>Edit</h6>
+								<span>(Max Characters: 200)</span>
+
 								<ReactQuill
 									modules={this.modules}
 									formats={this.formats}
