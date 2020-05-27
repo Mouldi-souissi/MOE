@@ -468,6 +468,13 @@ button:focus {
 }
 
 /* dashboard */
+.badge {
+	background-color: red !important;
+	font-size: 11px !important;
+	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.199) !important;
+	-webkit-text-stroke: 1px #f8f8f8;
+	text-shadow: 0px 1px 4px #000000;
+}
 div.avatar-bg-dash {
 	background: url(https://www.gravatar.com/avatar/1234566?size=200&d=mm);
 	background-position: 50% 50%;

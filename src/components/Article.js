@@ -19,6 +19,9 @@ export class Article extends Component {
 		loaded: 0,
 		sessions: [],
 		recordings: [],
+		isStudent:
+			localStorage.getItem("token") !== null &&
+			jwt_decode(localStorage.token).roles[0] === "STUDENT",
 	};
 	modules = {
 		toolbar: [
@@ -198,7 +201,7 @@ export class Article extends Component {
 
 	getSessions = () => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/meetings`,
+			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/meetings?running=true`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -207,22 +210,17 @@ export class Article extends Component {
 	};
 
 	getRecordedSessions = () => {
-		let sessionsWithRecordings = this.state.sessions.filter(
-			(sessions) => sessions.hasRecording
-		);
-		sessionsWithRecordings.map((session) =>
-			axios({
-				url: `http://91.134.133.143:9090/api/v1/courses/${session.meetingId}/meetings/recordings`,
-				method: "get",
-				headers: { authorization: localStorage.getItem("token") },
-			})
-				.then((res) =>
-					this.setState({
-						recordings: [...this.state.recordings, res.data.payload],
-					})
-				)
-				.catch((err) => console.log(err))
-		);
+		axios({
+			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/meetings/recordings`,
+			method: "get",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) =>
+				this.setState({
+					recordings: res.data.payload,
+				})
+			)
+			.catch((err) => console.log(err));
 	};
 
 	componentDidMount() {
@@ -230,6 +228,7 @@ export class Article extends Component {
 		this.getUploaded();
 		this.getExamsByCourse();
 		this.getSessions();
+		this.getRecordedSessions();
 	}
 	render() {
 		if (this.state.courses[0] !== undefined) {
@@ -496,13 +495,13 @@ export class Article extends Component {
 								</ol>
 							</div>
 							<div className='p-3'>
-								<div className='d-flex align-items-center mb-5'>
+								<div className='d-flex align-items-center mb-2'>
 									<h4>Live Session</h4>
 									{this.state.courses[0] &&
 										this.state.courses[0].createdBy.id ===
 											jwt_decode(localStorage.token).id && (
 											<button
-												className='btn btn-primary ml-5'
+												className='btn btn-secondary ml-5'
 												type='button'
 												aria-hidden='true'
 												data-toggle='modal'
@@ -511,17 +510,35 @@ export class Article extends Component {
 											</button>
 										)}
 									<SessionModal startSession={this.startSession} />
+
 									<button
-										className='btn btn-secondary ml-3'
+										className={
+											this.state.sessions.length !== 0
+												? "btn btn-primary ml-3"
+												: "btn btn-primary disabled ml-3"
+										}
 										onClick={this.joinSession}>
 										Join
 									</button>
 								</div>
-
-								<ol className='list-unstyled mb-0'></ol>
+								{this.state.sessions.length === 0 && (
+									<h6 className='ml-3'>No Active Sessions Found</h6>
+								)}
 							</div>
 							<div className='p-3'>
-								<ol className='list-unstyled mb-0'></ol>
+								<h4>Recorded Session</h4>
+								<ol className='list-unstyled mb-0'>
+									{this.state.recordings &&
+										this.state.recordings.map((rec, i) => (
+											<a
+												href={`${rec.url}`}
+												target='_blank'
+												rel='noopener noreferrer'
+												key={i}>
+												{rec.endDate}
+											</a>
+										))}
+								</ol>
 							</div>
 						</aside>
 					</div>

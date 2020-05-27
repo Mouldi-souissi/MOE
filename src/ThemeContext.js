@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import moment from "moment";
 
 export const ThemeContext = React.createContext();
 
@@ -11,6 +12,8 @@ class ThemeProvider extends Component {
 		enrolledThemes: [],
 		filteredCourses: [],
 		isFiltering: false,
+		newCourses: [],
+		date: moment(new Date()),
 	};
 
 	// themes
@@ -139,6 +142,31 @@ class ThemeProvider extends Component {
 			});
 	};
 
+	getNewCourses = () => {
+		this.getEnrolledThemes();
+		this.state.enrolledThemes.map((theme) =>
+			axios({
+				url: `http://91.134.133.143:9090/api/v1/courses?theme=${theme.value}`,
+				method: "GET",
+				headers: { authorization: localStorage.getItem("token") },
+			})
+				.then((res) => {
+					let date = moment(new Date()); //todays date
+					this.setState({
+						newCourses: this.state.newCourses.concat(
+							res.data.payload.filter(
+								(course) =>
+									Math.abs(moment(course.createdDate).diff(date, "hours")) < 24
+							)
+						),
+					});
+				})
+				.catch((err) => {
+					console.log(err);
+				})
+		);
+	};
+
 	render() {
 		const {
 			themes,
@@ -147,6 +175,7 @@ class ThemeProvider extends Component {
 			enrolledThemes,
 			filteredCourses,
 			isFiltering,
+			newCourses,
 		} = this.state;
 		const {
 			getAllThemes,
@@ -158,6 +187,7 @@ class ThemeProvider extends Component {
 			getEnrolledCources,
 			getEnrolledThemes,
 			handleSelect,
+			getNewCourses,
 		} = this;
 		return (
 			<ThemeContext.Provider
@@ -168,6 +198,8 @@ class ThemeProvider extends Component {
 					enrolledThemes,
 					filteredCourses,
 					isFiltering,
+					newCourses,
+
 					getAllThemes,
 					getAllCourses,
 					handleEnrollTheme,
@@ -177,6 +209,7 @@ class ThemeProvider extends Component {
 					getEnrolledCources,
 					getEnrolledThemes,
 					handleSelect,
+					getNewCourses,
 				}}>
 				{this.props.children}
 			</ThemeContext.Provider>

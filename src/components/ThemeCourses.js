@@ -26,7 +26,7 @@ export class ThemeCourses extends Component {
 	}
 	render() {
 		return (
-			<div className='album py-5 bg-light mt-3'>
+			<div className='album py-5 bg-light mt-5'>
 				<button
 					className='btn btn-primary mt-5 ml-2'
 					onClick={() => this.props.history.goBack()}>

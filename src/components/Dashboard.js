@@ -7,9 +7,42 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Profile from "./Profile";
 import ProfileContext from "../ProfileContext";
 import MyThemes from "./MyThemes";
+import Notifications from "./Notifications";
+import axios from "axios";
+import moment from "moment";
 
 export class Dashboard extends Component {
 	static contextType = ProfileContext;
+
+	state = {
+		courses: [],
+	};
+
+	getEnrolledThemes = () => {
+		axios({
+			url: "http://91.134.133.143:9090/api/v1/users/themes/enrollments",
+			method: "get",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) =>
+				res.data.payload.map((theme) =>
+					axios({
+						url: `http://91.134.133.143:9090/api/v1/courses?theme=${theme.value}`,
+						method: "GET",
+						headers: { authorization: localStorage.getItem("token") },
+					})
+						.then((res) => {
+							this.setState({
+								courses: this.state.courses.concat(res.data.payload),
+							});
+						})
+						.catch((err) => {
+							console.log(err);
+						})
+				)
+			)
+			.catch((err) => console.log(err));
+	};
 
 	componentDidMount() {
 		// toggling btn
@@ -17,6 +50,8 @@ export class Dashboard extends Component {
 			e.preventDefault();
 			$("#wrapper").toggleClass("toggled");
 		});
+
+		this.getEnrolledThemes();
 	}
 
 	handleLogout = () => {
@@ -29,6 +64,11 @@ export class Dashboard extends Component {
 			this.props.history.push("/admin");
 		}
 		const picture = this.context.profile.picture;
+
+		let date = moment(new Date()); //todays date
+		let newCourses = this.state.courses.filter(
+			(course) => Math.abs(moment(course.createdDate).diff(date, "hours")) < 24
+		);
 		return (
 			<Tabs>
 				<div className='innerbody'>
@@ -66,6 +106,8 @@ export class Dashboard extends Component {
 										<i className='fa fa-bell mr-3' aria-hidden='true' />
 										My Notifications
 									</Tab>
+									<span class='badge badge-secondary'>{newCourses.length}</span>
+
 									<br />
 									<Tab>
 										<button className='btn btn-primary btnTab'>
@@ -98,7 +140,9 @@ export class Dashboard extends Component {
 						<TabPanel>
 							<MyThemes />
 						</TabPanel>
-						<TabPanel> My Notifications</TabPanel>
+						<TabPanel>
+							<Notifications newCourses={newCourses} />
+						</TabPanel>
 						<TabPanel>
 							<Profile />
 						</TabPanel>
