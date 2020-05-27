@@ -85,9 +85,7 @@ export class PicModal extends Component {
 													style={{ width: `${this.props.loaded1}%` }}
 													aria-valuenow={this.props.loaded1}
 													aria-valuemin='0'
-													aria-valuemax='100'>
-													{Math.round(this.props.loaded1, 2)}%
-												</div>
+													aria-valuemax='100'></div>
 											</div>
 										)}
 									</div>
@@ -128,9 +126,7 @@ export class PicModal extends Component {
 													style={{ width: `${this.props.loaded2}%` }}
 													aria-valuenow={this.props.loaded2}
 													aria-valuemin='0'
-													aria-valuemax='100'>
-													{Math.round(this.props.loaded2, 2)}%
-												</div>
+													aria-valuemax='100'></div>
 											</div>
 										)}
 
@@ -206,9 +202,7 @@ export class PicModal extends Component {
 													style={{ width: `${this.props.loaded3}%` }}
 													aria-valuenow={this.props.loaded3}
 													aria-valuemin='0'
-													aria-valuemax='100'>
-													{Math.round(this.props.loaded3, 2)}%
-												</div>
+													aria-valuemax='100'></div>
 											</div>
 										)}
 

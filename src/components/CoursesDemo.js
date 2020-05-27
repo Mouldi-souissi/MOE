@@ -22,9 +22,11 @@ export class CoursesDemo extends Component {
 				<div className='bg'></div>
 				<div className='bg bg2'></div>
 				<div className='bg bg3'></div>
+
 				<h4 className='center sectionTitle' style={{ color: "white" }}>
-					Themes:
+					Themes: (Please Subscribe to a Theme)
 				</h4>
+
 				<div className='container-fluid'>
 					<div className='row justify-content-center'>
 						{themes.map((theme) => (

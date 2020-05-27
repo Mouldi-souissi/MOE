@@ -21,6 +21,7 @@ export class Profile extends Component {
 		this.setState({ isEditig: true });
 		if (this.state.editedData.length !== 0) {
 			this.context.handleEdit(this.state.editedData);
+			this.setState({ isEditig: false });
 		}
 	};
 
@@ -42,18 +43,12 @@ export class Profile extends Component {
 
 	getThemes = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/users/themes",
-			method: "GET",
+			url: "http://91.134.133.143:9090/api/v1/users/themes/enrollments",
+			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
-			.then((res) => {
-				this.setState({
-					themes: res.data.payload.map((theme) => ({ value: theme.value })),
-				});
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+			.then((res) => this.setState({ themes: res.data.payload }))
+			.catch((err) => console.log(err));
 	};
 	componentDidMount() {
 		this.context.getProfile();

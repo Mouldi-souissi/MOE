@@ -17,6 +17,8 @@ export class Article extends Component {
 		bonusFiles: [],
 		exams: [],
 		loaded: 0,
+		sessions: [],
+		recordings: [],
 	};
 	modules = {
 		toolbar: [
@@ -184,10 +186,50 @@ export class Article extends Component {
 			.catch((err) => console.log(err));
 	};
 
+	joinSession = () => {
+		axios({
+			url: `http://91.134.133.143:9090/api/v1/courses/${this.state.courses[0].id}/meetings/join`,
+			method: "get",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => window.open(`${res.data.payload}`, "_blank"))
+			.catch((err) => console.log(err));
+	};
+
+	getSessions = () => {
+		axios({
+			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/meetings`,
+			method: "get",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => this.setState({ sessions: res.data.payload }))
+			.catch((err) => console.log(err));
+	};
+
+	getRecordedSessions = () => {
+		let sessionsWithRecordings = this.state.sessions.filter(
+			(sessions) => sessions.hasRecording
+		);
+		sessionsWithRecordings.map((session) =>
+			axios({
+				url: `http://91.134.133.143:9090/api/v1/courses/${session.meetingId}/meetings/recordings`,
+				method: "get",
+				headers: { authorization: localStorage.getItem("token") },
+			})
+				.then((res) =>
+					this.setState({
+						recordings: [...this.state.recordings, res.data.payload],
+					})
+				)
+				.catch((err) => console.log(err))
+		);
+	};
+
 	componentDidMount() {
 		this.getAllCourses();
 		this.getUploaded();
 		this.getExamsByCourse();
+		this.getSessions();
 	}
 	render() {
 		if (this.state.courses[0] !== undefined) {
@@ -209,7 +251,6 @@ export class Article extends Component {
 			// backgroundAttachment: "fixed",
 			// width: "100%",
 		};
-
 		return (
 			<div>
 				<div className='container mt-5'>
@@ -455,23 +496,31 @@ export class Article extends Component {
 								</ol>
 							</div>
 							<div className='p-3'>
-								<div className='d-flex align-items-center justify-content-between mb-5'>
+								<div className='d-flex align-items-center mb-5'>
 									<h4>Live Session</h4>
 									{this.state.courses[0] &&
 										this.state.courses[0].createdBy.id ===
 											jwt_decode(localStorage.token).id && (
 											<button
-												className='btn btn-primary '
+												className='btn btn-primary ml-5'
 												type='button'
 												aria-hidden='true'
 												data-toggle='modal'
 												data-target='#SessionModal'>
-												Create Session
+												Create
 											</button>
 										)}
 									<SessionModal startSession={this.startSession} />
+									<button
+										className='btn btn-secondary ml-3'
+										onClick={this.joinSession}>
+										Join
+									</button>
 								</div>
 
+								<ol className='list-unstyled mb-0'></ol>
+							</div>
+							<div className='p-3'>
 								<ol className='list-unstyled mb-0'></ol>
 							</div>
 						</aside>

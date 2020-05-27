@@ -4,10 +4,9 @@ import $ from "jquery";
 import jwt_decode from "jwt-decode";
 import { withRouter } from "react-router-dom";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import Joinbbb from "./Joinbbb";
 import Profile from "./Profile";
-import Exams from "./Exams";
 import ProfileContext from "../ProfileContext";
+import MyThemes from "./MyThemes";
 
 export class Dashboard extends Component {
 	static contextType = ProfileContext;
@@ -60,12 +59,12 @@ export class Dashboard extends Component {
 										My Courses
 									</Tab>
 									<Tab>
-										<i className='fa fa-film mr-3' aria-hidden='true' />
-										Join Live room
+										<i className='fa fa-book mr-3' aria-hidden='true' />
+										My Themes
 									</Tab>
 									<Tab>
-										<i className='fa fa-leanpub mr-3' aria-hidden='true' />
-										Exams
+										<i className='fa fa-bell mr-3' aria-hidden='true' />
+										My Notifications
 									</Tab>
 									<br />
 									<Tab>
@@ -95,14 +94,11 @@ export class Dashboard extends Component {
 
 						<TabPanel>
 							<Courses />
-							{/* <CoursesInterface /> */}
 						</TabPanel>
 						<TabPanel>
-							<Joinbbb />
+							<MyThemes />
 						</TabPanel>
-						<TabPanel>
-							<Exams />
-						</TabPanel>
+						<TabPanel> My Notifications</TabPanel>
 						<TabPanel>
 							<Profile />
 						</TabPanel>

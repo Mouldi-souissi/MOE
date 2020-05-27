@@ -244,48 +244,6 @@ export class Landing extends Component {
 								this.state.themes.map((theme) => (
 									<ThemeCard key={theme.label} theme={theme} />
 								))}
-							{/* <div className='col-sm-6 col-md-4 item'>
-								<a href='/'>
-									<img className='img-fluid' src={article1} alt='img' />
-								</a>
-								<h3 className='name'>Article Title</h3>
-								<p className='description'>
-									Aenean tortor est, vulputate quis leo in, vehicula rhoncus
-									lacus. Praesent aliquam in tellus eu gravida. Aliquam varius
-									finibus est, interdum justo suscipit id.
-								</p>
-								<a className='action' href='/'>
-									<i className='fa fa-arrow-circle-right'></i>
-								</a>
-							</div>
-							<div className='col-sm-6 col-md-4 item'>
-								<a href='/'>
-									<img className='img-fluid' src={article2} alt='img' />
-								</a>
-								<h3 className='name'>Article Title</h3>
-								<p className='description'>
-									Aenean tortor est, vulputate quis leo in, vehicula rhoncus
-									lacus. Praesent aliquam in tellus eu gravida. Aliquam varius
-									finibus est, interdum justo suscipit id.
-								</p>
-								<a className='action' href='/'>
-									<i className='fa fa-arrow-circle-right'></i>
-								</a>
-							</div>
-							<div className='col-sm-6 col-md-4 item'>
-								<a href='/'>
-									<img className='img-fluid' src={article3} alt='img' />
-								</a>
-								<h3 className='name'>Article Title</h3>
-								<p className='description'>
-									Aenean tortor est, vulputate quis leo in, vehicula rhoncus
-									lacus. Praesent aliquam in tellus eu gravida. Aliquam varius
-									finibus est, interdum justo suscipit id.
-								</p>
-								<a className='action' href='/'>
-									<i className='fa fa-arrow-circle-right'></i>
-								</a>
-							</div> */}
 						</div>
 					</div>
 				</div>
@@ -337,12 +295,7 @@ export class Landing extends Component {
 									<p className='font-weight-light mb-0'>
 										"I would like to thank Global Vision for the well-organized
 										training. The training was superb, and I genuinely enjoyed
-										each and every moment of it. The content was extremely
-										informative and incredibly useful. I have attended several
-										trainings before, but I can’t recall any of them having such
-										a strong impact. You have done an excellent job, and I
-										appreciate your efforts. I will surely recommend this
-										training to all my colleagues."
+										each and every moment of it."
 									</p>
 								</div>
 							</div>

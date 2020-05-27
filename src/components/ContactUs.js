@@ -39,6 +39,7 @@ export class ContactUs extends Component {
 							</button>
 						</div>
 					</form>
+					<aside className='col-md-4 blog-sidebar'>hello</aside>
 				</div>
 			</div>
 		);

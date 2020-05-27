@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import $ from "jquery";
 import jwt_decode from "jwt-decode";
 import { withRouter } from "react-router-dom";
-import BigBlue from "./BigBlue";
-import Joinbbb from "./Joinbbb";
 import Profile from "./Profile";
 import FormSteps from "./FormSteps";
 import Courses from "./Courses";
@@ -92,22 +90,11 @@ export class DashIstructor extends Component {
 										/>
 										My Courses
 									</Tab>
-									<Tab>
-										<i className='fa fa-video-camera mr-3' aria-hidden='true' />
-										Create Live Room
-									</Tab>
-									<Tab>
-										<i className='fa fa-film mr-3' aria-hidden='true' />
-										Join Live Room
-									</Tab>
-									<Tab>
-										<i className='fa fa-folder mr-3' aria-hidden='true' />
-										Recorded Sessions
-									</Tab>
-									<Tab>
+
+									{/* <Tab>
 										<i className='fa fa-leanpub mr-3' aria-hidden='true' />
 										Exams
-									</Tab>
+									</Tab> */}
 									<br />
 									<Tab>
 										<button className='btn btn-primary btnTab-i'>
@@ -121,7 +108,7 @@ export class DashIstructor extends Component {
 									</Tab>
 									<button
 										type='button'
-										className='btn btn-success btnTab-i '
+										className='btn btn-success btnTab-i'
 										onClick={this.handleLogout}>
 										<i
 											className='fa fa-sign-out mr-1'
@@ -139,20 +126,56 @@ export class DashIstructor extends Component {
 						<TabPanel>
 							<Courses handleScores={this.handleScores} />
 						</TabPanel>
-						<TabPanel>
-							<BigBlue changeTab={this.changeTab} />
-						</TabPanel>
-						<TabPanel>
-							<Joinbbb />
-						</TabPanel>
-						<TabPanel>recorded</TabPanel>
-						<TabPanel>{/* <Exams /> */}</TabPanel>
+						{/* <TabPanel></TabPanel> */}
 						<TabPanel>
 							<Profile />
 						</TabPanel>
 					</div>
 				</div>
 			</Tabs>
+
+			// <div class='wrapper'>
+			// 	<main></main>
+			// 	<sidebar>
+			// 		<div class='avatar'>
+			// 			<div class='avatar__img'>
+			// 				<img src='https://picsum.photos/70' alt='avatar' />
+			// 			</div>
+			// 			<div class='avatar__name'>John Smith</div>
+			// 		</div>
+
+			// 		<nav class='menu'>
+			// 			<a class='menu__item' href='#'>
+			// 				<i class='menu__icon fa fa-home'></i>
+			// 				<span class='menu__text'>overview</span>
+			// 			</a>
+			// 			<a class='menu__item' href='#'>
+			// 				<i class='menu__icon fa fa-envelope'></i>
+			// 				<span class='menu__text'>messages</span>
+			// 			</a>
+			// 			<a class='menu__item' href='#'>
+			// 				<i class='menu__icon fa fa-list'></i>
+			// 				<span class='menu__text'>workout</span>
+			// 			</a>
+			// 			<a class='menu__item menu__item--active' href='#'>
+			// 				<i class='menu__icon fa fa-calendar'></i>
+			// 				<span class='menu__text'>calendar</span>
+			// 			</a>
+			// 			<a class='menu__item' href='#'>
+			// 				<i class='menu__icon fa fa-bar-chart'></i>
+			// 				<span class='menu__text'>goals</span>
+			// 			</a>
+			// 			<a class='menu__item' href='#'>
+			// 				<i class='menu__icon fa fa-trophy'></i>
+			// 				<span class='menu__text'>achivements</span>
+			// 			</a>
+			// 			<a class='menu__item' href='#'>
+			// 				<i class='menu__icon fa fa-sliders'></i>
+			// 				<span class='menu__text'>measurements</span>
+			// 			</a>
+			// 		</nav>
+			// 	</sidebar>
+			// </div>
 		);
 	}
 }

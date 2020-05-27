@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import { withRouter } from "react-router";
+import ThemeContext from "../ThemeContext";
+
 export class FormSteps extends Component {
+	static contextType = ThemeContext;
 	state = {
 		shortDescription: "",
 		description: "",
@@ -12,6 +15,7 @@ export class FormSteps extends Component {
 		courseID: "",
 		image: "",
 		src: "",
+		loaded: 0,
 	};
 	modules = {
 		toolbar: [
@@ -23,8 +27,6 @@ export class FormSteps extends Component {
 				{ indent: "-1" },
 				{ indent: "+1" },
 			],
-
-			["clean"],
 		],
 	};
 
@@ -75,14 +77,20 @@ export class FormSteps extends Component {
 	handleFileSend = () => {
 		var formData = new FormData();
 		formData.append("file", this.state.image);
+
 		axios({
 			url: `http://91.134.133.143:9090/api/v1/courses/${this.state.courseID}/picture`,
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: formData,
-		})
-			.then(this.props.history.push(`/article${this.state.courseID}`))
-			.catch((err) => console.log(err));
+			onUploadProgress: (ProgressEvent) => {
+				this.setState({
+					loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100,
+				});
+				this.state.loaded === 100 &&
+					this.props.history.push(`/article${this.state.courseID}`);
+			},
+		}).catch((err) => console.log(err));
 	};
 	// handle edit
 	handleText = (value) => {
@@ -99,8 +107,12 @@ export class FormSteps extends Component {
 	// 		.then((res) => <Redirect to={`/article${this.state.courseID}`} />)
 	// 		.catch((err) => console.log(err));
 	// };
+	componentDidMount() {
+		this.context.getAllThemes();
+	}
 
 	render() {
+		const themes = this.context.themes;
 		return (
 			<div className='altFormContainer'>
 				<div className='altForm '>
@@ -143,6 +155,7 @@ export class FormSteps extends Component {
 								<form>
 									<div className='form-group'>
 										<label htmlFor='title'>Title </label>
+										<span>*</span>
 										<input
 											className='form-control'
 											type='text'
@@ -153,6 +166,7 @@ export class FormSteps extends Component {
 									</div>
 									<div className='form-group'>
 										<label>Theme</label>
+										<span>*</span>
 										<select
 											className='form-control'
 											name='theme'
@@ -162,15 +176,14 @@ export class FormSteps extends Component {
 											<option value='DEFAULT' disabled>
 												. . .
 											</option>
-											<option>design</option>
-											<option>programming</option>
-											<option>business</option>
-											<option>data-science</option>
-											<option>artificial-intelligence</option>
+											{themes.map((theme, i) => (
+												<option key={i}>{theme.value}</option>
+											))}
 										</select>
 									</div>
 									<div className='form-group'>
 										<label>Description </label>
+										<span>*</span>
 										<input
 											className='form-control'
 											type='text'
@@ -198,8 +211,11 @@ export class FormSteps extends Component {
 							</div>
 
 							<div id='nav-tab-bank' className='tab-pane fade'>
-								<h6>Edit</h6>
-								<span>(Max Characters: 200)</span>
+								<div className='d-flex mt-2'>
+									<h6>Long Description</h6>
+									<span className='mr-5'>*</span>
+									<span>(Max Characters: 200)</span>
+								</div>
 
 								<ReactQuill
 									modules={this.modules}
@@ -208,7 +224,17 @@ export class FormSteps extends Component {
 									onChange={this.handleText}
 									theme='snow'
 								/>
-
+								{this.state.loaded !== 0 && (
+									<div className='progress'>
+										<div
+											className='progress-bar'
+											role='progressbar'
+											style={{ width: `${this.state.loaded}%` }}
+											aria-valuenow={this.state.loaded}
+											aria-valuemin='0'
+											aria-valuemax='100'></div>
+									</div>
+								)}
 								<button
 									type='button'
 									className='subscribe btn btn-primary btn-block rounded-pill shadow-sm mt-3 mb-3'
@@ -218,6 +244,8 @@ export class FormSteps extends Component {
 							</div>
 						</div>
 					</div>
+					<br />
+					<h5 className='center'>Required fields * </h5>
 				</div>
 			</div>
 		);
