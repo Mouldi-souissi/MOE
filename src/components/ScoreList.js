@@ -9,7 +9,7 @@ export class ScoreList extends Component {
 
 	getScore = () => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/exams/${this.props.match.params.id}/assessments`,
+			url: `https://app.visioconf.site/api/v1/exams/${this.props.match.params.id}/assessments`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})

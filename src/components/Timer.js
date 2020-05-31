@@ -1,62 +1,39 @@
 import React, { Component } from "react";
 
 export class Timer extends Component {
-	componentDidMount() {
-		// var target_date = this.props.startDate && this.props.startDate * 1000;
-		var target_date = new Date().getTime() + 1000 * 3600 * 48;
-		var days, hours, minutes, seconds; // variables for time units
-
-		var countdown = document.getElementById("tiles"); // get tag element
-
-		getCountdown();
-
-		setInterval(function () {
-			getCountdown();
+	constructor() {
+		super();
+		this.state = {
+			hr: 0,
+			min: 0,
+			sec: 0,
+			ms: this.props.time,
+		};
+		setInterval(() => {
+			this.setState({
+				ms: this.state.ms + 1000,
+			});
+			this.converter();
 		}, 1000);
-
-		function getCountdown() {
-			// find the amount of "seconds" between now and target
-			var current_date = new Date().getTime();
-			var seconds_left = (target_date - current_date) / 1000;
-
-			days = pad(parseInt(seconds_left / 86400));
-			seconds_left = seconds_left % 86400;
-
-			hours = pad(parseInt(seconds_left / 3600));
-			seconds_left = seconds_left % 3600;
-
-			minutes = pad(parseInt(seconds_left / 60));
-			seconds = pad(parseInt(seconds_left % 60));
-
-			// format countdown string + set tag value
-			countdown.innerHTML =
-				"<span>" +
-				days +
-				"</span><span>" +
-				hours +
-				"</span><span>" +
-				minutes +
-				"</span><span>" +
-				seconds +
-				"</span>";
-		}
-
-		function pad(n) {
-			return (n < 10 ? "0" : "") + n;
-		}
 	}
+
+	converter = () => {
+		this.setState({
+			hr: parseInt(this.state.ms / 3600000),
+			min: parseInt((this.state.ms % 3600000) / 60000),
+			sec: parseInt(((this.state.ms % 3600000) % 60000) / 1000),
+		});
+	};
+
 	render() {
 		return (
-			<div>
-				<div id='countdown'>
-					<div id='tiles'></div>
-					<div className='labels'>
-						<li>Days</li>
-						<li>Hours</li>
-						<li>Mins</li>
-						<li>Secs</li>
-					</div>
-				</div>
+			<div className='timer'>
+				<p>
+					{String(this.state.hr).padStart(2, "0")}:
+					{String(this.state.min).padStart(2, "0")}:
+					{String(this.state.sec).padStart(2, "0")}
+				</p>
+				<p>hh/mm/ss</p>
 			</div>
 		);
 	}

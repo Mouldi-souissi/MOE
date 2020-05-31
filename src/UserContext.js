@@ -13,7 +13,7 @@ class UserProvider extends Component {
 
 	getAllUsers = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/users/student",
+			url: "https://app.visioconf.site/api/v1/users/student",
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -21,7 +21,7 @@ class UserProvider extends Component {
 				this.setState({ students: res.data.payload });
 
 				axios({
-					url: "http://91.134.133.143:9090/api/v1/users/instructor",
+					url: "https://app.visioconf.site/api/v1/users/instructor",
 					method: "GET",
 					headers: { authorization: localStorage.getItem("token") },
 				})
@@ -39,7 +39,7 @@ class UserProvider extends Component {
 
 	getThemesEnrollement = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/themes/enrollments",
+			url: "https://app.visioconf.site/api/v1/themes/enrollments",
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -53,7 +53,7 @@ class UserProvider extends Component {
 
 	themeEnroll = (themeId, studentId, status) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/themes/${themeId}/enrollments?studentId=${studentId}`,
+			url: `https://app.visioconf.site/api/v1/themes/${themeId}/enrollments?studentId=${studentId}`,
 			method: "put",
 			headers: { authorization: localStorage.getItem("token") },
 			data: { status: status === "ACCEPTED" ? "REFUSED" : "ACCEPTED" },
@@ -69,13 +69,13 @@ class UserProvider extends Component {
 	// validate
 	handleValidate = (id) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/users/activate/${id}`,
+			url: `https://app.visioconf.site/api/v1/users/activate/${id}`,
 			method: "PUT",
 			headers: { authorization: localStorage.getItem("token") },
 		}).then(() => {
 			this.setState({});
 			axios({
-				url: `http://91.134.133.143:9090/api/v1/users/validate/${id}`,
+				url: `https://app.visioconf.site/api/v1/users/validate/${id}`,
 				method: "PUT",
 				headers: { authorization: localStorage.getItem("token") },
 			})
@@ -91,7 +91,7 @@ class UserProvider extends Component {
 
 	handleEdit = (editedData, id) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/users/${id}`,
+			url: `https://app.visioconf.site/api/v1/users/${id}`,
 			method: "PUT",
 			headers: { authorization: localStorage.getItem("token") },
 			data: editedData,
@@ -109,7 +109,7 @@ class UserProvider extends Component {
 
 	checkEnrollment = (theme) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/users/themes/enrollments?theme=${theme}`,
+			url: `https://app.visioconf.site/api/v1/users/themes/enrollments?theme=${theme}`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -123,7 +123,7 @@ class UserProvider extends Component {
 	// handle add user
 	handleAdd = (user, role) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/users/${role}`,
+			url: `https://app.visioconf.site/api/v1/users/${role}`,
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: user,

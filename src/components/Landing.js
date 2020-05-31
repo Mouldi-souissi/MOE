@@ -14,7 +14,7 @@ export class Landing extends Component {
 	};
 	getAllThemes = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/public/themes",
+			url: "https://app.visioconf.site/api/v1/public/themes",
 			method: "get",
 		})
 			.then((res) => this.setState({ themes: res.data.payload.slice(0, 3) }))
@@ -349,25 +349,27 @@ export class Landing extends Component {
 							<div className='col-lg-6 my-auto h-100 text-center text-lg-left'>
 								<ul className='list-inline mb-2'>
 									<li className='list-inline-item'>
-										<a href='/'>About</a>
+										<a href='/CancellationPolicy'>
+											Cancellation and Refund Policy
+										</a>
 									</li>
 									<li className='list-inline-item'>
 										<span>⋅</span>
 									</li>
 									<li className='list-inline-item'>
-										<a href='/'>Contact</a>
+										<a href='/License'>License Agreement</a>
 									</li>
 									<li className='list-inline-item'>
 										<span>⋅</span>
 									</li>
 									<li className='list-inline-item'>
-										<a href='/'>Terms of &nbsp;Use</a>
+										<a href='/TermsOfUse'>Terms of Use</a>
 									</li>
 									<li className='list-inline-item'>
 										<span>⋅</span>
 									</li>
 									<li className='list-inline-item'>
-										<a href='/'>Privacy Policy</a>
+										<a href='/PrivacyPolicy'>Privacy Policy</a>
 									</li>
 								</ul>
 								<p className='text-muted small mb-4 mb-lg-0'>

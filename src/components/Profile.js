@@ -43,7 +43,7 @@ export class Profile extends Component {
 
 	getThemes = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/users/themes/enrollments",
+			url: "https://app.visioconf.site/api/v1/users/themes/enrollments",
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})

@@ -23,7 +23,7 @@ export class SignUp extends Component {
 		if (this.state.password === this.state.matchingPassword) {
 			axios
 				.post(
-					`http://91.134.133.143:9090/api/v1/public/signup/${this.state.role}`,
+					`https://app.visioconf.site/api/v1/public/signup/${this.state.role}`,
 					this.state
 				)
 				.then((res) => {
@@ -66,6 +66,7 @@ export class SignUp extends Component {
 									placeholder='First Name'
 									onChange={this.handleInput}
 									required
+									maxLength='20'
 								/>
 							</div>
 							<div className='form-group'>
@@ -76,6 +77,7 @@ export class SignUp extends Component {
 									placeholder='Last Name'
 									onChange={this.handleInput}
 									required
+									maxLength='20'
 								/>
 							</div>
 							<div className='form-group'>
@@ -89,6 +91,7 @@ export class SignUp extends Component {
 										this.props.location.state && this.props.location.state
 									}
 									required
+									maxLength='20'
 								/>
 							</div>
 							<div className='form-group'>
@@ -99,6 +102,7 @@ export class SignUp extends Component {
 									placeholder='Password'
 									onChange={this.handleInput}
 									required
+									maxLength='20'
 								/>
 							</div>
 							<div className='form-group'>
@@ -109,6 +113,7 @@ export class SignUp extends Component {
 									placeholder='Password (repeat)'
 									onChange={this.handleInput}
 									required
+									maxLength='20'
 								/>
 							</div>
 							<div className='form-group'>
@@ -131,7 +136,7 @@ export class SignUp extends Component {
 											type='checkbox'
 											required
 										/>
-										I agree to the license terms.
+										I agree to the <Link to='/TermsOfUse'>license terms.</Link>
 									</label>
 								</div>
 							</div>

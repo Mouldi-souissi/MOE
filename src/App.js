@@ -14,10 +14,14 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import DashInstructor from "./components/DashIstructor";
 import ThemeCourses from "./components/ThemeCourses";
 import Article from "./components/Article";
-import AltSidebar from "./components/AltSidebar";
 import Exams from "./components/Exams";
 import AddExam from "./components/AddExam";
 import ScoreList from "./components/ScoreList";
+import TermsOfUse from "./components/TermsOfUse";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import RequestRefund from "./components/RequestRefund";
+import License from "./components/License";
+import CancellationPolicy from "./components/CancellationPolicy";
 
 export class App extends Component {
 	render() {
@@ -29,15 +33,22 @@ export class App extends Component {
 						<Route exact path='/' render={() => <Landing />} />
 						<Route exact path='/signUp' render={() => <SignUp />} />
 						<Route exact path='/signIn' render={() => <SignIn />} />
-						<Route exact path='/sidebar' render={() => <AltSidebar />} />
 						<Route exact path='/exam:id' component={Exams} />
+						<Route exact path='/TermsOfUse' component={TermsOfUse} />
+						<Route exact path='/PrivacyPolicy' component={PrivacyPolicy} />
+						<Route exact path='/License' component={License} />
+						<Route
+							exact
+							path='/CancellationPolicy'
+							component={CancellationPolicy}
+						/>
+						<Route exact path='/RequestRefund' component={RequestRefund} />
 						<PrivateRoute exact path='/addExam:id' component={AddExam} />
 						<PrivateRoute exact path='/scores:id' component={ScoreList} />
 						<PrivateRoute path='/dashboard' component={Dashboard} />
 						<PrivateRoute path='/dashboardI' component={DashInstructor} />
 						<PrivateRoute path='/admin' component={Admin} />
 						<PrivateRoute path='/article:id' component={Article} />
-						<PrivateRoute path='/sidebar' component={AltSidebar} />
 						<PrivateRoute
 							exact
 							path='/themeCourses/:value'

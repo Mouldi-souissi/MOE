@@ -16,6 +16,8 @@ export class FormSteps extends Component {
 		image: "",
 		src: "",
 		loaded: 0,
+		request: "",
+		err: "",
 	};
 	modules = {
 		toolbar: [
@@ -46,23 +48,65 @@ export class FormSteps extends Component {
 		this.setState({ [e.target.name]: e.target.value });
 	};
 
-	handleCreateCourse = () => {
+	handleCreateCourse = (e) => {
+		e.preventDefault();
 		let { shortDescription, title, theme, description } = this.state;
-		axios({
-			url: "http://91.134.133.143:9090/api/v1/courses",
-			method: "post",
-			headers: { authorization: localStorage.getItem("token") },
-			data: { shortDescription, title, theme, description },
-		})
-			.then((res) => {
-				this.setState({ courseID: res.data.payload.id });
-				this.handleFileSend();
-			})
-
-			.catch((err) => {
-				console.log(err);
+		if (description.length > 200)
+			this.setState({
+				...this.state,
+				err: "Long description max characters 200",
+				request: "fail",
 			});
+		if (!description)
+			this.setState({
+				...this.state,
+				err: "Please fill long description field",
+				request: "fail",
+			});
+		if (!shortDescription)
+			this.setState({
+				...this.state,
+				err: "Please fill description field",
+				request: "fail",
+			});
+
+		if (!theme)
+			this.setState({
+				...this.state,
+				err: "Please select a theme",
+				request: "fail",
+			});
+		if (!title)
+			this.setState({
+				...this.state,
+				err: "Please fill title field",
+				request: "fail",
+			});
+
+		if (
+			description &&
+			shortDescription &&
+			title &&
+			theme &&
+			description.length <= 200
+		) {
+			axios({
+				url: "https://app.visioconf.site/api/v1/courses",
+				method: "post",
+				headers: { authorization: localStorage.getItem("token") },
+				data: { shortDescription, title, theme, description },
+			})
+				.then((res) => {
+					this.setState({ ...this.state, courseID: res.data.payload.id });
+					this.handleFileSend();
+				})
+
+				.catch((err) => {
+					console.log(err);
+				});
+		}
 	};
+
 	// handle pic upload
 
 	handleFile = (e) => {
@@ -79,7 +123,7 @@ export class FormSteps extends Component {
 		formData.append("file", this.state.image);
 
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.state.courseID}/picture`,
+			url: `https://app.visioconf.site/api/v1/courses/${this.state.courseID}/picture`,
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: formData,
@@ -93,20 +137,11 @@ export class FormSteps extends Component {
 		}).catch((err) => console.log(err));
 	};
 	// handle edit
+
 	handleText = (value) => {
 		this.setState({ description: value });
 	};
 
-	// handleEdit = () => {
-	// 	axios({
-	// 		url: `http://91.134.133.143:9090/api/v1/courses/${this.state.courseID}`,
-	// 		method: "put",
-	// 		headers: { authorization: localStorage.getItem("token") },
-	// 		data: { description: this.state.text },
-	// 	})
-	// 		.then((res) => <Redirect to={`/article${this.state.courseID}`} />)
-	// 		.catch((err) => console.log(err));
-	// };
 	componentDidMount() {
 		this.context.getAllThemes();
 	}
@@ -117,7 +152,7 @@ export class FormSteps extends Component {
 			<div className='altFormContainer'>
 				<div className='altForm '>
 					<div className='bg-white rounded-lg shadow-sm p-5'>
-						<h5 className='center mb-3'>ADD Course</h5>
+						<h5 className='center mb-3'>Add Course</h5>
 						<ul
 							role='tablist'
 							className='nav bg-light nav-pills rounded-pill nav-fill mb-3'>
@@ -148,10 +183,18 @@ export class FormSteps extends Component {
 						</ul>
 
 						<div className='tab-content'>
+							{this.state.request && (
+								<p
+									className={
+										this.state.request === "fail"
+											? "alert alert-danger"
+											: "alert alert-success"
+									}>
+									{this.state.err}
+								</p>
+							)}
+
 							<div id='nav-tab-card' className='tab-pane fade show active'>
-								{/* <p className='alert alert-success'>
-										Some text success or error
-									</p> */}
 								<form>
 									<div className='form-group'>
 										<label htmlFor='title'>Title </label>
@@ -162,6 +205,7 @@ export class FormSteps extends Component {
 											name='title'
 											onChange={this.handleInput}
 											required
+											maxLength='10'
 										/>
 									</div>
 									<div className='form-group'>
@@ -190,6 +234,7 @@ export class FormSteps extends Component {
 											name='shortDescription'
 											onChange={this.handleInput}
 											required
+											maxLength='30'
 										/>
 									</div>
 								</form>
@@ -210,7 +255,7 @@ export class FormSteps extends Component {
 								</div>
 							</div>
 
-							<div id='nav-tab-bank' className='tab-pane fade'>
+							<div id='nav-tab-bank' className='form-Group tab-pane fade'>
 								<div className='d-flex mt-2'>
 									<h6>Long Description</h6>
 									<span className='mr-5'>*</span>
@@ -236,7 +281,6 @@ export class FormSteps extends Component {
 									</div>
 								)}
 								<button
-									type='button'
 									className='subscribe btn btn-primary btn-block rounded-pill shadow-sm mt-3 mb-3'
 									onClick={this.handleCreateCourse}>
 									Create

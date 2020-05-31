@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { withRouter } from "react-router";
 import ReactQuill from "react-quill";
-import PicModal from "./PicModal";
+import ArticleModal from "./ArticleModal";
 import jwt_decode from "jwt-decode";
 import { Link } from "react-router-dom";
 import { VideoPlayer } from "./VideoPlayer";
@@ -22,6 +22,9 @@ export class Article extends Component {
 		isStudent:
 			localStorage.getItem("token") !== null &&
 			jwt_decode(localStorage.token).roles[0] === "STUDENT",
+		// form msg
+		request: "",
+		err: "",
 	};
 	modules = {
 		toolbar: [
@@ -52,7 +55,7 @@ export class Article extends Component {
 
 	getAllCourses = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/courses",
+			url: "https://app.visioconf.site/api/v1/courses",
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -78,8 +81,9 @@ export class Article extends Component {
 	handleEdit = () => {
 		let theme = this.state.courses[0] && this.state.courses[0].theme.value;
 		let editedData = { ...this.state.editedData, theme };
+
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}`,
+			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}`,
 			method: "put",
 			headers: { authorization: localStorage.getItem("token") },
 			data: editedData,
@@ -89,60 +93,98 @@ export class Article extends Component {
 	};
 
 	handleFileSend = (image) => {
+		if (!image)
+			this.setState({
+				...this.state,
+				err: "Please select an image file",
+				request: "fail",
+			});
+
 		var formData = new FormData();
 		formData.append("file", image);
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/picture`,
-			method: "POST",
-			headers: { authorization: localStorage.getItem("token") },
-			data: formData,
-			onUploadProgress: (ProgressEvent) => {
-				this.setState({
-					loaded1: (ProgressEvent.loaded / ProgressEvent.total) * 100,
-				});
-				this.state.loaded1 === 100 && window.location.reload(false);
-			},
-		}).catch((err) => console.log(err));
+		image &&
+			axios({
+				url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/picture`,
+				method: "POST",
+				headers: { authorization: localStorage.getItem("token") },
+				data: formData,
+				onUploadProgress: (ProgressEvent) => {
+					this.setState({
+						loaded1: (ProgressEvent.loaded / ProgressEvent.total) * 100,
+					});
+					this.state.loaded1 === 100 && window.location.reload(false);
+				},
+			}).catch((err) => console.log(err));
 	};
 
 	handleTextFileSend = (textFile, title, description, type) => {
+		if (!type) {
+			type = "PRESENTATION";
+		}
+		if (!textFile)
+			this.setState({
+				...this.state,
+				err: "Please select a text file",
+				request: "fail",
+			});
+		if (!title)
+			this.setState({
+				...this.state,
+				err: "Please fill title field",
+				request: "fail",
+			});
 		var formData = new FormData();
 		formData.append("file", textFile);
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/attachments?description=${description}&title=${title}&type=${type}`,
-			method: "POST",
-			headers: { authorization: localStorage.getItem("token") },
-			data: formData,
-			onUploadProgress: (ProgressEvent) => {
-				this.setState({
-					loaded2: (ProgressEvent.loaded / ProgressEvent.total) * 100,
-				});
-				this.state.loaded2 === 100 && window.location.reload(false);
-			},
-		})
-			// .then(window.location.reload(false), this.setState({ isEditing: false }))
-			.catch((err) => console.log(err));
+		textFile &&
+			title &&
+			axios({
+				url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/attachments?description=${description}&title=${title}&type=${type}`,
+				method: "POST",
+				headers: { authorization: localStorage.getItem("token") },
+				data: formData,
+				onUploadProgress: (ProgressEvent) => {
+					this.setState({
+						loaded2: (ProgressEvent.loaded / ProgressEvent.total) * 100,
+					});
+					this.state.loaded2 === 100 && window.location.reload(false);
+				},
+			}).catch((err) => console.log(err));
 	};
 	handleVideoSend = (video, videoTitle, videoDescription) => {
+		if (!video)
+			this.setState({
+				...this.state,
+				err: "Please select a video",
+				request: "fail",
+			});
+		if (!videoTitle)
+			this.setState({
+				...this.state,
+				err: "Please fill video title field",
+				request: "fail",
+			});
+
 		var formData = new FormData();
 		formData.append("file", video);
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/attachments?description=${videoDescription}&title=${videoTitle}&type=VIDEO_YT`,
-			method: "POST",
-			headers: { authorization: localStorage.getItem("token") },
-			data: formData,
-			onUploadProgress: (ProgressEvent) => {
-				this.setState({
-					loaded3: (ProgressEvent.loaded / ProgressEvent.total) * 100,
-				});
-				this.state.loaded3 === 100 && window.location.reload(false);
-			},
-		}).catch((err) => console.log(err));
+		video &&
+			videoTitle &&
+			axios({
+				url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/attachments?description=${videoDescription}&title=${videoTitle}&type=VIDEO_YT`,
+				method: "POST",
+				headers: { authorization: localStorage.getItem("token") },
+				data: formData,
+				onUploadProgress: (ProgressEvent) => {
+					this.setState({
+						loaded3: (ProgressEvent.loaded / ProgressEvent.total) * 100,
+					});
+					this.state.loaded3 === 100 && window.location.reload(false);
+				},
+			}).catch((err) => console.log(err));
 	};
 
 	getUploaded = () => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/attachments`,
+			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/attachments`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -151,7 +193,7 @@ export class Article extends Component {
 	};
 	getExamsByCourse = () => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/exams`,
+			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/exams`,
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -167,7 +209,7 @@ export class Article extends Component {
 
 	handleDeleteFiles = (id) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/attachments/${id}`,
+			url: `https://app.visioconf.site/api/v1/attachments/${id}`,
 			method: "delete",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -177,7 +219,7 @@ export class Article extends Component {
 
 	startSession = (autoStartRecording) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${
+			url: `https://app.visioconf.site/api/v1/courses/${
 				this.state.courses[0].id
 			}/meetings/create?autoStartRecording=${
 				autoStartRecording === "No" ? false : true
@@ -191,7 +233,7 @@ export class Article extends Component {
 
 	joinSession = () => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.state.courses[0].id}/meetings/join`,
+			url: `https://app.visioconf.site/api/v1/courses/${this.state.courses[0].id}/meetings/join`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -201,7 +243,7 @@ export class Article extends Component {
 
 	getSessions = () => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/meetings?running=true`,
+			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/meetings?running=true`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -211,7 +253,7 @@ export class Article extends Component {
 
 	getRecordedSessions = () => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/meetings/recordings`,
+			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/meetings/recordings`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -386,13 +428,15 @@ export class Article extends Component {
 													</div>
 												)}
 
-												<PicModal
+												<ArticleModal
 													handleFileSend={this.handleFileSend}
 													handleTextFileSend={this.handleTextFileSend}
 													handleVideoSend={this.handleVideoSend}
 													loaded1={this.state.loaded1}
 													loaded2={this.state.loaded2}
 													loaded3={this.state.loaded3}
+													request={this.state.request}
+													err={this.state.err}
 												/>
 											</div>
 										</span>
@@ -408,7 +452,9 @@ export class Article extends Component {
 									this.state.bonusFiles
 										.filter((el) => el.type !== "VIDEO_YT")
 										.map((el) => (
-											<div className='d-flex align-items-center ' key={el.id}>
+											<div
+												className='d-flex align-items-center justify-content-between '
+												key={el.id}>
 												<a
 													href={`https://app.visioconf.site/attachment/${el.fileName}`}
 													download={el.title}
@@ -424,7 +470,7 @@ export class Article extends Component {
 														jwt_decode(localStorage.token).id && (
 														<i
 															type='button'
-															className='fa fa-times btn btn-outline-danger ml-5'
+															className='fa fa-times btn btn-outline-danger ml-5 mb-2'
 															aria-hidden='true'
 															onClick={() => this.handleDeleteFiles(el.id)}
 														/>
@@ -517,7 +563,9 @@ export class Article extends Component {
 												? "btn btn-primary ml-3"
 												: "btn btn-primary disabled ml-3"
 										}
-										onClick={this.joinSession}>
+										onClick={
+											this.state.sessions.length ? this.joinSession : undefined
+										}>
 										Join
 									</button>
 								</div>

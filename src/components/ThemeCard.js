@@ -41,7 +41,7 @@ export class ThemeCard extends Component {
 
 	checkEnrollment = () => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/users/themes/enrollments?theme=${this.props.theme.value}`,
+			url: `https://app.visioconf.site/api/v1/users/themes/enrollments?theme=${this.props.theme.value}`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})

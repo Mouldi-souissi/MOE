@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { withRouter } from "react-router-dom";
+import ExamContext from "../ExamContext";
 
 export class ExamsCard extends Component {
+	static contextType = ExamContext;
 	state = {
 		question: "",
 		answer: "",
+		isEditing: false,
 		answerType: false,
 		isEditingAnswer: false,
 		editedAnswer: "",
@@ -13,73 +15,29 @@ export class ExamsCard extends Component {
 		blocScore: 0,
 		checked: false,
 		checkedAnswers: [],
-		// date: new date(),
 	};
 
 	handleEditQuestion = () => {
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/questions/${this.props.exam.id}`,
-			method: "put",
-			headers: { authorization: localStorage.getItem("token") },
-			data: { statement: this.state.question },
-		})
-			.then(window.location.reload(false))
-			.catch((err) => {
-				console.log(err);
-			});
+		this.context.handleEditQuestion(
+			this.props.exam.id,
+			this.state.question,
+			this.props.match.params.id
+		);
+		this.setState({ isEditing: false });
 	};
 
-	handleAddA = () => {
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/questions/${this.props.exam.id}/answers`,
-			method: "post",
-			headers: { authorization: localStorage.getItem("token") },
-			data: [{ text: this.state.answer, correct: this.state.answerType }],
-		})
-			.then(window.location.reload(false))
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-	handleDeleteQuestion = () => {
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/questions/${this.props.exam.id}`,
-			method: "delete",
-			headers: { authorization: localStorage.getItem("token") },
-			data: [{ text: this.state.answer, correct: this.state.answerType }],
-		})
-			.then(window.location.reload(false))
-			.catch((err) => {
-				console.log(err);
-			});
-	};
 	handleEditAnswer = (id) => {
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/answers/${id}`,
-			method: "put",
-			headers: { authorization: localStorage.getItem("token") },
-			data: { text: this.state.editedAnswer, correct: this.state.editedType },
-		})
-			.then(window.location.reload(false))
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-	handleDeleteAnswer = (id) => {
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/answers/${id}`,
-			method: "delete",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then(window.location.reload(false))
-			.catch((err) => {
-				console.log(err);
-			});
+		this.context.handleEditAnswer(
+			id,
+			this.state.editedAnswer,
+			this.state.editedType,
+			this.props.match.params.id
+		);
+		this.setState({ isEditingAnswer: false });
 	};
 
 	handleChecked = (e) => {
 		this.setState({
-			// checked: e.target.checked,
 			checkedAnswers: [
 				...this.state.checkedAnswers,
 				{ checked: e.target.checked, correct: e.target.value, id: e.target.id },
@@ -91,7 +49,6 @@ export class ExamsCard extends Component {
 			correct: e.target.value === "true" ? true : false,
 			id: e.target.id,
 			date: Date.now(),
-			// idQ: this.props.exam.id,
 		});
 	};
 
@@ -148,7 +105,12 @@ export class ExamsCard extends Component {
 											type='button'
 											className='fa fa-trash btn btn-danger ml-2'
 											aria-hidden='true'
-											onClick={this.handleDeleteQuestion}
+											onClick={() =>
+												this.context.handleDeleteQuestion(
+													this.props.exam.id,
+													this.props.match.params.id
+												)
+											}
 										/>
 									</div>
 								)}
@@ -166,7 +128,14 @@ export class ExamsCard extends Component {
 									/>
 									<button
 										className='btn btn-primary mr-3'
-										onClick={this.handleAddA}>
+										onClick={() =>
+											this.context.handleAddA(
+												this.props.exam.id,
+												this.state.answer,
+												this.state.answerType,
+												this.props.match.params.id
+											)
+										}>
 										Add Answer
 									</button>
 									<div
@@ -202,20 +171,6 @@ export class ExamsCard extends Component {
 								</div>
 							)}
 						</div>
-						{/* {this.props.exam.answers.map((el, i) => (
-							<div className='choice-container' key={el.id}>
-								<div className='choice-prefix'>{i + 1}</div>
-								<div className='choice-text'>{el.text}</div>
-								<div className='form-check'>
-									<input
-										className='form-check-input'
-										type='checkbox'
-										value=''
-										id='defaultCheck1'
-									/>
-								</div>
-							</div>
-						))} */}
 						{this.props.exam.answers &&
 							this.props.exam.answers.map((el, i) => (
 								<div className='choice-container' key={i}>
@@ -248,7 +203,12 @@ export class ExamsCard extends Component {
 												type='button'
 												className='fa fa-trash btn btn-danger mt-3 mr-3'
 												aria-hidden='true'
-												onClick={() => this.handleDeleteAnswer(el.id)}
+												onClick={() =>
+													this.context.handleDeleteAnswer(
+														el.id,
+														this.props.match.params.id
+													)
+												}
 											/>
 										</div>
 									)}

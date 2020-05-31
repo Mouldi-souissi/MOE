@@ -4,7 +4,6 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
-import { Redirect } from "react-router-dom";
 
 export class AddExam extends Component {
 	state = {
@@ -13,32 +12,79 @@ export class AddExam extends Component {
 		qcm: { questions: [] },
 		startDate: new Date(),
 		durationMin: 0,
+		request: "",
+		err: "",
 	};
 
 	handleAddQ = () => {
-		this.setState({
-			...this.state,
+		let { title, durationMin, startDate, question } = this.state;
+		if (!question)
+			this.setState({
+				...this.state,
+				err: "Please fill question field",
+				request: "fail",
+			});
+		if (!startDate)
+			this.setState({
+				...this.state,
+				err: "Please fill start Date field",
+				request: "fail",
+			});
+		if (!durationMin)
+			this.setState({
+				...this.state,
+				err: "Please fill duration field",
+				request: "fail",
+			});
+		if (!title)
+			this.setState({
+				...this.state,
+				err: "Please fill title field",
+				request: "fail",
+			});
+		durationMin &&
+			title &&
+			startDate &&
+			question &&
+			this.setState({
+				...this.state,
 
-			qcm: {
-				durationMin: this.state.durationMin,
-				questions: [
-					...this.state.qcm.questions,
-					{
-						answers: [],
-						statement: this.state.question,
-					},
-				],
-				title: this.state.title,
-				startDate: moment(this.state.startDate).format("YYYY-MM-DD HH:mm:ss"),
-			},
-		});
+				qcm: {
+					durationMin: this.state.durationMin,
+					questions: [
+						...this.state.qcm.questions,
+						{
+							answers: [],
+							statement: this.state.question,
+						},
+					],
+					title: this.state.title,
+					startDate: moment(this.state.startDate).format("YYYY-MM-DD HH:mm:ss"),
+				},
+			});
+		this.timeout = setTimeout(() => {
+			this.setState({ err: "", request: "" });
+		}, 5000);
 	};
 	addAnswer = (answer, statement, answerType) => {
-		let result =
-			this.state.qcm &&
-			this.state.qcm.questions.find((el) => el.statement === statement);
-
-		result.answers = [...result.answers, { text: answer, correct: answerType }];
+		if (!answer)
+			this.setState({
+				...this.state,
+				err: "Please fill answer field",
+				request: "fail",
+			});
+		if (answer) {
+			let result =
+				this.state.qcm &&
+				this.state.qcm.questions.find((el) => el.statement === statement);
+			result.answers = [
+				...result.answers,
+				{ text: answer, correct: answerType },
+			];
+			this.timeout = setTimeout(() => {
+				this.setState({ err: "", request: "" });
+			}, 5000);
+		}
 	};
 
 	handleEditQuestion = (question, previousQuestion) => {
@@ -85,13 +131,13 @@ export class AddExam extends Component {
 
 	handleAddExam = () => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${this.props.match.params.id}/exams`,
+			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/exams`,
 			method: "post",
 			headers: { authorization: localStorage.getItem("token") },
 			data: this.state.qcm,
 		})
 			.then((res) => {
-				return <Redirect to={`/exam${res.data.payload.id}`} />;
+				window.location.href = `/exam${res.data.payload.id}`;
 			})
 			.catch((err) => {
 				console.log(err);
@@ -102,6 +148,16 @@ export class AddExam extends Component {
 		return (
 			<div className='login-clean'>
 				<div className='container'>
+					{this.state.request && (
+						<p
+							className={
+								this.state.request === "fail"
+									? "alert alert-danger"
+									: "alert alert-success"
+							}>
+							{this.state.err}
+						</p>
+					)}
 					<h5>Exam title:</h5>
 					<input
 						className='form-control w-50 mb-3'
@@ -114,7 +170,7 @@ export class AddExam extends Component {
 					<h5>Exam Duration (min):</h5>
 					<input
 						className='form-control w-50 mb-3'
-						placeholder='title'
+						placeholder='Duration'
 						type='text'
 						onChange={(e) =>
 							this.setState({

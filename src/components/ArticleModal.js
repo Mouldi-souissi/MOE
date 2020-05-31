@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export class PicModal extends Component {
+export class ArticleModal extends Component {
 	state = {
 		image: "",
 		src: "",
@@ -59,6 +59,7 @@ export class PicModal extends Component {
 						<div className='modal-content'>
 							<div className='modal-header'>
 								<h4 className='modal-title'>Upload files</h4>
+
 								<button
 									type='button'
 									className='close'
@@ -68,8 +69,19 @@ export class PicModal extends Component {
 								</button>
 							</div>
 							<div className='modal-body'>
+								{this.props.request && (
+									<p
+										className={
+											this.props.request === "fail"
+												? "alert alert-danger"
+												: "alert alert-success"
+										}>
+										{this.props.err}
+									</p>
+								)}
 								<div>
 									<h5>Change cover photo:</h5>
+
 									<div className='form-group'>
 										<input
 											className='form-control'
@@ -108,6 +120,7 @@ export class PicModal extends Component {
 								</div>
 								<div>
 									<h5>Upload Text/PDF file:</h5>
+
 									<div className='form-group'>
 										<input
 											className='form-control'
@@ -131,12 +144,14 @@ export class PicModal extends Component {
 										)}
 
 										<h6 className='mt-2'>Title for Text/PDF :</h6>
+
 										<input
 											className='form-control'
 											type='text'
 											name='title/description'
 											onChange={(e) =>
 												this.setState({
+													...this.state,
 													title: e.target.value,
 													description: e.target.value,
 												})
@@ -145,7 +160,9 @@ export class PicModal extends Component {
 										/>
 										<form
 											className='d-flex'
-											onChange={(e) => this.setState({ type: e.target.value })}>
+											onChange={(e) =>
+												this.setState({ ...this.state, type: e.target.value })
+											}>
 											<div>
 												<input
 													type='radio'
@@ -186,6 +203,7 @@ export class PicModal extends Component {
 								</div>
 								<div>
 									<h5>Upload Video:</h5>
+
 									<div className='form-group'>
 										<input
 											className='form-control'
@@ -220,7 +238,7 @@ export class PicModal extends Component {
 											required
 										/>
 										<button
-											className='btn btn-primary'
+											className='btn btn-primary mt-3'
 											onClick={() =>
 												this.props.handleVideoSend(
 													video,
@@ -249,4 +267,4 @@ export class PicModal extends Component {
 	}
 }
 
-export default PicModal;
+export default ArticleModal;

@@ -10,6 +10,7 @@ import MyThemes from "./MyThemes";
 import Notifications from "./Notifications";
 import axios from "axios";
 import moment from "moment";
+import MyExams from "./MyExams";
 
 export class Dashboard extends Component {
 	static contextType = ProfileContext;
@@ -20,14 +21,14 @@ export class Dashboard extends Component {
 
 	getEnrolledThemes = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/users/themes/enrollments",
+			url: "https://app.visioconf.site/api/v1/users/themes/enrollments",
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
 			.then((res) =>
 				res.data.payload.map((theme) =>
 					axios({
-						url: `http://91.134.133.143:9090/api/v1/courses?theme=${theme.value}`,
+						url: `https://app.visioconf.site/api/v1/courses?theme=${theme.value}`,
 						method: "GET",
 						headers: { authorization: localStorage.getItem("token") },
 					})
@@ -103,10 +104,18 @@ export class Dashboard extends Component {
 										My Themes
 									</Tab>
 									<Tab>
+										<i className='fa fa-leanpub mr-3' aria-hidden='true' />
+										My Exams
+									</Tab>
+									<Tab>
 										<i className='fa fa-bell mr-3' aria-hidden='true' />
 										My Notifications
 									</Tab>
-									<span class='badge badge-secondary'>{newCourses.length}</span>
+									{newCourses.length !== 0 && (
+										<span className='badge badge-secondary'>
+											{newCourses.length}
+										</span>
+									)}
 
 									<br />
 									<Tab>
@@ -139,6 +148,9 @@ export class Dashboard extends Component {
 						</TabPanel>
 						<TabPanel>
 							<MyThemes />
+						</TabPanel>
+						<TabPanel>
+							<MyExams />
 						</TabPanel>
 						<TabPanel>
 							<Notifications newCourses={newCourses} />

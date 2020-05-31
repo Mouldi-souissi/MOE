@@ -1,91 +1,51 @@
 import React, { Component } from "react";
 import ExamsCard from "./ExamsCard";
-import axios from "axios";
 import jwt_decode from "jwt-decode";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// import Timer from "./Timer";
 import moment from "moment";
+import ExamContext from "../ExamContext";
 
 export class Exams extends Component {
-	state = {
-		exam: [],
-		isStudent:
-			localStorage.getItem("token") !== null &&
-			jwt_decode(localStorage.token).roles[0] === "STUDENT",
-		isEditing: false,
-		title: "",
-		durationMin: 0,
-		addedQuestion: "",
-		startDate: new Date(),
-		grabedAnswers: [],
-		isDone: false,
-		score: 0,
-		editedData: {},
-	};
-
-	getExamById = () => {
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/exams/${this.props.match.params.id}`,
-			method: "GET",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => {
-				this.setState({
-					exam: res.data.payload,
-					durationMin: res.data.payload.durationMin,
-				});
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-	startExam = () => {
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/exams/${this.props.match.params.id}/start-assessment`,
-			method: "put",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => {
-				this.setState({
-					exam: res.data.payload.exam,
-				});
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
+	static contextType = ExamContext;
+	constructor() {
+		super();
+		this.state = {
+			isStudent:
+				localStorage.getItem("token") !== null &&
+				jwt_decode(localStorage.token).roles[0] === "STUDENT",
+			isEditing: false,
+			title: "",
+			durationMin: 0,
+			addedQuestion: "",
+			startDate: new Date(),
+			grabedAnswers: [],
+			editedData: {},
+			time: 0,
+			start: false,
+			hr: 0,
+			min: 0,
+			sec: 0,
+			ms: 0,
+		};
+		// setInterval(() => {
+		// 	if (this.state.start)
+		// 		this.setState({
+		// 			ms: this.state.ms - 1000,
+		// 		});
+		// 	this.converter();
+		// 	if (this.state.ms < 0) {
+		// 		this.setState({ start: false });
+		// 	}
+		// }, 1000);
+	}
 
 	handleEditExam = () => {
-		if (this.state.editedData) {
-			axios({
-				url: `http://91.134.133.143:9090/api/v1/exams/${this.props.match.params.id}`,
-				method: "put",
-				headers: { authorization: localStorage.getItem("token") },
-				data: this.state.editedData,
-			})
-				// .then(window.location.reload(false))
-				.catch((err) => {
-					console.log(err);
-				});
-		}
-	};
-	handleAddQ = () => {
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/exams/${this.props.match.params.id}/questions`,
-			method: "post",
-			headers: { authorization: localStorage.getItem("token") },
-			data: [
-				{
-					answers: [{}],
-					statement: this.state.addedQuestion,
-				},
-			],
-		})
-			.then(window.location.reload(false))
-			.catch((err) => {
-				console.log(err);
-			});
+		this.context.handleEditExam(
+			this.state.editedData,
+			this.props.match.params.id
+		);
+		this.setState({ isEditing: false });
 	};
 
 	grabAnswer = (grabedAnswers) => {
@@ -93,63 +53,40 @@ export class Exams extends Component {
 			grabedAnswers: [...this.state.grabedAnswers, grabedAnswers],
 		});
 	};
-	calculateScore = () => {
-		// let answers = this.state.grabedAnswers.filter((el) => el.checked);
-		let answers = this.state.grabedAnswers;
 
-		for (let i = 0; i < answers.length; i++) {
-			for (let j = 0; j < answers.length; j++) {
-				if (i !== j) {
-					if (answers[i].id === answers[j].id) {
-						if (answers[i].date > answers[j].date) {
-							answers[j] = {};
-						} else answers[i] = {};
-					}
-				}
-			}
-		}
-		// filter checked answers
-		let filtered = answers.filter((el) => el.checked);
-		// calculating scrore
-		let result =
-			(filtered.filter((el) => el.correct).length -
-				filtered.filter((el) => !el.correct).length) /
-			this.state.exam.questions.map((el) => el.answers.find((el) => el.correct))
-				.length;
-		result = result * 100;
+	timer = () => {
+		this.setState({ start: true, ms: this.context.durationMin * 60000 });
+	};
+
+	converter = () => {
 		this.setState({
-			...this.state,
-			score: result < 0 ? 0 : result,
-			isDone: true,
+			hr: parseInt(this.state.ms / 3600000),
+			min: parseInt((this.state.ms % 3600000) / 60000),
+			sec: parseInt(((this.state.ms % 3600000) % 60000) / 1000),
 		});
-		// sending score
-		this.sendScore(result);
 	};
 
-	sendScore = (score) => {
-		axios({
-			url: `http://91.134.133.143:9090/api/v1/exams/${this.props.match.params.id}/submit-assessment`,
-			method: "put",
-			headers: { authorization: localStorage.getItem("token") },
-			data: {
-				score: score,
-				status: score < 50 ? "FAILED" : "SUCCEEDED",
-			},
-		})
-			.then()
-			.catch((err) => {
-				console.log(err);
-			});
-	};
 	componentDidMount() {
-		this.state.isStudent ? this.startExam() : this.getExamById();
-		// let score = this.state.score;
-
+		this.state.isStudent
+			? this.context.startExam(this.props.match.params.id)
+			: this.context.getExamById(this.props.match.params.id);
 		// setTimeout(() => {
-		// 	this.sendScore(this.state.score);
-		// }, this.state.exam.durationMin * 60000);
+		// 	this.context.calculateAndSendScore(
+		// 		this.state.grabedAnswers,
+		// 		this.props.match.params.id
+		// 	);
+		// }, this.context.durationMin * 60000);
 	}
 	render() {
+		const exam = this.context.exam;
+		const score = this.context.score;
+		const isDone = this.context.isDone;
+		// console.log(
+		// 	moment(exam.startDate).calendar() === `Today at ${Date.now().getTime}`
+		// );
+		let a = moment(new Date()); //todays date
+		let b = exam.startDate;
+		let date = a.diff(b, "hours");
 		return (
 			<div className='exam mt-5'>
 				<div className='container'>
@@ -159,7 +96,7 @@ export class Exams extends Component {
 								<h5>Exam title:</h5>
 								<input
 									className='form-control w-50 ml-3'
-									defaultValue={this.state.exam.title}
+									defaultValue={exam.title}
 									type='text'
 									onChange={(e) =>
 										this.setState({
@@ -173,16 +110,17 @@ export class Exams extends Component {
 								/>
 							</div>
 						) : (
-							<h4>{this.state.exam.title}</h4>
+							<h4>{exam.title}</h4>
 						)}
 					</div>
+
 					<div className='center'>
 						{this.state.isEditing ? (
 							<div className='d-flex align-items-center mb-3'>
 								<h6>Exam Duration:</h6>
 								<input
 									className='form-control w-50 ml-3'
-									defaultValue={this.state.exam.durationMin}
+									defaultValue={exam.durationMin}
 									type='text'
 									onChange={(e) =>
 										this.setState({
@@ -196,7 +134,7 @@ export class Exams extends Component {
 								/>
 							</div>
 						) : (
-							<h6>Exam duration: {this.state.exam.durationMin}min</h6>
+							<h6>Exam duration: {exam.durationMin}min</h6>
 						)}
 					</div>
 					{this.state.isEditing ? (
@@ -221,9 +159,12 @@ export class Exams extends Component {
 							/>
 						</div>
 					) : (
-						<h6 className='center'>Exam starts: {this.state.exam.startDate}</h6>
+						<h6 className='center'>
+							Exam Date: {exam.startDate && moment(exam.startDate).calendar()}
+						</h6>
 					)}
 				</div>
+
 				{!this.state.isStudent && (
 					<i
 						type='button'
@@ -249,6 +190,7 @@ export class Exams extends Component {
 						onClick={this.handleEditExam}
 					/>
 				)}
+
 				{!this.state.isStudent && (
 					<div className='mt-5 ml-5'>
 						<h5>Add Question:</h5>
@@ -264,26 +206,58 @@ export class Exams extends Component {
 									})
 								}
 							/>
-							<button className='btn btn-primary' onClick={this.handleAddQ}>
+							<button
+								className='btn btn-primary'
+								onClick={() =>
+									this.context.handleAddQ(
+										this.props.match.params.id,
+										this.state.addedQuestion
+									)
+								}>
 								Add Question
 							</button>
 						</div>
 					</div>
 				)}
-				{/* {this.state.isStudent && (
-					<Timer
-						durationMin={
-							this.state.exam.durationMin && this.state.exam.durationMin
-						}
-					/>
-				)} */}
-				<button
-					className='btn btn-primary ml-5 mt-5'
-					onClick={() => this.props.history.goBack()}>
-					Go Back
-				</button>
-				{this.state.exam.questions &&
-					this.state.exam.questions.map((el) => (
+				<div className='d-flex'>
+					<button
+						className='btn btn-primary ml-5 mr-2'
+						onClick={() => this.props.history.goBack()}>
+						Go Back
+					</button>
+					{this.state.isStudent && !this.state.start && (
+						<button
+							className={
+								date === 0 ? "btn btn-warning" : "btn btn-warning disabled"
+							}
+							onClick={date === 0 ? this.timer : undefined}>
+							Start Exam
+						</button>
+					)}
+					{date !== 0 && <div>{}</div>}
+				</div>
+				{this.state.isStudent && this.state.start && (
+					<div className='timer center'>
+						<p>
+							{String(this.state.hr).padStart(2, "0")}:
+							{String(this.state.min).padStart(2, "0")}:
+							{String(this.state.sec).padStart(2, "0")}
+						</p>
+					</div>
+				)}
+				{exam.questions &&
+					this.state.start &&
+					exam.questions.map((el) => (
+						<ExamsCard
+							exam={el}
+							key={el.id}
+							isStudent={this.state.isStudent}
+							grabAnswer={this.grabAnswer}
+						/>
+					))}
+				{exam.questions &&
+					!this.state.isStudent &&
+					exam.questions.map((el) => (
 						<ExamsCard
 							exam={el}
 							key={el.id}
@@ -292,17 +266,23 @@ export class Exams extends Component {
 						/>
 					))}
 				{this.state.isStudent &&
-					(this.state.isDone ? (
-						<h2 className='center'>
-							Score: {this.state.score}%{" "}
-							{this.state.score > 0 ? "Succeded" : "Failed"}
+					(isDone ? (
+						<h2 className='center mb-5 mt-5'>
+							Score: {score}% {score > 0 ? "Succeded" : "Failed"}
 						</h2>
 					) : (
-						<button
-							className='btn btn-primary godown mb-5'
-							onClick={this.calculateScore}>
-							Submit
-						</button>
+						this.state.start && (
+							<button
+								className='btn btn-primary godown mb-5 mt-5'
+								onClick={() =>
+									this.context.calculateAndSendScore(
+										this.state.grabedAnswers,
+										this.props.match.params.id
+									)
+								}>
+								Submit
+							</button>
+						)
 					))}
 			</div>
 		);

@@ -6,15 +6,18 @@ import * as serviceWorker from "./serviceWorker";
 import { UserProvider } from "./UserContext";
 import { ProfileProvider } from "./ProfileContext";
 import { ThemeProvider } from "./ThemeContext";
+import { ExamProvider } from "./ExamContext";
 
 ReactDOM.render(
-	<ThemeProvider>
-		<ProfileProvider>
-			<UserProvider>
-				<App />
-			</UserProvider>
-		</ProfileProvider>
-	</ThemeProvider>,
+	<ExamProvider>
+		<ThemeProvider>
+			<ProfileProvider>
+				<UserProvider>
+					<App />
+				</UserProvider>
+			</ProfileProvider>
+		</ThemeProvider>
+	</ExamProvider>,
 	document.getElementById("root")
 );
 

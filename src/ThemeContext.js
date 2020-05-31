@@ -14,13 +14,14 @@ class ThemeProvider extends Component {
 		isFiltering: false,
 		newCourses: [],
 		date: moment(new Date()),
+		userExams: [],
 	};
 
 	// themes
 
 	getAllThemes = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/public/themes",
+			url: "https://app.visioconf.site/api/v1/public/themes",
 			method: "get",
 		})
 			.then((res) => this.setState({ themes: res.data.payload }))
@@ -29,7 +30,7 @@ class ThemeProvider extends Component {
 
 	handleEnrollTheme = (value) => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/themes/enroll",
+			url: "https://app.visioconf.site/api/v1/themes/enroll",
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: {
@@ -38,13 +39,14 @@ class ThemeProvider extends Component {
 		})
 			.then((res) => {
 				this.setState({});
+				this.getEnrolledThemes();
 			})
 			.catch((err) => console.log(err));
 	};
 
 	handleUnEnroll = (value) => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/themes/un-enroll",
+			url: "https://app.visioconf.site/api/v1/themes/un-enroll",
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: {
@@ -53,6 +55,7 @@ class ThemeProvider extends Component {
 		})
 			.then((res) => {
 				this.setState({});
+				this.getEnrolledThemes();
 			})
 			.catch((err) => console.log(err));
 	};
@@ -61,7 +64,7 @@ class ThemeProvider extends Component {
 
 	getAllCourses = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/courses",
+			url: "https://app.visioconf.site/api/v1/courses",
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -75,7 +78,7 @@ class ThemeProvider extends Component {
 
 	handleEnrollCourse = (id) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${id}/enroll`,
+			url: `https://app.visioconf.site/api/v1/courses/${id}/enroll`,
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -88,7 +91,7 @@ class ThemeProvider extends Component {
 
 	handleUnEnrollCourse = (id) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${id}/un-enroll`,
+			url: `https://app.visioconf.site/api/v1/courses/${id}/un-enroll`,
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -101,7 +104,7 @@ class ThemeProvider extends Component {
 
 	getEnrolledCources = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/courses?findEnrollments=true",
+			url: "https://app.visioconf.site/api/v1/courses?findEnrollments=true",
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -117,7 +120,7 @@ class ThemeProvider extends Component {
 
 	getEnrolledThemes = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/users/themes/enrollments",
+			url: "https://app.visioconf.site/api/v1/users/themes/enrollments",
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -127,7 +130,7 @@ class ThemeProvider extends Component {
 
 	handleSelect = (value) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses?theme=${value}`,
+			url: `https://app.visioconf.site/api/v1/courses?theme=${value}`,
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -146,7 +149,7 @@ class ThemeProvider extends Component {
 		this.getEnrolledThemes();
 		this.state.enrolledThemes.map((theme) =>
 			axios({
-				url: `http://91.134.133.143:9090/api/v1/courses?theme=${theme.value}`,
+				url: `https://app.visioconf.site/api/v1/courses?theme=${theme.value}`,
 				method: "GET",
 				headers: { authorization: localStorage.getItem("token") },
 			})
@@ -167,6 +170,20 @@ class ThemeProvider extends Component {
 		);
 	};
 
+	getUserExams = () => {
+		axios({
+			url: `https://app.visioconf.site/api/v1/exams`,
+			method: "GET",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => {
+				this.setState({ userExams: res.data.payload });
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	render() {
 		const {
 			themes,
@@ -176,6 +193,7 @@ class ThemeProvider extends Component {
 			filteredCourses,
 			isFiltering,
 			newCourses,
+			userExams,
 		} = this.state;
 		const {
 			getAllThemes,
@@ -188,6 +206,7 @@ class ThemeProvider extends Component {
 			getEnrolledThemes,
 			handleSelect,
 			getNewCourses,
+			getUserExams,
 		} = this;
 		return (
 			<ThemeContext.Provider
@@ -199,6 +218,7 @@ class ThemeProvider extends Component {
 					filteredCourses,
 					isFiltering,
 					newCourses,
+					userExams,
 
 					getAllThemes,
 					getAllCourses,
@@ -210,6 +230,7 @@ class ThemeProvider extends Component {
 					getEnrolledThemes,
 					handleSelect,
 					getNewCourses,
+					getUserExams,
 				}}>
 				{this.props.children}
 			</ThemeContext.Provider>

@@ -8,7 +8,7 @@ export class ThemeCourses extends Component {
 	};
 	getCoursesByTheme = () => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses?theme=${this.props.match.params.value}`,
+			url: `https://app.visioconf.site/api/v1/courses?theme=${this.props.match.params.value}`,
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})

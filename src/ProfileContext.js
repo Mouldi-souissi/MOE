@@ -25,7 +25,7 @@ class ProfileProvider extends Component {
 	};
 	handleEdit = (editedData) => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/users/profile",
+			url: "https://app.visioconf.site/api/v1/users/profile",
 			method: "PUT",
 			headers: { authorization: localStorage.getItem("token") },
 			data: editedData,
@@ -43,7 +43,7 @@ class ProfileProvider extends Component {
 		var formData = new FormData();
 		formData.append("file", image);
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/users/profile/photo",
+			url: "https://app.visioconf.site/api/v1/users/profile/photo",
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: formData,

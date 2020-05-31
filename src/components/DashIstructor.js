@@ -7,8 +7,8 @@ import FormSteps from "./FormSteps";
 import Courses from "./Courses";
 import axios from "axios";
 import ProfileContext from "../ProfileContext";
-
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import MyExams from "./MyExams";
 
 export class DashIstructor extends Component {
 	static contextType = ProfileContext;
@@ -37,7 +37,7 @@ export class DashIstructor extends Component {
 
 	handleScores = (id) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses/${id}/exams`,
+			url: `https://app.visioconf.site/api/v1/courses/${id}/exams`,
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -91,10 +91,10 @@ export class DashIstructor extends Component {
 										My Courses
 									</Tab>
 
-									{/* <Tab>
+									<Tab>
 										<i className='fa fa-leanpub mr-3' aria-hidden='true' />
-										Exams
-									</Tab> */}
+										My Exams
+									</Tab>
 									<br />
 									<Tab>
 										<button className='btn btn-primary btnTab-i'>
@@ -126,56 +126,15 @@ export class DashIstructor extends Component {
 						<TabPanel>
 							<Courses handleScores={this.handleScores} />
 						</TabPanel>
-						{/* <TabPanel></TabPanel> */}
+						<TabPanel>
+							<MyExams />
+						</TabPanel>
 						<TabPanel>
 							<Profile />
 						</TabPanel>
 					</div>
 				</div>
 			</Tabs>
-
-			// <div class='wrapper'>
-			// 	<main></main>
-			// 	<sidebar>
-			// 		<div class='avatar'>
-			// 			<div class='avatar__img'>
-			// 				<img src='https://picsum.photos/70' alt='avatar' />
-			// 			</div>
-			// 			<div class='avatar__name'>John Smith</div>
-			// 		</div>
-
-			// 		<nav class='menu'>
-			// 			<a class='menu__item' href='#'>
-			// 				<i class='menu__icon fa fa-home'></i>
-			// 				<span class='menu__text'>overview</span>
-			// 			</a>
-			// 			<a class='menu__item' href='#'>
-			// 				<i class='menu__icon fa fa-envelope'></i>
-			// 				<span class='menu__text'>messages</span>
-			// 			</a>
-			// 			<a class='menu__item' href='#'>
-			// 				<i class='menu__icon fa fa-list'></i>
-			// 				<span class='menu__text'>workout</span>
-			// 			</a>
-			// 			<a class='menu__item menu__item--active' href='#'>
-			// 				<i class='menu__icon fa fa-calendar'></i>
-			// 				<span class='menu__text'>calendar</span>
-			// 			</a>
-			// 			<a class='menu__item' href='#'>
-			// 				<i class='menu__icon fa fa-bar-chart'></i>
-			// 				<span class='menu__text'>goals</span>
-			// 			</a>
-			// 			<a class='menu__item' href='#'>
-			// 				<i class='menu__icon fa fa-trophy'></i>
-			// 				<span class='menu__text'>achivements</span>
-			// 			</a>
-			// 			<a class='menu__item' href='#'>
-			// 				<i class='menu__icon fa fa-sliders'></i>
-			// 				<span class='menu__text'>measurements</span>
-			// 			</a>
-			// 		</nav>
-			// 	</sidebar>
-			// </div>
 		);
 	}
 }

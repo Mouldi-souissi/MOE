@@ -33,7 +33,7 @@ export class CourseCard extends Component {
 
 	checkCourseEnrollment = () => {
 		axios({
-			url: "http://91.134.133.143:9090/api/v1/courses/enrollments",
+			url: "https://app.visioconf.site/api/v1/courses/enrollments",
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})

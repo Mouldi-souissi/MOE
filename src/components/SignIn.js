@@ -3,7 +3,6 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
-// import Gravatar from "react-gravatar";
 
 export class SignIn extends Component {
 	state = {
@@ -19,7 +18,7 @@ export class SignIn extends Component {
 		e.preventDefault();
 		let { email, password } = this.state;
 		axios
-			.post("http://91.134.133.143:9090/api/auth", { email, password })
+			.post("https://app.visioconf.site/api/auth", { email, password })
 			.then((res) => {
 				if (res.status !== 200) alert("invalid credentials");
 				else {
@@ -41,9 +40,7 @@ export class SignIn extends Component {
 				<div className='login-clean'>
 					<form onSubmit={(e) => this.handleSignIn(e)}>
 						<h3 className='text-center mb-3'>Sign In</h3>
-						<div className='avatar-bg-dash'>
-							{/* <Gravatar email={this.state.email} /> */}
-						</div>
+						<div className='avatar-bg-dash'></div>
 
 						<div className='form-group d-flex align-items-center'>
 							<i className='fa fa-envelope mr-3' aria-hidden='true'></i>
@@ -53,6 +50,7 @@ export class SignIn extends Component {
 								name='email'
 								placeholder='Email'
 								onChange={this.handleInput}
+								maxLength='20'
 								required
 							/>
 						</div>
@@ -64,6 +62,7 @@ export class SignIn extends Component {
 								name='password'
 								placeholder='Password'
 								onChange={this.handleInput}
+								maxLength='20'
 								required
 							/>
 						</div>
