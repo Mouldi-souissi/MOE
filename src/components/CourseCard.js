@@ -9,6 +9,7 @@ import moment from "moment";
 export class CourseCard extends Component {
 	static contextType = ThemeContext;
 	state = {
+		isEnrolledToTheme: false,
 		isEnrolled: false,
 		isStudent:
 			localStorage.getItem("token") !== null &&
@@ -31,27 +32,24 @@ export class CourseCard extends Component {
 		this.setState({ isEnrolled: false });
 	};
 
-	checkCourseEnrollment = () => {
+	checkEnrollmentTheme = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/courses/enrollments",
-			method: "GET",
+			url: `https://app.visioconf.site/api/v1/users/themes/enrollments?theme=${this.props.course.theme.value}`,
+			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
 			.then((res) => {
 				this.setState({
-					isEnrolled: res.data.payload.filter(
-						(el) => el.courseId === this.props.course.id
-					).length
-						? true
-						: false,
+					isEnrolledToTheme: res.data.payload[0].status,
 				});
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
+
 	componentDidMount() {
-		this.state.isStudent && this.checkCourseEnrollment();
+		this.state.isStudent && this.checkEnrollmentTheme();
 
 		// ...
 		var max = 70;
@@ -62,7 +60,6 @@ export class CourseCard extends Component {
 			str = tot <= max ? str : str.substring(0, max + 1) + "...";
 			$(this).html(str);
 		});
-		// check theme enrollment
 	}
 
 	render() {
@@ -72,11 +69,15 @@ export class CourseCard extends Component {
 			picture,
 			shortDescription,
 			createdDate,
+			theme,
 		} = this.props.course;
 
 		let a = moment(new Date()); //todays date
 		let b = createdDate;
 		let date = a.diff(b, "hours");
+		const enrolledCourses = this.context.enrolledCourses.filter(
+			(course) => course.id === this.props.course.id
+		)[0];
 
 		return (
 			<div className='col-auto mb-4 mt-4'>
@@ -115,18 +116,23 @@ export class CourseCard extends Component {
 						)}
 
 						<h5 className='card-title'>{title}</h5>
-						<p className='card-text'>{shortDescription}</p>
+						<h6 className='card-title'>{theme.label}</h6>
+						<p className='card-text mb-5'>{shortDescription}</p>
 						<div className='d-flex justify-content-between align-items-center'>
-							<div className='btn-group'>
-								{this.state.isStudent && this.state.isEnrolled && (
-									<Link to={`/article${id}`}>
-										<button
-											type='button'
-											className='btn btn-sm btn-outline-secondary mr-1'>
-											View
-										</button>
-									</Link>
-								)}
+							<div
+								className='btn-group'
+								style={{ position: "absolute", bottom: "20px" }}>
+								{this.state.isStudent &&
+									enrolledCourses &&
+									this.state.isEnrolledToTheme === "ACCEPTED" && (
+										<Link to={`/article${id}`}>
+											<button
+												type='button'
+												className='btn btn-sm btn-outline-secondary mr-1'>
+												View
+											</button>
+										</Link>
+									)}
 								{this.state.isInstructor && this.state.isOwner && (
 									<Link to={`/article${id}`}>
 										<button
@@ -147,7 +153,7 @@ export class CourseCard extends Component {
 
 								{jwt_decode(localStorage.token).roles[0] !== "INSTRUCTOR" && (
 									<div>
-										{this.state.isEnrolled ? (
+										{enrolledCourses ? (
 											<button
 												type='button'
 												className='btn btn-sm btn-outline-secondary'
@@ -165,7 +171,9 @@ export class CourseCard extends Component {
 									</div>
 								)}
 							</div>
-							<small className='text-muted'>
+							<small
+								className='text-muted'
+								style={{ position: "absolute", bottom: "20px", right: "10px" }}>
 								{moment(createdDate).format("MMM Do YY")}
 							</small>
 						</div>

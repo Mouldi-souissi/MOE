@@ -46,6 +46,7 @@ export class Navbar extends Component {
 
 	render() {
 		const picture = this.context.profile.picture;
+		const name = this.context.profile.firstName;
 		return (
 			<nav className='navbar navbar-light navbar-expand-lg'>
 				<div className='container-fluid'>
@@ -130,9 +131,7 @@ export class Navbar extends Component {
 												aria-hidden='true'></i>
 										</div>
 									</Link>
-									<div className='nav-link'>
-										{jwt_decode(localStorage.token).firstName}
-									</div>
+									<div className='nav-link'>{name}</div>
 									<button
 										className='btn btn-success'
 										type='button'

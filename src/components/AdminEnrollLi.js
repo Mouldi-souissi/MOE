@@ -11,6 +11,12 @@ export class AdminEnrollLi extends Component {
 						<div className='avatar-admin'></div>
 					</td>
 					<td className='align-middle'>
+						<div>
+							{this.props.enroll.student && this.props.enroll.student.firstName}{" "}
+							{this.props.enroll.student && this.props.enroll.student.lastName}
+						</div>
+					</td>
+					<td className='align-middle'>
 						<div>{this.props.enroll.label}</div>
 					</td>
 
@@ -24,7 +30,7 @@ export class AdminEnrollLi extends Component {
 								onClick={() =>
 									this.context.themeEnroll(
 										this.props.enroll.themeId,
-										this.props.enroll.studentId,
+										this.props.enroll.student.id,
 										this.props.enroll.status
 									)
 								}>
@@ -36,7 +42,7 @@ export class AdminEnrollLi extends Component {
 								onClick={() =>
 									this.context.themeEnroll(
 										this.props.enroll.themeId,
-										this.props.enroll.studentId,
+										this.props.enroll.student.id,
 										this.props.enroll.status
 									)
 								}>

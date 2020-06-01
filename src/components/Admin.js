@@ -24,18 +24,22 @@ export class Admin extends Component {
 		}
 		const students = this.context.students;
 		const instructors = this.context.instructors;
-		let filteredStudents = students.filter((el) =>
-			el.firstName
-				.trim()
-				.toLocaleLowerCase()
-				.includes(this.state.search.trim().toLocaleLowerCase())
-		);
-		let filteredInstructors = instructors.filter((el) =>
-			el.firstName
-				.trim()
-				.toLocaleLowerCase()
-				.includes(this.state.search.trim().toLocaleLowerCase())
-		);
+		// let filteredStudents =
+		// 	students &&
+		// 	students.filter((el) =>
+		// 		el.firstName
+		// 			.trim()
+		// 			.toLocaleLowerCase()
+		// 			.includes(this.state.search.trim().toLocaleLowerCase())
+		// 	);
+		// let filteredInstructors =
+		// 	instructors &&
+		// 	instructors.filter((el) =>
+		// 		el.firstName
+		// 			.trim()
+		// 			.toLocaleLowerCase()
+		// 			.includes(this.state.search.trim().toLocaleLowerCase())
+		// 	);
 		const enrollments = this.context.enrollments;
 		return (
 			<div className='admin'>
@@ -168,7 +172,7 @@ export class Admin extends Component {
 															</th>
 														</tr>
 													</thead>
-													{filteredStudents.map((user, key) => (
+													{students.map((user, key) => (
 														<AdminLi key={key} user={user} role='student' />
 													))}
 												</table>
@@ -190,7 +194,7 @@ export class Admin extends Component {
 														</th>
 													</tr>
 												</thead>
-												{filteredInstructors.map((user, key) => (
+												{instructors.map((user, key) => (
 													<AdminLi key={key} user={user} role='instructor' />
 												))}
 											</table>
@@ -200,6 +204,7 @@ export class Admin extends Component {
 												<thead>
 													<tr align='center'>
 														<th scope='col'></th>
+														<th scope='col'>Student</th>
 														<th scope='col'>Theme</th>
 														<th scope='col'>Status</th>
 

@@ -17,8 +17,10 @@ export class Profile extends Component {
 		loaded: 0,
 	};
 
-	handleEdit = () => {
+	handleEdit = (e) => {
+		e.preventDefault();
 		this.setState({ isEditig: true });
+
 		if (this.state.editedData.length !== 0) {
 			this.context.handleEdit(this.state.editedData);
 			this.setState({ isEditig: false });
@@ -74,7 +76,7 @@ export class Profile extends Component {
 							</div>
 						</div>
 					</div>
-					<form>
+					<form onSubmit={(e) => this.handleEdit(e)}>
 						<div className='form-row profile-row'>
 							<div className='col-md-4 relative'>
 								<div className='avatar'>
@@ -145,6 +147,7 @@ export class Profile extends Component {
 															},
 														})
 													}
+													required
 												/>
 											</div>
 										) : (
@@ -172,6 +175,7 @@ export class Profile extends Component {
 															},
 														})
 													}
+													required
 												/>
 											</div>
 										) : (
@@ -197,8 +201,7 @@ export class Profile extends Component {
 										<div className='col-md-12 content-right'>
 											<button
 												className='btn btn-primary form-btn'
-												type='button'
-												onClick={this.handleEdit}>
+												type='submit'>
 												SAVE
 											</button>
 											<button

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ThemeContext from "../ThemeContext";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 export class MyExams extends Component {
 	static contextType = ThemeContext;
@@ -20,6 +21,7 @@ export class MyExams extends Component {
 								<th scope='col'>Title</th>
 								<th scope='col'>Duration</th>
 								<th scope='col'>Start Date</th>
+								<th scope='col'>Status</th>
 							</tr>
 						</thead>
 						{exmas.map((exam, i) => (
@@ -33,6 +35,11 @@ export class MyExams extends Component {
 
 									<td>{exam.durationMin}</td>
 									<td>{exam.startDate}</td>
+									<td>
+										{moment(exam.startDate) < moment(new Date())
+											? "Finished"
+											: "Upcoming"}
+									</td>
 								</tr>
 							</tbody>
 						))}
