@@ -13,12 +13,11 @@ export class SessionModal extends Component {
 					className='modal'
 					tabIndex='-1'
 					role='dialog'
-					id='SessionModal'
+					id='deleteModal'
 					data-backdrop='static'>
 					<div className='modal-dialog modal-dialog-centered' role='document'>
 						<div className='modal-content'>
 							<div className='modal-header'>
-								<h4 className='modal-title'>Create Session</h4>
 								<button
 									type='button'
 									className='close'
@@ -29,37 +28,27 @@ export class SessionModal extends Component {
 							</div>
 							<div className='modal-body'>
 								<div className='form-group'>
-									<h5>Start Auto Recording</h5>
-									<select
-										className='form-control'
-										id='record'
-										defaultValue={this.state.autoStartRecording}
-										name='record'
-										onChange={(e) =>
-											this.setState({ autoStartRecording: e.target.value })
-										}>
-										<option>No</option>
-										<option>Yes</option>
-									</select>
+									<h5>Are you sure you want to delete this file ?</h5>
 								</div>
 							</div>
 							<div className='modal-footer'>
 								<button
 									type='button'
 									className='btn btn-primary'
+									data-dismiss='modal'
 									onClick={() =>
-										this.context.startSession(
-											this.state.autoStartRecording,
+										this.context.handleDeleteFiles(
+											this.props.id,
 											this.props.idCourse
 										)
 									}>
-									Start
+									Yes
 								</button>
 								<button
 									type='button'
 									className='btn btn-secondary'
 									data-dismiss='modal'>
-									Close
+									No
 								</button>
 							</div>
 						</div>

@@ -87,6 +87,13 @@ export class Exams extends Component {
 		let a = moment(new Date()); //todays date
 		let b = exam.startDate;
 		let date = a.diff(b, "hours");
+
+		// if (date < 24) {
+		let startTime = moment(b).format("h:mm:ss a");
+		// let endTime = startTime.add(2, "hours");
+		console.log("start" + startTime);
+		// console.log("end" + endTime);
+		// }
 		return (
 			<div className='exam mt-5'>
 				<div className='container'>

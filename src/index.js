@@ -7,17 +7,20 @@ import { UserProvider } from "./UserContext";
 import { ProfileProvider } from "./ProfileContext";
 import { ThemeProvider } from "./ThemeContext";
 import { ExamProvider } from "./ExamContext";
+import { CourseProvider } from "./CourseContext";
 
 ReactDOM.render(
-	<ExamProvider>
-		<ThemeProvider>
-			<ProfileProvider>
-				<UserProvider>
-					<App />
-				</UserProvider>
-			</ProfileProvider>
-		</ThemeProvider>
-	</ExamProvider>,
+	<CourseProvider>
+		<ExamProvider>
+			<ThemeProvider>
+				<ProfileProvider>
+					<UserProvider>
+						<App />
+					</UserProvider>
+				</ProfileProvider>
+			</ThemeProvider>
+		</ExamProvider>
+	</CourseProvider>,
 	document.getElementById("root")
 );
 

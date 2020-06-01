@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import CourseContext from "../CourseContext";
 
 export class ArticleModal extends Component {
+	static contextType = CourseContext;
 	state = {
 		image: "",
 		src: "",
@@ -38,15 +40,12 @@ export class ArticleModal extends Component {
 	};
 
 	render() {
-		let {
-			title,
-			description,
-			type,
-			textFile,
-			video,
-			videoTitle,
-			videoDescription,
-		} = this.state;
+		let { title, type, textFile, video, videoTitle } = this.state;
+		const err = this.context.err;
+		const request = this.context.request;
+		const loadedPic = this.context.loadedPic;
+		const loadedFile = this.context.loadedFile;
+		const loadedvideo = this.context.loadedvideo;
 		return (
 			<div>
 				<div
@@ -69,14 +68,14 @@ export class ArticleModal extends Component {
 								</button>
 							</div>
 							<div className='modal-body'>
-								{this.props.request && (
+								{request && (
 									<p
 										className={
-											this.props.request === "fail"
+											request === "fail"
 												? "alert alert-danger"
 												: "alert alert-success"
 										}>
-										{this.props.err}
+										{err}
 									</p>
 								)}
 								<div>
@@ -89,13 +88,13 @@ export class ArticleModal extends Component {
 											name='courseFile'
 											onChange={this.handleImageFile}
 										/>
-										{this.props.loaded1 && (
+										{loadedPic !== 0 && (
 											<div className='progress'>
 												<div
 													className='progress-bar'
 													role='progressbar'
-													style={{ width: `${this.props.loaded1}%` }}
-													aria-valuenow={this.props.loaded1}
+													style={{ width: `${loadedPic}%` }}
+													aria-valuenow={loadedPic}
 													aria-valuemin='0'
 													aria-valuemax='100'></div>
 											</div>
@@ -113,7 +112,12 @@ export class ArticleModal extends Component {
 									</div>
 									<button
 										className='btn btn-primary'
-										onClick={() => this.props.handleFileSend(this.state.image)}>
+										onClick={() =>
+											this.context.handlePictureUpload(
+												this.state.image,
+												this.props.id
+											)
+										}>
 										Upload
 									</button>
 									<hr />
@@ -131,13 +135,13 @@ export class ArticleModal extends Component {
 											onChange={this.handleTextFile}
 											required
 										/>
-										{this.props.loaded2 && (
+										{loadedFile !== 0 && (
 											<div className='progress'>
 												<div
 													className='progress-bar'
 													role='progressbar'
-													style={{ width: `${this.props.loaded2}%` }}
-													aria-valuenow={this.props.loaded2}
+													style={{ width: `${loadedFile}%` }}
+													aria-valuenow={loadedFile}
 													aria-valuemin='0'
 													aria-valuemax='100'></div>
 											</div>
@@ -189,11 +193,11 @@ export class ArticleModal extends Component {
 										<button
 											className='btn btn-primary'
 											onClick={() =>
-												this.props.handleTextFileSend(
+												this.context.handleTextFileSend(
 													textFile,
 													title,
-													description,
-													type
+													type,
+													this.props.id
 												)
 											}>
 											Upload
@@ -212,13 +216,13 @@ export class ArticleModal extends Component {
 											onChange={this.handleVideo}
 											required
 										/>
-										{this.props.loaded3 && (
+										{loadedvideo !== 0 && (
 											<div className='progress'>
 												<div
 													className='progress-bar'
 													role='progressbar'
-													style={{ width: `${this.props.loaded3}%` }}
-													aria-valuenow={this.props.loaded3}
+													style={{ width: `${loadedvideo}%` }}
+													aria-valuenow={loadedvideo}
 													aria-valuemin='0'
 													aria-valuemax='100'></div>
 											</div>
@@ -240,10 +244,10 @@ export class ArticleModal extends Component {
 										<button
 											className='btn btn-primary mt-3'
 											onClick={() =>
-												this.props.handleVideoSend(
+												this.context.handleVideoSend(
 													video,
 													videoTitle,
-													videoDescription
+													this.props.id
 												)
 											}>
 											Upload

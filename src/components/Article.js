@@ -8,13 +8,14 @@ import jwt_decode from "jwt-decode";
 import { Link } from "react-router-dom";
 import { VideoPlayer } from "./VideoPlayer";
 import SessionModal from "./SessionModal";
+import CourseContext from "../CourseContext";
+import DeleteFileModal from "./DeleteFileModal";
 
 export class Article extends Component {
+	static contextType = CourseContext;
 	state = {
-		courses: [],
 		isEditing: false,
 		editedData: {},
-		bonusFiles: [],
 		exams: [],
 		loaded: 0,
 		sessions: [],
@@ -53,24 +54,6 @@ export class Article extends Component {
 		"indent",
 	];
 
-	getAllCourses = () => {
-		axios({
-			url: "https://app.visioconf.site/api/v1/courses",
-			method: "GET",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => {
-				this.setState({
-					courses: res.data.payload.filter(
-						(el) => el.id === Number(this.props.match.params.id)
-					),
-				});
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-
 	handleText = (value) => {
 		this.setState({
 			...this.state,
@@ -79,161 +62,17 @@ export class Article extends Component {
 	};
 
 	handleEdit = () => {
-		let theme = this.state.courses[0] && this.state.courses[0].theme.value;
-		let editedData = { ...this.state.editedData, theme };
-
-		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}`,
-			method: "put",
-			headers: { authorization: localStorage.getItem("token") },
-			data: editedData,
-		})
-			.then(window.location.reload(false), this.setState({ isEditing: false }))
-			.catch((err) => console.log(err));
-	};
-
-	handleFileSend = (image) => {
-		if (!image)
-			this.setState({
-				...this.state,
-				err: "Please select an image file",
-				request: "fail",
-			});
-
-		var formData = new FormData();
-		formData.append("file", image);
-		image &&
-			axios({
-				url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/picture`,
-				method: "POST",
-				headers: { authorization: localStorage.getItem("token") },
-				data: formData,
-				onUploadProgress: (ProgressEvent) => {
-					this.setState({
-						loaded1: (ProgressEvent.loaded / ProgressEvent.total) * 100,
-					});
-					this.state.loaded1 === 100 && window.location.reload(false);
-				},
-			}).catch((err) => console.log(err));
-	};
-
-	handleTextFileSend = (textFile, title, description, type) => {
-		if (!type) {
-			type = "PRESENTATION";
-		}
-		if (!textFile)
-			this.setState({
-				...this.state,
-				err: "Please select a text file",
-				request: "fail",
-			});
-		if (!title)
-			this.setState({
-				...this.state,
-				err: "Please fill title field",
-				request: "fail",
-			});
-		var formData = new FormData();
-		formData.append("file", textFile);
-		textFile &&
-			title &&
-			axios({
-				url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/attachments?description=${description}&title=${title}&type=${type}`,
-				method: "POST",
-				headers: { authorization: localStorage.getItem("token") },
-				data: formData,
-				onUploadProgress: (ProgressEvent) => {
-					this.setState({
-						loaded2: (ProgressEvent.loaded / ProgressEvent.total) * 100,
-					});
-					this.state.loaded2 === 100 && window.location.reload(false);
-				},
-			}).catch((err) => console.log(err));
-	};
-	handleVideoSend = (video, videoTitle, videoDescription) => {
-		if (!video)
-			this.setState({
-				...this.state,
-				err: "Please select a video",
-				request: "fail",
-			});
-		if (!videoTitle)
-			this.setState({
-				...this.state,
-				err: "Please fill video title field",
-				request: "fail",
-			});
-
-		var formData = new FormData();
-		formData.append("file", video);
-		video &&
-			videoTitle &&
-			axios({
-				url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/attachments?description=${videoDescription}&title=${videoTitle}&type=VIDEO_YT`,
-				method: "POST",
-				headers: { authorization: localStorage.getItem("token") },
-				data: formData,
-				onUploadProgress: (ProgressEvent) => {
-					this.setState({
-						loaded3: (ProgressEvent.loaded / ProgressEvent.total) * 100,
-					});
-					this.state.loaded3 === 100 && window.location.reload(false);
-				},
-			}).catch((err) => console.log(err));
-	};
-
-	getUploaded = () => {
-		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/attachments`,
-			method: "get",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => this.setState({ bonusFiles: res.data.payload }))
-			.catch((err) => console.log(err));
-	};
-	getExamsByCourse = () => {
-		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/exams`,
-			method: "GET",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => {
-				this.setState({
-					exams: res.data.payload,
-				});
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-
-	handleDeleteFiles = (id) => {
-		axios({
-			url: `https://app.visioconf.site/api/v1/attachments/${id}`,
-			method: "delete",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then(window.location.reload(false), this.setState({ isEditing: false }))
-			.catch((err) => console.log(err));
-	};
-
-	startSession = (autoStartRecording) => {
-		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${
-				this.state.courses[0].id
-			}/meetings/create?autoStartRecording=${
-				autoStartRecording === "No" ? false : true
-			}`,
-			method: "get",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => window.open(`${res.data.payload}`, "_blank"))
-			.catch((err) => console.log(err));
+		this.context.handleEdit(
+			this.props.match.params.id,
+			this.state.editedData,
+			this.context.course.theme.value
+		);
+		this.setState({ isEditing: false });
 	};
 
 	joinSession = () => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${this.state.courses[0].id}/meetings/join`,
+			url: `https://app.visioconf.site/api/v1/courses/${this.context.course.id}/meetings/join`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -241,50 +80,25 @@ export class Article extends Component {
 			.catch((err) => console.log(err));
 	};
 
-	getSessions = () => {
-		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/meetings?running=true`,
-			method: "get",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => this.setState({ sessions: res.data.payload }))
-			.catch((err) => console.log(err));
-	};
-
-	getRecordedSessions = () => {
-		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/meetings/recordings`,
-			method: "get",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) =>
-				this.setState({
-					recordings: res.data.payload,
-				})
-			)
-			.catch((err) => console.log(err));
-	};
-
 	componentDidMount() {
-		this.getAllCourses();
-		this.getUploaded();
-		this.getExamsByCourse();
-		this.getSessions();
-		this.getRecordedSessions();
+		this.context.getCourse(this.props.match.params.id);
+		this.context.getUploadedTextFiles(this.props.match.params.id);
+		this.context.getExamsByCourse(this.props.match.params.id);
+		this.context.getSessions(this.props.match.params.id);
+		this.context.getRecordedSessions(this.props.match.params.id);
 	}
-	render() {
-		if (this.state.courses[0] !== undefined) {
-			var s = this.state.courses[0].description;
+	componentDidUpdate() {
+		if (this.context.course && this.context.course.description !== undefined) {
+			var s = this.context.course.description;
 			var justHtmlContent = document.getElementById("justHtml");
 			this.state.isEditing
 				? (justHtmlContent.innerHTML = "")
 				: (justHtmlContent.innerHTML = s);
 		}
+	}
+	render() {
 		const style = {
-			backgroundImage: ` url(${`https://app.visioconf.site/img/${
-				this.state.courses[0] && this.state.courses[0].picture
-			}`})`,
-
+			backgroundImage: ` url(${`https://app.visioconf.site/img/${this.context.course.picture}`})`,
 			backgroundSize: "cover",
 			backgroundPosition: "center center",
 			backgroundRepeat: "no-repeat",
@@ -292,6 +106,12 @@ export class Article extends Component {
 			// backgroundAttachment: "fixed",
 			// width: "100%",
 		};
+
+		const course = this.context.course;
+		const bonusFiles = this.context.bonusFiles;
+		const sessions = this.context.sessions;
+		const exams = this.context.exams;
+		const recordings = this.context.recordings;
 		return (
 			<div>
 				<div className='container mt-5'>
@@ -299,16 +119,11 @@ export class Article extends Component {
 						className='jumbotron p-3 p-md-5 text-white rounded bg-dark'
 						style={style}>
 						<div className='col-md-6 px-0'>
-							<h1 className='display-4'>
-								{this.state.courses[0] && this.state.courses[0].title}
-							</h1>
+							<h1 className='display-4'>{course.title}</h1>
 
 							<p className='blog-post-meta'>
-								{this.state.courses[0] && this.state.courses[0].createdDate} by{" "}
-								<a href='/'>
-									{this.state.courses[0] &&
-										this.state.courses[0].createdBy.lastName}
-								</a>
+								{course.createdDate} by{" "}
+								<a href='/'>{course.createdBy && course.createdBy.lastName}</a>
 							</p>
 						</div>
 					</div>
@@ -324,9 +139,8 @@ export class Article extends Component {
 									Go Back
 								</button>
 
-								{this.state.courses[0] &&
-									this.state.courses[0].createdBy.id ===
-										jwt_decode(localStorage.token).id && (
+								{course.createdBy &&
+									course.createdBy.id === jwt_decode(localStorage.token).id && (
 										<span>
 											<i
 												type='button'
@@ -371,10 +185,7 @@ export class Article extends Component {
 															className='form-control tooLong'
 															type='text'
 															name='title'
-															defaultValue={
-																this.state.courses[0] &&
-																this.state.courses[0].title
-															}
+															defaultValue={course.title}
 															onChange={(e) =>
 																this.setState({
 																	...this.state,
@@ -396,10 +207,7 @@ export class Article extends Component {
 															className='form-control tooLong'
 															type='text'
 															name='title'
-															defaultValue={
-																this.state.courses[0] &&
-																this.state.courses[0].shortDescription
-															}
+															defaultValue={course.shortDescription}
 															onChange={(e) =>
 																this.setState({
 																	...this.state,
@@ -418,26 +226,14 @@ export class Article extends Component {
 														<ReactQuill
 															modules={this.modules}
 															formats={this.formats}
-															defaultValue={
-																this.state.courses[0] &&
-																this.state.courses[0].description
-															}
+															defaultValue={course.description}
 															onChange={this.handleText}
 															theme='snow'
 														/>
 													</div>
 												)}
 
-												<ArticleModal
-													handleFileSend={this.handleFileSend}
-													handleTextFileSend={this.handleTextFileSend}
-													handleVideoSend={this.handleVideoSend}
-													loaded1={this.state.loaded1}
-													loaded2={this.state.loaded2}
-													loaded3={this.state.loaded3}
-													request={this.state.request}
-													err={this.state.err}
-												/>
+												<ArticleModal id={this.props.match.params.id} />
 											</div>
 										</span>
 									)}
@@ -448,67 +244,66 @@ export class Article extends Component {
 							</div>
 							<div>
 								<h5 className='mt-5'>Download attachment files:</h5>
-								{this.state.bonusFiles &&
-									this.state.bonusFiles
-										.filter((el) => el.type !== "VIDEO_YT")
-										.map((el) => (
-											<div
-												className='d-flex align-items-center justify-content-between '
-												key={el.id}>
-												<a
-													href={`https://app.visioconf.site/attachment/${el.fileName}`}
-													download={el.title}
-													target='_blank'
-													rel='noopener noreferrer'>
-													<div
-														src={`https://app.visioconf.site/attachment/${el.fileName}`}>
-														{el.title}
-													</div>
-												</a>
-												{this.state.courses[0] &&
-													this.state.courses[0].createdBy.id ===
-														jwt_decode(localStorage.token).id && (
+								{bonusFiles
+									.filter((el) => el.type !== "VIDEO_YT")
+									.map((el) => (
+										<div
+											className='d-flex align-items-center justify-content-between '
+											key={el.id}>
+											<a
+												href={`https://app.visioconf.site/attachment/${el.fileName}`}
+												download={el.title}
+												target='_blank'
+												rel='noopener noreferrer'>
+												<div
+													src={`https://app.visioconf.site/attachment/${el.fileName}`}>
+													{el.title}
+												</div>
+											</a>
+											{course.createdBy &&
+												course.createdBy.id ===
+													jwt_decode(localStorage.token).id && (
+													<div>
 														<i
 															type='button'
 															className='fa fa-times btn btn-outline-danger ml-5 mb-2'
 															aria-hidden='true'
-															onClick={() => this.handleDeleteFiles(el.id)}
+															data-toggle='modal'
+															data-target='#deleteModal'
 														/>
-													)}
-											</div>
-										))}
-								{this.state.bonusFiles && (
+														<DeleteFileModal
+															id={el.id}
+															idCourse={this.props.match.params.id}
+														/>
+													</div>
+												)}
+										</div>
+									))}
+								{!bonusFiles && (
 									<div className='mt-5'>No attachments found</div>
 								)}
 							</div>
-							{this.state.bonusFiles &&
-								this.state.bonusFiles.find((el) => el.type === "VIDEO_YT") && (
-									<div>
-										<h5 className='mt-5'>Attachment Video:</h5>
-										<VideoPlayer
-											videoId={
-												this.state.bonusFiles[0] &&
-												this.state.bonusFiles[0].videoYtId
-											}
-										/>
-									</div>
-								)}
+							{bonusFiles.find((el) => el.type === "VIDEO_YT") && (
+								<div>
+									<h5 className='mt-5'>Attachment Video:</h5>
+									<VideoPlayer
+										videoId={bonusFiles.videoYtId && bonusFiles.videoYtId}
+									/>
+								</div>
+							)}
 						</div>
 
 						<aside className='col-md-4 blog-sidebar'>
 							<div className='p-3 mb-3 bg-light rounded'>
 								<h4 className=''>About</h4>
-								<p className='mb-0'>
-									{this.state.courses[0] &&
-										this.state.courses[0].shortDescription}
-								</p>
+								<p className='mb-0'>{course.shortDescription}</p>
 							</div>
 
 							<div className='p-3'>
 								<div className='d-flex align-items-center justify-content-between mb-5'>
 									<h4>Exams of this course</h4>
-									{this.state.courses[0] &&
-										this.state.courses[0].createdBy.id ===
+									{course.createdBy &&
+										course.createdBy.id ===
 											jwt_decode(localStorage.token).id && (
 											<Link to={`/addExam${this.props.match.params.id}`}>
 												<button className='btn btn-primary'>Create exam</button>
@@ -517,34 +312,33 @@ export class Article extends Component {
 								</div>
 
 								<ol className='list-unstyled mb-0'>
-									{this.state.exams &&
-										this.state.exams.map((el) => (
-											<div key={el.id} className='mb-4'>
-												<Link
-													to={{
-														pathname: `/exam${el.id}`,
-														isOwner:
-															this.state.courses[0] &&
-															this.state.courses[0].createdBy.id ===
-																jwt_decode(localStorage.token).id,
-													}}>
-													{el.title}
-												</Link>
+									{exams.map((el) => (
+										<div key={el.id} className='mb-4'>
+											<Link
+												to={{
+													pathname: `/exam${el.id}`,
+													isOwner:
+														course.createdBy &&
+														course.createdBy.id ===
+															jwt_decode(localStorage.token).id,
+												}}>
+												{el.title}
+											</Link>
 
-												<Link to={`/scores${el.id}`}>
-													<button className='btn btn-success float-right'>
-														Scores
-													</button>
-												</Link>
-											</div>
-										))}
+											<Link to={`/scores${el.id}`}>
+												<button className='btn btn-success float-right'>
+													Scores
+												</button>
+											</Link>
+										</div>
+									))}
 								</ol>
 							</div>
 							<div className='p-3'>
 								<div className='d-flex align-items-center mb-2'>
 									<h4>Live Session</h4>
-									{this.state.courses[0] &&
-										this.state.courses[0].createdBy.id ===
+									{course.createdBy &&
+										course.createdBy.id ===
 											jwt_decode(localStorage.token).id && (
 											<button
 												className='btn btn-secondary ml-5'
@@ -555,37 +349,34 @@ export class Article extends Component {
 												Create
 											</button>
 										)}
-									<SessionModal startSession={this.startSession} />
+									<SessionModal idCourse={this.props.match.params.id} />
 
 									<button
 										className={
-											this.state.sessions.length !== 0
+											sessions.length !== 0
 												? "btn btn-primary ml-3"
 												: "btn btn-primary disabled ml-3"
 										}
-										onClick={
-											this.state.sessions.length ? this.joinSession : undefined
-										}>
+										onClick={sessions.length ? this.joinSession : undefined}>
 										Join
 									</button>
 								</div>
-								{this.state.sessions.length === 0 && (
+								{sessions.length === 0 && (
 									<h6 className='ml-3'>No Active Sessions Found</h6>
 								)}
 							</div>
 							<div className='p-3'>
 								<h4>Recorded Session</h4>
 								<ol className='list-unstyled mb-0'>
-									{this.state.recordings &&
-										this.state.recordings.map((rec, i) => (
-											<a
-												href={`${rec.url}`}
-												target='_blank'
-												rel='noopener noreferrer'
-												key={i}>
-												{rec.endDate}
-											</a>
-										))}
+									{recordings.map((rec, i) => (
+										<a
+											href={`${rec.url}`}
+											target='_blank'
+											rel='noopener noreferrer'
+											key={i}>
+											{rec.endDate}
+										</a>
+									))}
 								</ol>
 							</div>
 						</aside>

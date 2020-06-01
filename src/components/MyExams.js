@@ -26,9 +26,11 @@ export class MyExams extends Component {
 							<tbody key={i}>
 								<tr>
 									<th scope='row'>{i + 1}</th>
-									<Link to={`/exam${exam.id}`}>
-										<td>{exam.title}</td>
-									</Link>
+
+									<td>
+										<Link to={`/exam${exam.id}`}>{exam.title}</Link>
+									</td>
+
 									<td>{exam.durationMin}</td>
 									<td>{exam.startDate}</td>
 								</tr>
