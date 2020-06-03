@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import CourseCard from "./CourseCard";
-// import axios from "axios";
 import jwt_decode from "jwt-decode";
 import ThemeContext from "../ThemeContext";
 const Moment = require("moment");
@@ -13,20 +12,26 @@ export class Courses extends Component {
 	};
 
 	componentDidMount() {
-		this.context.getAllCourses();
-		this.context.getEnrolledCources();
-		this.context.getEnrolledThemes();
+		if (jwt_decode(localStorage.token).roles[0] === "STUDENT") {
+			this.context.getEnrolledCources();
+			this.context.getEnrolledThemes();
+		} else {
+			this.context.getAllcourseByInstructor(jwt_decode(localStorage.token).id);
+		}
 	}
 	render() {
-		const courses = this.context.courses
-			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
-			.reverse();
 		const enrolledCourses = this.context.enrolledCourses
 			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
 			.reverse();
-		const enrolledThemes = this.context.enrolledThemes;
+		const enrolledThemes = this.context.enrolledThemes.filter(
+			(el) => el.status === "ACCEPTED"
+		);
 		const isFiltering = this.context.isFiltering;
 		const filteredCourses = this.context.filteredCourses
+			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
+			.reverse();
+
+		const coursesInstructor = this.context.coursesInstructor
 			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
 			.reverse();
 
@@ -42,29 +47,34 @@ export class Courses extends Component {
 							<option value='DEFAULT' disabled>
 								. . .
 							</option>
-							{enrolledThemes.map((theme) => (
-								<option key={theme.value}>{theme.value}</option>
-							))}
+							{enrolledThemes &&
+								enrolledThemes.map((theme) => (
+									<option key={theme.value}>{theme.value}</option>
+								))}
 						</select>
+					</div>
+				)}
+				{jwt_decode(localStorage.token).roles[0] === "INSTRUCTOR" && (
+					<div className='row justify-content-center'>
+						{coursesInstructor.map((course) => (
+							<CourseCard
+								key={course.id}
+								course={course}
+								handleScores={this.props.handleScores}
+							/>
+						))}
 					</div>
 				)}
 				{/* <h4 className='sectionTitle'>All courses:</h4> */}
 				<div className='row justify-content-center'>
-					{isFiltering
-						? filteredCourses.map((course) => (
-								<CourseCard
-									key={course.id}
-									course={course}
-									handleScores={this.props.handleScores}
-								/>
-						  ))
-						: courses.map((course) => (
-								<CourseCard
-									key={course.id}
-									course={course}
-									handleScores={this.props.handleScores}
-								/>
-						  ))}
+					{isFiltering &&
+						filteredCourses.map((course) => (
+							<CourseCard
+								key={course.id}
+								course={course}
+								handleScores={this.props.handleScores}
+							/>
+						))}
 				</div>
 				{jwt_decode(localStorage.token).roles[0] === "STUDENT" && (
 					<div>

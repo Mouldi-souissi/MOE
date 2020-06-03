@@ -30,7 +30,11 @@ export class MyExams extends Component {
 									<th scope='row'>{i + 1}</th>
 
 									<td>
-										<Link to={`/exam${exam.id}`}>{exam.title}</Link>
+										{moment(exam.startDate) < moment(new Date()) ? (
+											<Link to={`/scores${exam.id}`}>{exam.title}</Link>
+										) : (
+											<Link to={`/exam${exam.id}`}>{exam.title}</Link>
+										)}
 									</td>
 
 									<td>{exam.durationMin}</td>

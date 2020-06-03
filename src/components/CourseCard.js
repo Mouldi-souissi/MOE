@@ -20,10 +20,17 @@ export class CourseCard extends Component {
 		isOwner:
 			localStorage.getItem("token") !== null &&
 			jwt_decode(localStorage.token).id === this.props.course.createdBy.id,
+		status: "",
 	};
 
 	handleEnroll = () => {
-		this.context.handleEnrollCourse(this.props.course.id);
+		this.context.handleEnrollCourse(
+			this.props.course.id,
+			this.state.isEnrolledToTheme === "ACCEPTED" ||
+				this.state.isEnrolledToTheme === "OPEN"
+				? ""
+				: this.props.course.theme.value
+		);
 		this.setState({ isEnrolled: true });
 	};
 
@@ -39,17 +46,36 @@ export class CourseCard extends Component {
 			headers: { authorization: localStorage.getItem("token") },
 		})
 			.then((res) => {
-				this.setState({
-					isEnrolledToTheme: res.data.payload[0].status,
-				});
+				if (res.data.payload[0]) {
+					this.setState({
+						isEnrolledToTheme: res.data.payload[0].status,
+					});
+				}
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
 
+	checkCompleted = () => {
+		axios({
+			url: `https://app.visioconf.site/api/v1/courses/enrollments`,
+			method: "get",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => {
+				this.setState({
+					status: res.data.payload.filter(
+						(el) => el.courseId === Number(this.props.course.id)
+					)[0].status,
+				});
+			})
+			.catch((err) => console.log(err));
+	};
+
 	componentDidMount() {
 		this.state.isStudent && this.checkEnrollmentTheme();
+		this.state.isStudent && this.checkCompleted();
 
 		// ...
 		var max = 70;
@@ -78,6 +104,10 @@ export class CourseCard extends Component {
 		const enrolledCourses = this.context.enrolledCourses.filter(
 			(course) => course.id === this.props.course.id
 		)[0];
+
+		// const status = this.context.status.filter(
+		// 	(el) => el.courseId === Number(this.props.course.id)
+		// )[0].status;
 
 		return (
 			<div className='col-auto mb-4 mt-4'>
@@ -114,7 +144,20 @@ export class CourseCard extends Component {
 								<span>NEW</span>
 							</div>
 						)}
-
+						{this.state.isStudent && enrolledCourses && (
+							<span
+								// style={{ fontSize: "13px", padding: "10px" }}
+								className={
+									this.state.status === "IN_PROGRESS"
+										? "float-right badge badge-secondary"
+										: "float-right badge badge-success"
+								}>
+								Status:{" "}
+								{this.state.status === "IN_PROGRESS"
+									? "In progress"
+									: "Completed"}
+							</span>
+						)}
 						<h5 className='card-title'>{title}</h5>
 						<h6 className='card-title'>{theme.label}</h6>
 						<p className='card-text mb-5'>{shortDescription}</p>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import UserContext from "../UserContext";
+import ResetModal from "./ResetModal";
 
 export class AdminLi extends Component {
 	static contextType = UserContext;
@@ -32,7 +33,14 @@ export class AdminLi extends Component {
 			<tbody>
 				<tr align='center'>
 					<td>
-						<div className='avatar-admin'></div>
+						<div className='avatar-nav'>
+							{user.picture && (
+								<img
+									alt='img'
+									src={`https://app.visioconf.site/img/${user.picture}`}
+								/>
+							)}
+						</div>
 					</td>
 
 					<td className='align-middle'>
@@ -77,7 +85,10 @@ export class AdminLi extends Component {
 						)}
 					</td>
 					<td className='align-middle'>
-						<div> {user.email}</div>
+						<div>
+							{" "}
+							{user.email} {user.id}{" "}
+						</div>
 					</td>
 
 					{!isValid ? (
@@ -114,6 +125,16 @@ export class AdminLi extends Component {
 							<div> {user.active ? "active" : "Not active"}</div>
 						</td>
 					)}
+					<td className='align-middle' align='center'>
+						<button
+							className='btn btn-danger'
+							aria-hidden='true'
+							data-toggle='modal'
+							data-target='#reset'>
+							Reset
+						</button>
+						<ResetModal id={user.id} key={user.id} />
+					</td>
 					<td align='center' className='align-middle'>
 						<button className='btn btn-primary mb-2' onClick={this.handleEdit}>
 							<em className='fa fa-pencil'></em>

@@ -8,13 +8,23 @@ export class AdminEnrollLi extends Component {
 			<tbody>
 				<tr align='center'>
 					<td>
-						<div className='avatar-admin'></div>
+						<div className='avatar-nav'>
+							{this.props.enroll.student.picture && (
+								<img
+									alt='img'
+									src={`https://app.visioconf.site/img/${this.props.enroll.student.picture}`}
+								/>
+							)}
+						</div>
 					</td>
 					<td className='align-middle'>
 						<div>
 							{this.props.enroll.student && this.props.enroll.student.firstName}{" "}
 							{this.props.enroll.student && this.props.enroll.student.lastName}
 						</div>
+					</td>
+					<td className='align-middle'>
+						<div>{this.props.enroll.student.email}</div>
 					</td>
 					<td className='align-middle'>
 						<div>{this.props.enroll.label}</div>

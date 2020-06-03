@@ -5,7 +5,7 @@ export const ProfileContext = React.createContext();
 
 class ProfileProvider extends Component {
 	// Context state
-	state = { profile: [] };
+	state = { profile: [], enrolledThemes: [] };
 
 	// Method to update state
 	getProfile = () => {
@@ -60,18 +60,52 @@ class ProfileProvider extends Component {
 			.catch((err) => console.log(err));
 	};
 
+	handleChangePWD = (currentPassword, password, matchingPassword) => {
+		axios({
+			url: "https://app.visioconf.site/api/v1/users/edit-pwd",
+			method: "PUT",
+			headers: { authorization: localStorage.getItem("token") },
+			data: { currentPassword, password, matchingPassword },
+		})
+			.then((res) => {
+				this.setState({});
+				this.getProfile();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	getEnrolledThemes = () => {
+		axios({
+			url: "https://app.visioconf.site/api/v1/users/themes/enrollments",
+			method: "get",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => this.setState({ enrolledThemes: res.data.payload }))
+			.catch((err) => console.log(err));
+	};
 	render() {
 		const { children } = this.props;
-		const { profile } = this.state;
-		const { getProfile, handleEdit, handleFileSend } = this;
+		const { profile, enrolledThemes } = this.state;
+		const {
+			getProfile,
+			handleEdit,
+			handleFileSend,
+			handleChangePWD,
+			getEnrolledThemes,
+		} = this;
 
 		return (
 			<ProfileContext.Provider
 				value={{
 					profile,
+					enrolledThemes,
 					getProfile,
 					handleEdit,
 					handleFileSend,
+					handleChangePWD,
+					getEnrolledThemes,
 				}}>
 				{children}
 			</ProfileContext.Provider>

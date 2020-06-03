@@ -15,6 +15,7 @@ class CourseProvider extends Component {
 		sessions: [],
 		exams: [],
 		recordings: [],
+		status: "",
 	};
 
 	getCourse = (id) => {
@@ -231,6 +232,37 @@ class CourseProvider extends Component {
 			.catch((err) => console.log(err));
 	};
 
+	checkCompleted = (id) => {
+		axios({
+			url: `https://app.visioconf.site/api/v1/courses/enrollments`,
+			method: "get",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => {
+				this.setState({
+					status: res.data.payload.filter((el) => el.courseId === Number(id))[0]
+						.status,
+				});
+			})
+			.catch((err) => console.log(err));
+	};
+
+	handleCompleted = (id, studentId) => {
+		axios({
+			url: `https://app.visioconf.site/api/v1/courses/${id}/enrollments?studentId=${studentId}`,
+			method: "put",
+			headers: { authorization: localStorage.getItem("token") },
+			data: {
+				status: "COMPLETED",
+			},
+		})
+			.then(() => {
+				this.setState({});
+				this.checkCompleted(id);
+			})
+			.catch((err) => console.log(err));
+	};
+
 	render() {
 		const { children } = this.props;
 		const {
@@ -244,6 +276,7 @@ class CourseProvider extends Component {
 			sessions,
 			exams,
 			recordings,
+			status,
 		} = this.state;
 		const {
 			getCourse,
@@ -257,6 +290,8 @@ class CourseProvider extends Component {
 			getSessions,
 			getExamsByCourse,
 			getRecordedSessions,
+			checkCompleted,
+			handleCompleted,
 		} = this;
 
 		return (
@@ -272,6 +307,7 @@ class CourseProvider extends Component {
 					sessions,
 					exams,
 					recordings,
+					status,
 					getCourse,
 					handleEdit,
 					handlePictureUpload,
@@ -283,6 +319,8 @@ class CourseProvider extends Component {
 					getSessions,
 					getExamsByCourse,
 					getRecordedSessions,
+					checkCompleted,
+					handleCompleted,
 				}}>
 				{children}
 			</CourseContext.Provider>

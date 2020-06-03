@@ -28,16 +28,21 @@ export class Exams extends Component {
 			sec: 0,
 			ms: 0,
 		};
-		// setInterval(() => {
-		// 	if (this.state.start)
-		// 		this.setState({
-		// 			ms: this.state.ms - 1000,
-		// 		});
-		// 	this.converter();
-		// 	if (this.state.ms < 0) {
-		// 		this.setState({ start: false });
-		// 	}
-		// }, 1000);
+		let setI = setInterval(() => {
+			if (this.state.start)
+				this.setState({
+					ms: this.state.ms - 1000,
+				});
+			this.converter();
+			if (this.state.ms < 0) {
+				this.setState({ start: false });
+				clearInterval(setI);
+				this.context.calculateAndSendScore(
+					this.state.grabedAnswers,
+					this.props.match.params.id
+				);
+			}
+		}, 1000);
 	}
 
 	handleEditExam = () => {
@@ -55,7 +60,16 @@ export class Exams extends Component {
 	};
 
 	timer = () => {
-		this.setState({ start: true, ms: this.context.durationMin * 60000 });
+		let todaysDate = moment(new Date());
+		let endDate = moment(this.context.exam.startDate).add(
+			this.context.exam.durationMin,
+			"minutes"
+		);
+		let d = moment
+			.duration(moment(endDate).diff(moment(todaysDate)))
+			.asMilliseconds();
+
+		d > 0 && this.setState({ start: true, ms: d });
 	};
 
 	converter = () => {
@@ -70,30 +84,17 @@ export class Exams extends Component {
 		this.state.isStudent
 			? this.context.startExam(this.props.match.params.id)
 			: this.context.getExamById(this.props.match.params.id);
-		// setTimeout(() => {
-		// 	this.context.calculateAndSendScore(
-		// 		this.state.grabedAnswers,
-		// 		this.props.match.params.id
-		// 	);
-		// }, this.context.durationMin * 60000);
 	}
 	render() {
 		const exam = this.context.exam;
 		const score = this.context.score;
 		const isDone = this.context.isDone;
-		// console.log(
-		// 	moment(exam.startDate).calendar() === `Today at ${Date.now().getTime}`
-		// );
-		let a = moment(new Date()); //todays date
-		let b = exam.startDate;
-		let date = a.diff(b, "hours");
 
-		// if (date < 24) {
-		let startTime = moment(b).format("h:mm:ss a");
-		// let endTime = startTime.add(2, "hours");
-		console.log("start" + startTime);
-		// console.log("end" + endTime);
-		// }
+		let todaysDate = moment(new Date());
+		let startDate = exam.startDate;
+		let endDate = moment(exam.startDate).add(exam.durationMin, "minutes");
+		var isbetween = moment(todaysDate).isBetween(startDate, endDate);
+
 		return (
 			<div className='exam mt-5'>
 				<div className='container'>
@@ -235,13 +236,12 @@ export class Exams extends Component {
 					{this.state.isStudent && !this.state.start && (
 						<button
 							className={
-								date === 0 ? "btn btn-warning" : "btn btn-warning disabled"
+								isbetween ? "btn btn-warning" : "btn btn-warning disabled"
 							}
-							onClick={date === 0 ? this.timer : undefined}>
+							onClick={isbetween ? this.timer : undefined}>
 							Start Exam
 						</button>
 					)}
-					{date !== 0 && <div>{}</div>}
 				</div>
 				{this.state.isStudent && this.state.start && (
 					<div className='timer center'>

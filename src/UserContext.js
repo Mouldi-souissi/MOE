@@ -9,6 +9,7 @@ class UserProvider extends Component {
 		instructors: [],
 		enrollments: [],
 		status: "",
+		generatedPwd: "",
 	};
 
 	getAllUsers = () => {
@@ -134,9 +135,29 @@ class UserProvider extends Component {
 			})
 			.catch((err) => console.log(err));
 	};
+
+	handleResetPWD = (id) => {
+		axios({
+			url: `https://app.visioconf.site/api/v1/users/${id}/reset-pwd`,
+			method: "PUT",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => {
+				this.setState({ generatedPwd: res.data.payload.password });
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 	render() {
 		const { children } = this.props;
-		const { students, instructors, enrollments, status } = this.state;
+		const {
+			students,
+			instructors,
+			enrollments,
+			status,
+			generatedPwd,
+		} = this.state;
 		const {
 			getAllUsers,
 			getThemesEnrollement,
@@ -145,6 +166,7 @@ class UserProvider extends Component {
 			handleValidate,
 			handleEdit,
 			handleAdd,
+			handleResetPWD,
 		} = this;
 
 		return (
@@ -154,6 +176,7 @@ class UserProvider extends Component {
 					instructors,
 					enrollments,
 					status,
+					generatedPwd,
 					getAllUsers,
 					getThemesEnrollement,
 					themeEnroll,
@@ -161,6 +184,7 @@ class UserProvider extends Component {
 					handleValidate,
 					handleEdit,
 					handleAdd,
+					handleResetPWD,
 				}}>
 				{children}
 			</UserContext.Provider>

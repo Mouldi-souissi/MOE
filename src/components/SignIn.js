@@ -8,6 +8,7 @@ export class SignIn extends Component {
 	state = {
 		email: "",
 		password: "",
+		alert: "",
 	};
 
 	handleInput = (e) => {
@@ -20,8 +21,10 @@ export class SignIn extends Component {
 		axios
 			.post("https://app.visioconf.site/api/auth", { email, password })
 			.then((res) => {
-				if (res.status !== 200) alert("invalid credentials");
-				else {
+				if (res.status !== 200) {
+					this.setState({ alert: "invalid credentials" });
+					console.log(this.state.alert);
+				} else {
 					localStorage.setItem("token", res.headers.authorization);
 					const decoded = jwt_decode(localStorage.token);
 					console.log(decoded.roles);
@@ -31,7 +34,8 @@ export class SignIn extends Component {
 						} else this.props.history.push(`/dashboard`);
 					} else this.props.history.push("/admin");
 				}
-			});
+			})
+			.catch((err) => console.log(err));
 	};
 
 	render() {
@@ -73,8 +77,13 @@ export class SignIn extends Component {
 						</div>
 						<div className='already center'>
 							<Link to='/signUp'> Sign up </Link>
-							if you don't have an account!
+							If you don't have an account!
 						</div>
+						<p
+							className='already center text-muted mt-3'
+							style={{ fontSize: "10px" }}>
+							If you have forgot your password please contact live support
+						</p>
 					</form>
 				</div>
 			</div>

@@ -16,6 +16,10 @@ export class Navbar extends Component {
 	};
 
 	componentDidMount() {
+		if (localStorage.getItem("token")) {
+			this.context.getProfile();
+		}
+
 		function checkScroll() {
 			var startY = $(".navbar").height() * 2; //The point where the navbar changes in px
 
@@ -31,17 +35,6 @@ export class Navbar extends Component {
 				checkScroll();
 			});
 		}
-
-		if (localStorage.getItem("token")) {
-			this.context.getProfile();
-		}
-
-		// $(".nav li").click(function () {
-		// 	if ($(".nav li").removeClass("active")) {
-		// 		$(this).removeClass("active");
-		// 	}
-		// 	$(this).addClass("active");
-		// });
 	}
 
 	render() {

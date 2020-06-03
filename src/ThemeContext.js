@@ -15,6 +15,8 @@ class ThemeProvider extends Component {
 		newCourses: [],
 		date: moment(new Date()),
 		userExams: [],
+		coursesInstructor: [],
+		status: [],
 	};
 
 	// themes
@@ -61,6 +63,19 @@ class ThemeProvider extends Component {
 	};
 
 	// courses
+	getAllcourseByInstructor = (id) => {
+		axios({
+			url: `http://91.134.133.143:9090/api/v1/courses?instructorId=${id}`,
+			method: "GET",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => {
+				this.setState({ coursesInstructor: res.data.payload });
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	getAllCourses = () => {
 		axios({
@@ -76,7 +91,7 @@ class ThemeProvider extends Component {
 			.catch((err) => console.log(err));
 	};
 
-	handleEnrollCourse = (id) => {
+	handleEnrollCourse = (id, value) => {
 		axios({
 			url: `https://app.visioconf.site/api/v1/courses/${id}/enroll`,
 			method: "POST",
@@ -85,6 +100,7 @@ class ThemeProvider extends Component {
 			.then(() => {
 				this.setState({});
 				this.getEnrolledCources();
+				value && this.handleEnrollTheme(value);
 			})
 			.catch((err) => console.log(err));
 	};
@@ -184,6 +200,20 @@ class ThemeProvider extends Component {
 			});
 	};
 
+	checkCompleted = () => {
+		axios({
+			url: `https://app.visioconf.site/api/v1/courses/enrollments`,
+			method: "get",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => {
+				this.setState({
+					status: res.data.payload,
+				});
+			})
+			.catch((err) => console.log(err));
+	};
+
 	render() {
 		const {
 			themes,
@@ -194,6 +224,8 @@ class ThemeProvider extends Component {
 			isFiltering,
 			newCourses,
 			userExams,
+			coursesInstructor,
+			status,
 		} = this.state;
 		const {
 			getAllThemes,
@@ -207,6 +239,8 @@ class ThemeProvider extends Component {
 			handleSelect,
 			getNewCourses,
 			getUserExams,
+			getAllcourseByInstructor,
+			checkCompleted,
 		} = this;
 		return (
 			<ThemeContext.Provider
@@ -219,6 +253,8 @@ class ThemeProvider extends Component {
 					isFiltering,
 					newCourses,
 					userExams,
+					coursesInstructor,
+					status,
 
 					getAllThemes,
 					getAllCourses,
@@ -231,6 +267,8 @@ class ThemeProvider extends Component {
 					handleSelect,
 					getNewCourses,
 					getUserExams,
+					getAllcourseByInstructor,
+					checkCompleted,
 				}}>
 				{this.props.children}
 			</ThemeContext.Provider>

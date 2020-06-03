@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import jwt_decode from "jwt-decode";
 import ProfileContext from "../ProfileContext";
 
@@ -15,15 +14,63 @@ export class Profile extends Component {
 		src: "",
 		themesToSend: [],
 		loaded: 0,
+
+		currentPassword: "",
+		password: "",
+		matchingPassword: "",
+
+		request: "",
+		err: "",
 	};
 
 	handleEdit = (e) => {
 		e.preventDefault();
-		this.setState({ isEditig: true });
+		this.setState({ ...this.state, isEditig: true });
+		let { currentPassword, password, matchingPassword } = this.state;
 
 		if (this.state.editedData.length !== 0) {
 			this.context.handleEdit(this.state.editedData);
 			this.setState({ isEditig: false });
+		}
+
+		if (currentPassword || password || matchingPassword) {
+			if (!currentPassword)
+				this.setState({
+					...this.state,
+					err: "current Password is required",
+					request: "fail",
+				});
+			if (!password)
+				this.setState({
+					...this.state,
+					err: "Password is required",
+					request: "fail",
+				});
+			if (!matchingPassword)
+				this.setState({
+					...this.state,
+					err: "Matching password is required",
+					request: "fail",
+				});
+			if (matchingPassword !== password)
+				this.setState({
+					...this.state,
+					err: "Passwords should match",
+					request: "fail",
+				});
+			if (
+				password &&
+				currentPassword &&
+				matchingPassword &&
+				matchingPassword === password
+			) {
+				this.context.handleChangePWD(
+					currentPassword,
+					password,
+					matchingPassword
+				);
+				this.setState({ isEditig: false });
+			}
 		}
 	};
 
@@ -43,22 +90,14 @@ export class Profile extends Component {
 		}
 	};
 
-	getThemes = () => {
-		axios({
-			url: "https://app.visioconf.site/api/v1/users/themes/enrollments",
-			method: "get",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => this.setState({ themes: res.data.payload }))
-			.catch((err) => console.log(err));
-	};
 	componentDidMount() {
 		this.context.getProfile();
-		this.getThemes();
+		this.context.getEnrolledThemes();
 	}
 
 	render() {
-		let profile = this.context.profile;
+		const profile = this.context.profile;
+		const enrolledThemes = this.context.enrolledThemes;
 		return (
 			<div>
 				<div className='container profile profile-view' id='profile'>
@@ -127,7 +166,18 @@ export class Profile extends Component {
 							</div>
 							<div className='col-md-8'>
 								<h1>Profile </h1>
+
 								<hr />
+								{this.state.request && (
+									<p
+										className={
+											this.state.request === "fail"
+												? "alert alert-danger"
+												: "alert alert-success"
+										}>
+										{this.state.err}
+									</p>
+								)}
 								<div className='form-row'>
 									<div className='col-sm-12 col-md-6'>
 										{this.state.isEditig ? (
@@ -186,14 +236,65 @@ export class Profile extends Component {
 										)}
 									</div>
 								</div>
-								{jwt_decode(localStorage.token).roles[0] === "STUDENT" && (
-									<div className='mt-5'>
-										<h5>Subscribed themes: </h5>
-										{this.state.themes.map((theme) => (
-											<div key={theme.value}>-{theme.value}</div>
-										))}
+								<div className='form-row'>
+									<div className='col-sm-12 col-md-6'>
+										{jwt_decode(localStorage.token).roles[0] === "STUDENT" && (
+											<div className='mt-5'>
+												<h5>Subscribed themes: </h5>
+												{enrolledThemes.map((theme) => (
+													<div key={theme.value}>
+														-{theme.value}
+														{theme.status === "OPEN" &&
+															"  (Please wait for admin approval)"}
+													</div>
+												))}
+											</div>
+										)}
 									</div>
-								)}
+									<div className='col-sm-12 col-md-6 mt-5'>
+										{this.state.isEditig && (
+											<div className='form-group'>
+												<h5 className='mb-5'>Change password:</h5>
+												<h6>Current password </h6>
+												<input
+													className='form-control mb-3'
+													type='password'
+													name='currentPassword'
+													onChange={(e) =>
+														this.setState({
+															...this.state,
+															currentPassword: e.target.value,
+														})
+													}
+												/>
+												<h6>New password </h6>
+												<input
+													className='form-control mb-3'
+													type='password'
+													name='password'
+													onChange={(e) =>
+														this.setState({
+															...this.state,
+															password: e.target.value,
+														})
+													}
+												/>
+												<h6>Matching password </h6>
+												<input
+													className='form-control'
+													type='password'
+													name='matchingPassword'
+													onChange={(e) =>
+														this.setState({
+															...this.state,
+															matchingPassword: e.target.value,
+														})
+													}
+												/>
+											</div>
+										)}
+									</div>
+								</div>
 
 								<hr />
 								{this.state.isEditig ? (

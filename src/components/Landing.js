@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import testi1 from "../assets/testimonials-1.jpg";
 import testi2 from "../assets/testimonials-2.jpg";
 import testi3 from "../assets/testimonials-3.jpg";
+import landing1 from "../assets/landing1.jpg";
+import landing2 from "../assets/landing2.jpg";
+import landing3 from "../assets/landing3.jpg";
 import axios from "axios";
 import ThemeCard from "./ThemeCard";
 
@@ -147,11 +150,7 @@ export class Landing extends Component {
 								</p>
 							</div>
 							<div className='col-lg-6 d-none d-lg-block'>
-								<img
-									src='https://res.cloudinary.com/mhmd/image/upload/v1556834136/illus_kftyh4.png'
-									alt=''
-									className='img-fluid'
-								/>
+								<img src={landing3} alt='' className='img-fluid' />
 							</div>
 						</div>
 					</div>
@@ -183,11 +182,7 @@ export class Landing extends Component {
 						</div>
 						<div className='row align-items-center'>
 							<div className='col-lg-5 px-5 mx-auto'>
-								<img
-									src='https://res.cloudinary.com/mhmd/image/upload/v1556834136/img-2_vdgqgn.jpg'
-									alt=''
-									className='img-fluid mb-4 mb-lg-0'
-								/>
+								<img src={landing2} alt='' className='img-fluid mb-4 mb-lg-0' />
 							</div>
 							<div className='col-lg-6'>
 								<h2 className='font-weight-light mb-5'>
@@ -219,11 +214,7 @@ export class Landing extends Component {
 								</p>
 							</div>
 							<div className='col-lg-5 px-5 mx-auto order-1 order-lg-2'>
-								<img
-									src='https://res.cloudinary.com/mhmd/image/upload/v1556834139/img-1_e25nvh.jpg'
-									alt=''
-									className='img-fluid mb-4 mb-lg-0'
-								/>
+								<img src={landing1} alt='' className='img-fluid mb-4 mb-lg-0' />
 							</div>
 						</div>
 					</div>
@@ -233,10 +224,10 @@ export class Landing extends Component {
 					<div className='container'>
 						<div className='intro'>
 							<h2 className='text-center'>Our Themes</h2>
-							<p className='text-center mb-5'>
+							{/* <p className='text-center mb-5'>
 								Nunc luctus in metus eget fringilla. Aliquam sed justo ligula.
 								Vestibulum nibh erat, pellentesque ut laoreet vitae.{" "}
-							</p>
+							</p> */}
 						</div>
 
 						<div className='row mb-5'>

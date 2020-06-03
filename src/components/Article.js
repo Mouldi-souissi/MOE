@@ -86,6 +86,7 @@ export class Article extends Component {
 		this.context.getExamsByCourse(this.props.match.params.id);
 		this.context.getSessions(this.props.match.params.id);
 		this.context.getRecordedSessions(this.props.match.params.id);
+		this.context.checkCompleted(this.props.match.params.id);
 	}
 	componentDidUpdate() {
 		if (this.context.course && this.context.course.description !== undefined) {
@@ -112,6 +113,9 @@ export class Article extends Component {
 		const sessions = this.context.sessions;
 		const exams = this.context.exams;
 		const recordings = this.context.recordings;
+		const status = this.context.status;
+
+		console.log(jwt_decode(localStorage.token));
 		return (
 			<div>
 				<div className='container mt-5'>
@@ -138,6 +142,21 @@ export class Article extends Component {
 									onClick={() => this.props.history.goBack()}>
 									Go Back
 								</button>
+								{this.state.isStudent && status === "IN_PROGRESS" && (
+									<button
+										className='btn btn-warning ml-2'
+										onClick={() =>
+											this.context.handleCompleted(
+												this.props.match.params.id,
+												jwt_decode(localStorage.token).id
+											)
+										}>
+										Mark Completed
+									</button>
+								)}
+								{this.state.isStudent && status === "COMPLETED" && (
+									<h5>Course Completed</h5>
+								)}
 
 								{course.createdBy &&
 									course.createdBy.id === jwt_decode(localStorage.token).id && (
@@ -242,13 +261,13 @@ export class Article extends Component {
 							<div className='blog-post'>
 								<div id='justHtml'></div>
 							</div>
-							<div>
+							<div className='mb-5'>
 								<h5 className='mt-5'>Download attachment files:</h5>
 								{bonusFiles
 									.filter((el) => el.type !== "VIDEO_YT")
 									.map((el) => (
 										<div
-											className='d-flex align-items-center justify-content-between '
+											className='d-flex align-items-center justify-content-between'
 											key={el.id}>
 											<a
 												href={`https://app.visioconf.site/attachment/${el.fileName}`}
@@ -284,7 +303,7 @@ export class Article extends Component {
 								)}
 							</div>
 							{bonusFiles.find((el) => el.type === "VIDEO_YT") && (
-								<div>
+								<div className='mb-5'>
 									<h5 className='mt-5'>Attachment Video:</h5>
 									<VideoPlayer
 										videoId={bonusFiles.videoYtId && bonusFiles.videoYtId}

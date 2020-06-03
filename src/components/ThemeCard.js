@@ -109,6 +109,9 @@ export class ThemeCard extends Component {
 							}}></div>
 						<figcaption>
 							<h3>{this.props.theme.label}</h3>
+							{this.state.isStudent && this.state.isEnrolled === "OPEN" && (
+								<h6>Please wait for admin approval</h6>
+							)}
 
 							{this.state.isStudent && (
 								<div className='mt-2'>

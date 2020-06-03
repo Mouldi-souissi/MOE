@@ -3,9 +3,7 @@ import CourseContext from "../CourseContext";
 
 export class SessionModal extends Component {
 	static contextType = CourseContext;
-	state = {
-		autoStartRecording: "No",
-	};
+
 	render() {
 		return (
 			<div>

@@ -92,7 +92,7 @@ button:focus {
 
 /* landing  */
 .thunder {
-	background-image: url("./assets/callToAction.jpg");
+	background-image: url("./assets/hero.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center center;
@@ -465,7 +465,7 @@ button:focus {
 }
 
 /* dashboard */
-.badge {
+.innerbody.badge {
 	background-color: red !important;
 	font-size: 11px !important;
 	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.199) !important;
@@ -718,7 +718,7 @@ div.avatar-admin {
 	padding: 0;
 }
 
-.badge {
+.admin.badge {
 	border-radius: 50%;
 	padding: 5px;
 	background: #007bff;
@@ -971,8 +971,9 @@ div.avatar-bg {
 
 /* courses demo   */
 .fa-chevron-circle-right {
-	font-size: 30px;
-	margin-left: 150px;
+	font-size: 30px !important;
+	margin-left: 150px !important;
+	color: #4db6fc !important;
 }
 .demo {
 	padding-top: 80px;

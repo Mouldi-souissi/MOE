@@ -166,7 +166,7 @@ export class Admin extends Component {
 															<th scope='col'>Last Name</th>
 															<th scope='col'>E-mail</th>
 															<th scope='col'>State</th>
-
+															<th scope='col'>Reset Password</th>
 															<th scope='col'>
 																<em className='fa fa-cog'></em>
 															</th>
@@ -188,7 +188,7 @@ export class Admin extends Component {
 														<th scope='col'>Last Name</th>
 														<th scope='col'>E-mail</th>
 														<th scope='col'>State</th>
-
+														<th scope='col'>Reset Password</th>
 														<th scope='col'>
 															<em className='fa fa-cog'></em>
 														</th>
@@ -205,6 +205,7 @@ export class Admin extends Component {
 													<tr align='center'>
 														<th scope='col'></th>
 														<th scope='col'>Student</th>
+														<th scope='col'>E-mail</th>
 														<th scope='col'>Theme</th>
 														<th scope='col'>Status</th>
 

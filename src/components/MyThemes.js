@@ -15,9 +15,10 @@ export class MyThemes extends Component {
 			<div className='container-fluid mt-5'>
 				<h4 className='center mb-5'>Subscribed Themes</h4>
 				<div className='row justify-content-center'>
-					{enrolledThemes.map((theme) => (
-						<ThemeCard key={theme.label} theme={theme} />
-					))}
+					{enrolledThemes &&
+						enrolledThemes.map((theme) => (
+							<ThemeCard key={theme.label} theme={theme} />
+						))}
 				</div>
 			</div>
 		);
