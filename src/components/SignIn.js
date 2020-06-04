@@ -23,11 +23,9 @@ export class SignIn extends Component {
 			.then((res) => {
 				if (res.status !== 200) {
 					this.setState({ alert: "invalid credentials" });
-					console.log(this.state.alert);
 				} else {
 					localStorage.setItem("token", res.headers.authorization);
 					const decoded = jwt_decode(localStorage.token);
-					console.log(decoded.roles);
 					if (decoded.sub !== "admin@moe.com") {
 						if (decoded.roles[0] === "INSTRUCTOR") {
 							this.props.history.push(`/dashboardI`);
@@ -35,7 +33,17 @@ export class SignIn extends Component {
 					} else this.props.history.push("/admin");
 				}
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => {
+				if (err.response.data.status) {
+					this.setState({ alert: "invalid credentials" });
+					setTimeout(() => {
+						this.setState({
+							...this.state,
+							alert: "",
+						});
+					}, 3000);
+				}
+			});
 	};
 
 	render() {
@@ -45,7 +53,9 @@ export class SignIn extends Component {
 					<form onSubmit={(e) => this.handleSignIn(e)}>
 						<h3 className='text-center mb-3'>Sign In</h3>
 						<div className='avatar-bg-dash'></div>
-
+						{this.state.alert && (
+							<p className='alert alert-danger'>{this.state.alert}</p>
+						)}
 						<div className='form-group d-flex align-items-center'>
 							<i className='fa fa-envelope mr-3' aria-hidden='true'></i>
 							<input

@@ -38,8 +38,8 @@ export class Navbar extends Component {
 	}
 
 	render() {
-		const picture = this.context.profile.picture;
-		const name = this.context.profile.firstName;
+		const profile = this.context.profile;
+
 		return (
 			<nav className='navbar navbar-light navbar-expand-lg'>
 				<div className='container-fluid'>
@@ -113,10 +113,10 @@ export class Navbar extends Component {
 												: "/dashboard"
 										}>
 										<div className='avatar-nav'>
-											{picture && (
+											{profile.picture && (
 												<img
 													alt='img'
-													src={`https://app.visioconf.site/img/${picture}`}
+													src={`https://app.visioconf.site/img/${profile.picture}`}
 												/>
 											)}
 											<i
@@ -124,7 +124,7 @@ export class Navbar extends Component {
 												aria-hidden='true'></i>
 										</div>
 									</Link>
-									<div className='nav-link'>{name}</div>
+									<div className='nav-link'>{profile.firstName}</div>
 									<button
 										className='btn btn-success'
 										type='button'

@@ -34,30 +34,66 @@ export class Profile extends Component {
 		}
 
 		if (currentPassword || password || matchingPassword) {
-			if (!currentPassword)
+			if (!currentPassword) {
 				this.setState({
 					...this.state,
 					err: "current Password is required",
 					request: "fail",
 				});
-			if (!password)
+				setTimeout(() => {
+					this.setState({
+						...this.state,
+						err: "",
+						request: "",
+					});
+				}, 3000);
+			}
+
+			if (!password) {
 				this.setState({
 					...this.state,
 					err: "Password is required",
 					request: "fail",
 				});
-			if (!matchingPassword)
+				setTimeout(() => {
+					this.setState({
+						...this.state,
+						err: "",
+						request: "",
+					});
+				}, 3000);
+			}
+
+			if (!matchingPassword) {
 				this.setState({
 					...this.state,
 					err: "Matching password is required",
 					request: "fail",
 				});
-			if (matchingPassword !== password)
+				setTimeout(() => {
+					this.setState({
+						...this.state,
+						err: "",
+						request: "",
+					});
+				}, 3000);
+			}
+
+			if (matchingPassword !== password) {
 				this.setState({
 					...this.state,
 					err: "Passwords should match",
 					request: "fail",
 				});
+				setTimeout(() => {
+					this.setState({
+						...this.state,
+						err: "",
+						request: "",
+					});
+				}, 3000);
+			}
+
 			if (
 				password &&
 				currentPassword &&

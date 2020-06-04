@@ -51,37 +51,80 @@ export class FormSteps extends Component {
 	handleCreateCourse = (e) => {
 		e.preventDefault();
 		let { shortDescription, title, theme, description } = this.state;
-		if (description.length > 200)
+		if (description.length > 200) {
 			this.setState({
 				...this.state,
 				err: "Long description max characters 200",
 				request: "fail",
 			});
-		if (!description)
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (!description) {
 			this.setState({
 				...this.state,
 				err: "Please fill long description field",
 				request: "fail",
 			});
-		if (!shortDescription)
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (!shortDescription) {
 			this.setState({
 				...this.state,
 				err: "Please fill description field",
 				request: "fail",
 			});
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
 
-		if (!theme)
+		if (!theme) {
 			this.setState({
 				...this.state,
 				err: "Please select a theme",
 				request: "fail",
 			});
-		if (!title)
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (!title) {
 			this.setState({
 				...this.state,
 				err: "Please fill title field",
 				request: "fail",
 			});
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
 
 		if (
 			description &&

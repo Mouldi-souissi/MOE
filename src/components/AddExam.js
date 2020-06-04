@@ -18,30 +18,66 @@ export class AddExam extends Component {
 
 	handleAddQ = () => {
 		let { title, durationMin, startDate, question } = this.state;
-		if (!question)
+		if (!question) {
 			this.setState({
 				...this.state,
 				err: "Please fill question field",
 				request: "fail",
 			});
-		if (!startDate)
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (!startDate) {
 			this.setState({
 				...this.state,
 				err: "Please fill start Date field",
 				request: "fail",
 			});
-		if (!durationMin)
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (!durationMin) {
 			this.setState({
 				...this.state,
 				err: "Please fill duration field",
 				request: "fail",
 			});
-		if (!title)
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (!title) {
 			this.setState({
 				...this.state,
 				err: "Please fill title field",
 				request: "fail",
 			});
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
 		durationMin &&
 			title &&
 			startDate &&
@@ -147,6 +183,11 @@ export class AddExam extends Component {
 	render() {
 		return (
 			<div className='login-clean'>
+				<button
+					className='btn btn-primary mb-5 ml-2'
+					onClick={() => this.props.history.goBack()}>
+					Go Back
+				</button>
 				<div className='container'>
 					{this.state.request && (
 						<p
@@ -158,6 +199,7 @@ export class AddExam extends Component {
 							{this.state.err}
 						</p>
 					)}
+
 					<h5>Exam title:</h5>
 					<input
 						className='form-control w-50 mb-3'

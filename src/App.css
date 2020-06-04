@@ -1329,6 +1329,17 @@ div.content {
 	}
 }
 /* alt article */
+.jumbotron {
+	background-color: transparent !important;
+}
+
+.jumbotron img {
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+	height: 100%;
+	position: relative;
+}
 
 .article {
 	padding-top: 100px;

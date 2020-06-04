@@ -11,12 +11,18 @@ import Notifications from "./Notifications";
 import axios from "axios";
 import moment from "moment";
 import MyExams from "./MyExams";
+// import { generatePath } from "react-router";
 
 export class Dashboard extends Component {
 	static contextType = ProfileContext;
 
 	state = {
 		courses: [],
+		tabIndex: 0,
+	};
+
+	changeTab = () => {
+		this.setState({ tabIndex: 3 });
 	};
 
 	getEnrolledThemes = () => {
@@ -53,6 +59,10 @@ export class Dashboard extends Component {
 		});
 
 		this.getEnrolledThemes();
+
+		// generatePath("/dashboard:index", {
+		// 	id: 3,
+		// });
 	}
 
 	handleLogout = () => {
@@ -70,8 +80,11 @@ export class Dashboard extends Component {
 		let newCourses = this.state.courses.filter(
 			(course) => Math.abs(moment(course.createdDate).diff(date, "hours")) < 24
 		);
+
 		return (
-			<Tabs>
+			<Tabs
+				selectedIndex={this.state.tabIndex}
+				onSelect={(tabIndex) => this.setState({ tabIndex })}>
 				<div className='innerbody'>
 					<div id='wrapper'>
 						<div id='sidebar-wrapper'>

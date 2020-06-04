@@ -97,6 +97,11 @@ export class Exams extends Component {
 
 		return (
 			<div className='exam mt-5'>
+				<button
+					className='btn btn-primary mt-5 ml-2'
+					onClick={() => this.props.history.goBack()}>
+					Go Back
+				</button>
 				<div className='container'>
 					<div className='center title'>
 						{this.state.isEditing ? (
@@ -228,11 +233,6 @@ export class Exams extends Component {
 					</div>
 				)}
 				<div className='d-flex'>
-					<button
-						className='btn btn-primary ml-5 mr-2'
-						onClick={() => this.props.history.goBack()}>
-						Go Back
-					</button>
 					{this.state.isStudent && !this.state.start && (
 						<button
 							className={

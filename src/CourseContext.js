@@ -51,12 +51,20 @@ class CourseProvider extends Component {
 	};
 
 	handlePictureUpload = (image, id) => {
-		if (!image)
+		if (!image) {
 			this.setState({
 				...this.state,
 				err: "Please select an image file",
 				request: "fail",
 			});
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
 
 		var formData = new FormData();
 		formData.append("file", image);
@@ -70,9 +78,20 @@ class CourseProvider extends Component {
 					this.setState({
 						loadedPic: (ProgressEvent.loaded / ProgressEvent.total) * 100,
 					});
-					// if (this.state.loadedPic === 100) {
-					// 	this.setState({});
-					// }
+					if (this.state.loadedPic === 100) {
+						this.setState({
+							...this.state,
+							err: "Image Uploaded",
+							request: "success",
+						});
+						setTimeout(() => {
+							this.setState({
+								...this.state,
+								err: "",
+								request: "",
+							});
+						}, 3000);
+					}
 				},
 			})
 				.then(() => {
@@ -85,18 +104,36 @@ class CourseProvider extends Component {
 		if (!type) {
 			type = "PRESENTATION";
 		}
-		if (!textFile)
+		if (!textFile) {
 			this.setState({
 				...this.state,
 				err: "Please select a text file",
 				request: "fail",
 			});
-		if (!title)
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (!title) {
 			this.setState({
 				...this.state,
 				err: "Please fill title field",
 				request: "fail",
 			});
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
 		var formData = new FormData();
 		formData.append("file", textFile);
 		textFile &&
@@ -110,6 +147,20 @@ class CourseProvider extends Component {
 					this.setState({
 						loadedFile: (ProgressEvent.loaded / ProgressEvent.total) * 100,
 					});
+					if (this.state.loadedFile === 100) {
+						this.setState({
+							...this.state,
+							err: "File Uploaded",
+							request: "success",
+						});
+						setTimeout(() => {
+							this.setState({
+								...this.state,
+								err: "",
+								request: "",
+							});
+						}, 3000);
+					}
 				},
 			})
 				.then(() => {
@@ -119,18 +170,35 @@ class CourseProvider extends Component {
 	};
 
 	handleVideoSend = (video, videoTitle, id) => {
-		if (!video)
+		if (!video) {
 			this.setState({
 				...this.state,
 				err: "Please select a video",
 				request: "fail",
 			});
-		if (!videoTitle)
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (!videoTitle) {
 			this.setState({
 				...this.state,
 				err: "Please fill video title field",
 				request: "fail",
 			});
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
 
 		var formData = new FormData();
 		formData.append("file", video);
@@ -145,6 +213,20 @@ class CourseProvider extends Component {
 					this.setState({
 						loadedvideo: (ProgressEvent.loaded / ProgressEvent.total) * 100,
 					});
+					if (this.state.loadedvideo === 100) {
+						this.setState({
+							...this.state,
+							err: "Video Uploaded",
+							request: "success",
+						});
+						setTimeout(() => {
+							this.setState({
+								...this.state,
+								err: "",
+								request: "",
+							});
+						}, 3000);
+					}
 				},
 			})
 				.then(() => {

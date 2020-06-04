@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import UserContext from "../UserContext";
 import ResetModal from "./ResetModal";
+// import { v4 as uuidv4 } from "uuid";
 
 export class AdminLi extends Component {
 	static contextType = UserContext;
@@ -85,10 +86,7 @@ export class AdminLi extends Component {
 						)}
 					</td>
 					<td className='align-middle'>
-						<div>
-							{" "}
-							{user.email} {user.id}{" "}
-						</div>
+						<div> {user.email}</div>
 					</td>
 
 					{!isValid ? (
@@ -133,7 +131,7 @@ export class AdminLi extends Component {
 							data-target='#reset'>
 							Reset
 						</button>
-						<ResetModal id={user.id} key={user.id} />
+						<ResetModal id={user.id} />
 					</td>
 					<td align='center' className='align-middle'>
 						<button className='btn btn-primary mb-2' onClick={this.handleEdit}>

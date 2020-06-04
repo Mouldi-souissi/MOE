@@ -10,6 +10,7 @@ import { VideoPlayer } from "./VideoPlayer";
 import SessionModal from "./SessionModal";
 import CourseContext from "../CourseContext";
 import DeleteFileModal from "./DeleteFileModal";
+import moment from "moment";
 
 export class Article extends Component {
 	static contextType = CourseContext;
@@ -86,7 +87,8 @@ export class Article extends Component {
 		this.context.getExamsByCourse(this.props.match.params.id);
 		this.context.getSessions(this.props.match.params.id);
 		this.context.getRecordedSessions(this.props.match.params.id);
-		this.context.checkCompleted(this.props.match.params.id);
+		this.state.isStudent &&
+			this.context.checkCompleted(this.props.match.params.id);
 	}
 	componentDidUpdate() {
 		if (this.context.course && this.context.course.description !== undefined) {
@@ -98,16 +100,6 @@ export class Article extends Component {
 		}
 	}
 	render() {
-		const style = {
-			backgroundImage: ` url(${`https://app.visioconf.site/img/${this.context.course.picture}`})`,
-			backgroundSize: "cover",
-			backgroundPosition: "center center",
-			backgroundRepeat: "no-repeat",
-			minHeight: "400px",
-			// backgroundAttachment: "fixed",
-			// width: "100%",
-		};
-
 		const course = this.context.course;
 		const bonusFiles = this.context.bonusFiles;
 		const sessions = this.context.sessions;
@@ -115,20 +107,25 @@ export class Article extends Component {
 		const recordings = this.context.recordings;
 		const status = this.context.status;
 
-		console.log(jwt_decode(localStorage.token));
 		return (
 			<div>
 				<div className='container mt-5'>
-					<div
-						className='jumbotron p-3 p-md-5 text-white rounded bg-dark'
-						style={style}>
+					<div className='jumbotron p-3 p-md-5 text-white rounded bg-dark'>
 						<div className='col-md-6 px-0'>
-							<h1 className='display-4'>{course.title}</h1>
+							<h1 className='display-4' style={{ color: "black" }}>
+								{course.title}
+							</h1>
 
-							<p className='blog-post-meta'>
-								{course.createdDate} by{" "}
-								<a href='/'>{course.createdBy && course.createdBy.lastName}</a>
+							<p className='blog-post-meta' style={{ color: "black" }}>
+								{moment(course.createdDate).format("MMMM Do YYYY, h:mm a")} by{" "}
+								{course.createdBy && course.createdBy.lastName}
 							</p>
+							{this.context.course.picture && (
+								<img
+									alt='hero'
+									src={`${`https://app.visioconf.site/img/${this.context.course.picture}`}`}
+								/>
+							)}
 						</div>
 					</div>
 				</div>
@@ -336,12 +333,12 @@ export class Article extends Component {
 											<Link
 												to={{
 													pathname: `/exam${el.id}`,
-													isOwner:
-														course.createdBy &&
-														course.createdBy.id ===
-															jwt_decode(localStorage.token).id,
+													// isOwner:
+													// 	course.createdBy &&
+													// 	course.createdBy.id ===
+													// 		jwt_decode(localStorage.token).id,
 												}}>
-												{el.title}
+												-{el.title}
 											</Link>
 
 											<Link to={`/scores${el.id}`}>
