@@ -13,7 +13,7 @@ export class ResetModal extends Component {
 					className='modal'
 					tabIndex='-1'
 					role='dialog'
-					id='reset'
+					id={this.props.id}
 					data-backdrop='static'>
 					<div className='modal-dialog modal-dialog-centered' role='document'>
 						<div className='modal-content'>

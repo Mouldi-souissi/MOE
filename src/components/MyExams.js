@@ -31,7 +31,7 @@ export class MyExams extends Component {
 
 		return (
 			<div>
-				<div className='scores mr-5 ml-5'>
+				<div className='myExams mr-5 ml-5'>
 					<h4 className='center mb-3'>Exams:</h4>
 					<table className='table table-striped'>
 						<thead>

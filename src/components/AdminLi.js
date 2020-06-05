@@ -86,7 +86,7 @@ export class AdminLi extends Component {
 						)}
 					</td>
 					<td className='align-middle'>
-						<div> {user.email}</div>
+						<div>{user.email}</div>
 					</td>
 
 					{!isValid ? (
@@ -128,7 +128,8 @@ export class AdminLi extends Component {
 							className='btn btn-danger'
 							aria-hidden='true'
 							data-toggle='modal'
-							data-target='#reset'>
+							// data-target='#reset'
+							data-target={"#" + user.id}>
 							Reset
 						</button>
 						<ResetModal id={user.id} />

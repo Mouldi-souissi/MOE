@@ -31,14 +31,26 @@ export class SignUp extends Component {
 				})
 				.catch((err) => {
 					console.log(err.response.data.status);
-					if (err.response.data.status === 500) {
+					if (err.response.data.status === "DUPLICATE_ENTITY") {
 						this.setState({
-							err: "Already registered !",
+							err: "This user is already registered !",
 						});
+						setTimeout(() => {
+							this.setState({
+								...this.state,
+								err: "",
+							});
+						}, 3000);
 					}
 				});
 		} else {
 			this.setState({ err: "Passwords should match !" });
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+				});
+			}, 3000);
 		}
 	};
 
@@ -91,7 +103,7 @@ export class SignUp extends Component {
 										this.props.location.state && this.props.location.state
 									}
 									required
-									maxLength='20'
+									maxLength='25'
 								/>
 							</div>
 							<div className='form-group'>

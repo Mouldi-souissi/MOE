@@ -9,8 +9,8 @@ import { Link } from "react-router-dom";
 import { VideoPlayer } from "./VideoPlayer";
 import SessionModal from "./SessionModal";
 import CourseContext from "../CourseContext";
-import DeleteFileModal from "./DeleteFileModal";
 import moment from "moment";
+import DeleteFileModal from "./DeleteFileModal";
 
 export class Article extends Component {
 	static contextType = CourseContext;
@@ -27,6 +27,7 @@ export class Article extends Component {
 		// form msg
 		request: "",
 		err: "",
+		isdeleting: false,
 	};
 	modules = {
 		toolbar: [
@@ -152,7 +153,7 @@ export class Article extends Component {
 									</button>
 								)}
 								{this.state.isStudent && status === "COMPLETED" && (
-									<h5>Course Completed</h5>
+									<span className='ml-5'>Course Completed</span>
 								)}
 
 								{course.createdBy &&
@@ -285,7 +286,7 @@ export class Article extends Component {
 															className='fa fa-times btn btn-outline-danger ml-5 mb-2'
 															aria-hidden='true'
 															data-toggle='modal'
-															data-target='#deleteModal'
+															data-target={"#" + el.id}
 														/>
 														<DeleteFileModal
 															id={el.id}

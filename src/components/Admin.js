@@ -6,6 +6,7 @@ import jwt_decode from "jwt-decode";
 import ModalAdmin from "./ModalAdmin";
 import UserContext from "../UserContext";
 import AdminEnrollLi from "./AdminEnrollLi";
+import { v4 as uuidv4 } from "uuid";
 
 export class Admin extends Component {
 	static contextType = UserContext;
@@ -172,8 +173,8 @@ export class Admin extends Component {
 															</th>
 														</tr>
 													</thead>
-													{students.map((user, key) => (
-														<AdminLi key={key} user={user} role='student' />
+													{students.map((user) => (
+														<AdminLi key={user.id} user={user} role='student' />
 													))}
 												</table>
 											</div>
@@ -194,8 +195,12 @@ export class Admin extends Component {
 														</th>
 													</tr>
 												</thead>
-												{instructors.map((user, key) => (
-													<AdminLi key={key} user={user} role='instructor' />
+												{instructors.map((user) => (
+													<AdminLi
+														key={user.id}
+														user={user}
+														role='instructor'
+													/>
 												))}
 											</table>
 										</div>
@@ -215,8 +220,8 @@ export class Admin extends Component {
 													</tr>
 												</thead>
 												{enrollments &&
-													enrollments.map((enroll, i) => (
-														<AdminEnrollLi key={i} enroll={enroll} />
+													enrollments.map((enroll) => (
+														<AdminEnrollLi key={uuidv4()} enroll={enroll} />
 													))}
 											</table>
 										</div>
