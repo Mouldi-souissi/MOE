@@ -6,7 +6,6 @@ export class ResetModal extends Component {
 
 	render() {
 		const generatedPwd = this.context.generatedPwd;
-		console.log(this.props.id);
 		return (
 			<div>
 				<div

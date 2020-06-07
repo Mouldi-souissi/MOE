@@ -138,6 +138,9 @@ export class Landing extends Component {
 				<div className='bg-light'>
 					<div className='container py-5'>
 						<div className='row h-100 align-items-center py-5'>
+							<div className='col-lg-6 d-none d-lg-block'>
+								<img src={landing3} alt='' className='img-fluid' />
+							</div>
 							<div className='col-lg-6'>
 								<h1 className='display-4 mb-3'>About us</h1>
 								<h2 className='lead '>
@@ -149,15 +152,12 @@ export class Landing extends Component {
 									Teach and train in a virtual classroom - anyone, anywhere.
 								</p>
 							</div>
-							<div className='col-lg-6 d-none d-lg-block'>
-								<img src={landing3} alt='' className='img-fluid' />
-							</div>
 						</div>
 					</div>
 				</div>
-				<div className='bg-white py-5'>
-					<div className='container py-5'>
-						<div className='row align-items-center mb-5'>
+				<div className='bg-white'>
+					<div className='container'>
+						<div className='row align-items-center mt-5'>
 							<div className='col-lg-6 order-2 order-lg-1'>
 								<h2 className='font-weight-light mb-5'>
 									Learning Management System
@@ -282,7 +282,7 @@ export class Landing extends Component {
 										src={testi3}
 										alt='img'
 									/>
-									<h5>Sarah W.</h5>
+									<h5>Ibrahim.</h5>
 									<p className='font-weight-light mb-0'>
 										"I would like to thank Global Vision for the well-organized
 										training. The training was superb, and I genuinely enjoyed

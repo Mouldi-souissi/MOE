@@ -148,6 +148,7 @@ export class AdminLi extends Component {
 							</button>
 						)}
 					</td>
+					<td className='align-middle'>{user.lastConnectionDate}</td>
 				</tr>
 			</tbody>
 		);

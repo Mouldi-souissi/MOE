@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import $ from "jquery";
@@ -39,43 +38,9 @@ export class CourseCard extends Component {
 		this.setState({ isEnrolled: false });
 	};
 
-	checkEnrollmentTheme = () => {
-		axios({
-			url: `https://app.visioconf.site/api/v1/users/themes/enrollments?theme=${this.props.course.theme.value}`,
-			method: "get",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => {
-				if (res.data.payload[0]) {
-					this.setState({
-						isEnrolledToTheme: res.data.payload[0].status,
-					});
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-
-	checkCompleted = () => {
-		axios({
-			url: `https://app.visioconf.site/api/v1/courses/enrollments`,
-			method: "get",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => {
-				this.setState({
-					status: res.data.payload.filter(
-						(el) => el.courseId === Number(this.props.course.id)
-					)[0].status,
-				});
-			})
-			.catch((err) => console.log(err));
-	};
-
 	componentDidMount() {
-		this.state.isStudent && this.checkEnrollmentTheme();
-		this.state.isStudent && this.checkCompleted();
+		this.state.isStudent && this.context.getEnrolledThemes();
+		this.state.isStudent && this.context.checkCompleted();
 
 		// ...
 		var max = 70;
@@ -105,9 +70,13 @@ export class CourseCard extends Component {
 			(course) => course.id === this.props.course.id
 		)[0];
 
-		// const status = this.context.status.filter(
-		// 	(el) => el.courseId === Number(this.props.course.id)
-		// )[0].status;
+		const isEnrolledToTheme = this.context.enrolledThemes.filter(
+			(el) => el.value === this.props.course.theme.value
+		);
+
+		const isCompleted = this.context.status.filter(
+			(el) => el.courseId === Number(this.props.course.id)
+		);
 
 		return (
 			<div className='col-auto mb-4 mt-4'>
@@ -148,12 +117,14 @@ export class CourseCard extends Component {
 							<span
 								// style={{ fontSize: "13px", padding: "10px" }}
 								className={
-									this.state.status === "IN_PROGRESS"
+									isCompleted.length !== 0 &&
+									isCompleted[0].status === "IN_PROGRESS"
 										? "float-right badge badge-secondary"
 										: "float-right badge badge-success"
 								}>
 								Status:{" "}
-								{this.state.status === "IN_PROGRESS"
+								{isCompleted.length !== 0 &&
+								isCompleted[0].status === "IN_PROGRESS"
 									? "In progress"
 									: "Completed"}
 							</span>
@@ -167,7 +138,8 @@ export class CourseCard extends Component {
 								style={{ position: "absolute", bottom: "20px" }}>
 								{this.state.isStudent &&
 									enrolledCourses &&
-									this.state.isEnrolledToTheme === "ACCEPTED" && (
+									isEnrolledToTheme.length !== 0 &&
+									isEnrolledToTheme[0].status === "ACCEPTED" && (
 										<Link to={`/article${id}`}>
 											<button
 												type='button'

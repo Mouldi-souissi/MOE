@@ -7,6 +7,7 @@ import ModalAdmin from "./ModalAdmin";
 import UserContext from "../UserContext";
 import AdminEnrollLi from "./AdminEnrollLi";
 import { v4 as uuidv4 } from "uuid";
+import CourseLi from "./CourseLi";
 
 export class Admin extends Component {
 	static contextType = UserContext;
@@ -17,6 +18,7 @@ export class Admin extends Component {
 	componentDidMount() {
 		this.context.getAllUsers();
 		this.context.getThemesEnrollement();
+		this.context.getAllCourses();
 	}
 
 	render() {
@@ -25,6 +27,7 @@ export class Admin extends Component {
 		}
 		const students = this.context.students;
 		const instructors = this.context.instructors;
+		const courses = this.context.courses;
 		// let filteredStudents =
 		// 	students &&
 		// 	students.filter((el) =>
@@ -106,6 +109,18 @@ export class Admin extends Component {
 												</span>
 											</div>
 										</li>
+										<li className='nav-item'>
+											<div
+												className='nav-link'
+												role='tab'
+												data-toggle='tab'
+												href='#tab-4'>
+												Courses&nbsp;
+												<span className='badge badge-pill badge-primary'>
+													{courses.length}
+												</span>
+											</div>
+										</li>
 									</ul>
 									<div className='tab-content'>
 										<div className='tab-pane active' role='tabpanel' id='tab-1'>
@@ -171,6 +186,7 @@ export class Admin extends Component {
 															<th scope='col'>
 																<em className='fa fa-cog'></em>
 															</th>
+															<th scope='col'>Last Connection</th>
 														</tr>
 													</thead>
 													{students.map((user) => (
@@ -193,6 +209,7 @@ export class Admin extends Component {
 														<th scope='col'>
 															<em className='fa fa-cog'></em>
 														</th>
+														<th scope='col'>Last Connection</th>
 													</tr>
 												</thead>
 												{instructors.map((user) => (
@@ -225,7 +242,21 @@ export class Admin extends Component {
 													))}
 											</table>
 										</div>
-										<div className='tab-pane' role='tabpanel' id='tab-4'></div>
+										<div className='tab-pane' role='tabpanel' id='tab-4'>
+											<table className='table table-hover  table-bordered table-list'>
+												<thead>
+													<tr align='center'>
+														<th scope='col'>Title</th>
+														<th scope='col'>Created By</th>
+														<th scope='col'>Theme</th>
+														<th scope='col'>Sessions Stats</th>
+													</tr>
+												</thead>
+												{courses.map((course) => (
+													<CourseLi key={course.id} course={course} />
+												))}
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>

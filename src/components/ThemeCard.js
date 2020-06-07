@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import {
@@ -23,7 +22,6 @@ import ThemeContext from "../ThemeContext";
 export class ThemeCard extends Component {
 	static contextType = ThemeContext;
 	state = {
-		isEnrolled: "",
 		isStudent:
 			localStorage.getItem("token") !== null &&
 			jwt_decode(localStorage.token).roles[0] === "STUDENT",
@@ -31,32 +29,14 @@ export class ThemeCard extends Component {
 
 	handleEnroll = () => {
 		this.context.handleEnrollTheme(this.props.theme.value);
-		this.setState({ isEnrolled: "ACCEPTED" });
 	};
 
 	handleUnEnroll = () => {
 		this.context.handleUnEnroll(this.props.theme.value);
-		this.setState({ isEnrolled: "" });
-	};
-
-	checkEnrollment = () => {
-		axios({
-			url: `https://app.visioconf.site/api/v1/users/themes/enrollments?theme=${this.props.theme.value}`,
-			method: "get",
-			headers: { authorization: localStorage.getItem("token") },
-		})
-			.then((res) => {
-				this.setState({
-					isEnrolled: res.data.payload[0].status,
-				});
-			})
-			.catch((err) => {
-				console.log(err);
-			});
 	};
 
 	componentDidMount() {
-		this.state.isStudent && this.checkEnrollment();
+		this.state.isStudent && this.context.getEnrolledThemes();
 	}
 	img = () => {
 		switch (this.props.theme.value) {
@@ -93,6 +73,10 @@ export class ThemeCard extends Component {
 		}
 	};
 	render() {
+		const isEnrolled = this.context.enrolledThemes.filter(
+			(el) => el.value === this.props.theme.value
+		);
+
 		return (
 			<div className='col-auto'>
 				<div>
@@ -109,14 +93,18 @@ export class ThemeCard extends Component {
 							}}></div>
 						<figcaption>
 							<h3>{this.props.theme.label}</h3>
-							{this.state.isStudent && this.state.isEnrolled === "OPEN" && (
-								<h6>Please wait for admin approval</h6>
-							)}
+							{this.state.isStudent &&
+								isEnrolled.length !== 0 &&
+								isEnrolled[0].status === "OPEN" && (
+									<h6>Please wait for admin approval</h6>
+								)}
 
 							{this.state.isStudent && (
 								<div className='mt-2'>
-									{this.state.isEnrolled === "OPEN" ||
-									this.state.isEnrolled === "ACCEPTED" ? (
+									{(isEnrolled.length !== 0 &&
+										isEnrolled[0].status === "OPEN") ||
+									(isEnrolled.length !== 0 &&
+										isEnrolled[0].status === "ACCEPTED") ? (
 										<button
 											type='button'
 											className='btn btn-danger mr-2'

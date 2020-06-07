@@ -62,7 +62,7 @@ export class Navbar extends Component {
 										exact
 										className='nav-link'
 										to='/'
-										activeClassName='active'>
+										activeclassname='active'>
 										HOME
 									</NavLink>
 								</li>
@@ -71,7 +71,7 @@ export class Navbar extends Component {
 										<NavLink
 											className='nav-link'
 											to='/courses'
-											activeClassName='active'>
+											activeclassname='active'>
 											COURSES
 										</NavLink>
 									</li>
@@ -86,7 +86,7 @@ export class Navbar extends Component {
 												? "/dashboardI"
 												: "/dashboard"
 										}
-										activeClassName='active'>
+										activeclassname='active'>
 										DASHBOARD
 									</NavLink>
 								</li>
@@ -94,7 +94,7 @@ export class Navbar extends Component {
 									<NavLink
 										className='nav-link'
 										to='/aboutUs'
-										activeClassName='active'>
+										activeclassname='active'>
 										CONTACT US
 									</NavLink>
 								</li>

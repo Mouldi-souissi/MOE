@@ -22,6 +22,7 @@ import PrivacyPolicy from "./components/PrivacyPolicy";
 import RequestRefund from "./components/RequestRefund";
 import License from "./components/License";
 import CancellationPolicy from "./components/CancellationPolicy";
+import SessionStats from "./components/SessionStats";
 
 export class App extends Component {
 	render() {
@@ -48,6 +49,11 @@ export class App extends Component {
 						<PrivateRoute path='/dashboard' component={Dashboard} />
 						<PrivateRoute path='/dashboardI' component={DashInstructor} />
 						<PrivateRoute path='/admin' component={Admin} />
+						<PrivateRoute
+							exact
+							path='/sessionStats:name'
+							component={SessionStats}
+						/>
 						<PrivateRoute path='/article:id' component={Article} />
 						<PrivateRoute
 							exact

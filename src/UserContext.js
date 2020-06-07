@@ -10,6 +10,8 @@ class UserProvider extends Component {
 		enrollments: [],
 		status: "",
 		generatedPwd: "",
+		courses: [],
+		sessions: [],
 	};
 
 	getAllUsers = () => {
@@ -149,6 +151,33 @@ class UserProvider extends Component {
 				console.log(err);
 			});
 	};
+
+	getAllCourses = () => {
+		axios({
+			url: "https://app.visioconf.site/api/v1/courses",
+			method: "get",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) =>
+				this.setState({
+					courses: res.data.payload,
+				})
+			)
+			.catch((err) => console.log(err));
+	};
+
+	getSessions = () => {
+		this.state.courses &&
+			this.state.courses.forEach((course) => {
+				axios({
+					url: `https://app.visioconf.site/api/v1/courses/${course.id}/meetings`,
+					method: "get",
+					headers: { authorization: localStorage.getItem("token") },
+				})
+					.then((res) => this.setState({ sessions: res.data.payload }))
+					.catch((err) => console.log(err));
+			});
+	};
 	render() {
 		const { children } = this.props;
 		const {
@@ -157,6 +186,8 @@ class UserProvider extends Component {
 			enrollments,
 			status,
 			generatedPwd,
+			courses,
+			sessions,
 		} = this.state;
 		const {
 			getAllUsers,
@@ -167,6 +198,8 @@ class UserProvider extends Component {
 			handleEdit,
 			handleAdd,
 			handleResetPWD,
+			getAllCourses,
+			getSessions,
 		} = this;
 
 		return (
@@ -177,6 +210,8 @@ class UserProvider extends Component {
 					enrollments,
 					status,
 					generatedPwd,
+					courses,
+					sessions,
 					getAllUsers,
 					getThemesEnrollement,
 					themeEnroll,
@@ -185,6 +220,8 @@ class UserProvider extends Component {
 					handleEdit,
 					handleAdd,
 					handleResetPWD,
+					getAllCourses,
+					getSessions,
 				}}>
 				{children}
 			</UserContext.Provider>
