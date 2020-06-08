@@ -91,7 +91,7 @@ class ThemeProvider extends Component {
 			.catch((err) => console.log(err));
 	};
 
-	handleEnrollCourse = (id, value) => {
+	handleEnrollCourse = (id) => {
 		axios({
 			url: `https://app.visioconf.site/api/v1/courses/${id}/enroll`,
 			method: "POST",
@@ -100,7 +100,6 @@ class ThemeProvider extends Component {
 			.then(() => {
 				this.setState({});
 				this.getEnrolledCources();
-				value && this.handleEnrollTheme(value);
 			})
 			.catch((err) => console.log(err));
 	};

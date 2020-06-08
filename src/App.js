@@ -23,6 +23,8 @@ import RequestRefund from "./components/RequestRefund";
 import License from "./components/License";
 import CancellationPolicy from "./components/CancellationPolicy";
 import SessionStats from "./components/SessionStats";
+import CourseStats from "./components/CourseStats";
+import AdminExams from "./components/AdminExams";
 
 export class App extends Component {
 	render() {
@@ -51,9 +53,15 @@ export class App extends Component {
 						<PrivateRoute path='/admin' component={Admin} />
 						<PrivateRoute
 							exact
-							path='/sessionStats:name'
+							path='/sessionStats:id'
 							component={SessionStats}
 						/>
+						<PrivateRoute
+							exact
+							path='/courseStats:id'
+							component={CourseStats}
+						/>
+						<PrivateRoute exact path='/adminExams:id' component={AdminExams} />
 						<PrivateRoute path='/article:id' component={Article} />
 						<PrivateRoute
 							exact

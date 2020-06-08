@@ -3,13 +3,9 @@ import UserContext from "../UserContext";
 import { Link } from "react-router-dom";
 
 export class CourseLi extends Component {
-	componentDidMount() {
-		this.context.getSessions();
-	}
 	static contextType = UserContext;
 	render() {
 		const course = this.props.course;
-		// const sessions = this.context.sessions;
 		return (
 			<tbody>
 				<tr align='center'>
@@ -25,8 +21,26 @@ export class CourseLi extends Component {
 						<div>{course.theme.label}</div>
 					</td>
 					<td className='align-middle'>
-						<Link to={`/sessionStats${course.title}`}>
+						<Link to={`/sessionStats${course.id}`}>
 							<button className='btn btn-primary'>Stats</button>
+						</Link>
+					</td>
+					<td className='align-middle'>
+						<Link
+							to={{
+								pathname: `/courseStats${course.id}`,
+								courseTitle: course.title,
+							}}>
+							<button className='btn btn-primary'>Stats</button>
+						</Link>
+					</td>
+					<td className='align-middle'>
+						<Link
+							to={{
+								pathname: `/adminExams${course.id}`,
+								courseTitle: course.title,
+							}}>
+							<button className='btn btn-primary'>Exams</button>
 						</Link>
 					</td>
 				</tr>

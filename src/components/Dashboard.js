@@ -31,8 +31,12 @@ export class Dashboard extends Component {
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
-			.then((res) =>
-				res.data.payload.map((theme) =>
+			.then((res) => {
+				let filtered = res.data.payload.filter(
+					(el) => el.status === "ACCEPTED"
+				);
+				console.log(filtered);
+				filtered.forEach((theme) =>
 					axios({
 						url: `https://app.visioconf.site/api/v1/courses?theme=${theme.value}`,
 						method: "GET",
@@ -46,8 +50,8 @@ export class Dashboard extends Component {
 						.catch((err) => {
 							console.log(err);
 						})
-				)
-			)
+				);
+			})
 			.catch((err) => console.log(err));
 	};
 

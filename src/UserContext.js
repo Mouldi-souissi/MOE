@@ -174,10 +174,15 @@ class UserProvider extends Component {
 					method: "get",
 					headers: { authorization: localStorage.getItem("token") },
 				})
-					.then((res) => this.setState({ sessions: res.data.payload }))
+					.then((res) =>
+						this.setState({
+							sessions: [...this.state.sessions, res.data.payload],
+						})
+					)
 					.catch((err) => console.log(err));
 			});
 	};
+
 	render() {
 		const { children } = this.props;
 		const {

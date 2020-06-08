@@ -4,12 +4,11 @@ import jwt_decode from "jwt-decode";
 import $ from "jquery";
 import ThemeContext from "../ThemeContext";
 import moment from "moment";
+// import axios from "axios";
 
 export class CourseCard extends Component {
 	static contextType = ThemeContext;
 	state = {
-		isEnrolledToTheme: false,
-		isEnrolled: false,
 		isStudent:
 			localStorage.getItem("token") !== null &&
 			jwt_decode(localStorage.token).roles[0] === "STUDENT",
@@ -19,28 +18,19 @@ export class CourseCard extends Component {
 		isOwner:
 			localStorage.getItem("token") !== null &&
 			jwt_decode(localStorage.token).id === this.props.course.createdBy.id,
-		status: "",
 	};
 
 	handleEnroll = () => {
-		this.context.handleEnrollCourse(
-			this.props.course.id,
-			this.state.isEnrolledToTheme === "ACCEPTED" ||
-				this.state.isEnrolledToTheme === "OPEN"
-				? ""
-				: this.props.course.theme.value
-		);
-		this.setState({ isEnrolled: true });
+		this.context.handleEnrollCourse(this.props.course.id);
 	};
 
 	handleUnEnroll = () => {
 		this.context.handleUnEnrollCourse(this.props.course.id);
-		this.setState({ isEnrolled: false });
 	};
 
 	componentDidMount() {
+		this.state.isStudent && this.context.getEnrolledCources();
 		this.state.isStudent && this.context.getEnrolledThemes();
-		this.state.isStudent && this.context.checkCompleted();
 
 		// ...
 		var max = 70;
@@ -66,17 +56,14 @@ export class CourseCard extends Component {
 		let a = moment(new Date()); //todays date
 		let b = createdDate;
 		let date = a.diff(b, "hours");
+
 		const enrolledCourses = this.context.enrolledCourses.filter(
 			(course) => course.id === this.props.course.id
 		)[0];
 
-		const isEnrolledToTheme = this.context.enrolledThemes.filter(
-			(el) => el.value === this.props.course.theme.value
-		);
-
-		const isCompleted = this.context.status.filter(
-			(el) => el.courseId === Number(this.props.course.id)
-		);
+		const enrolledThemes = this.context.enrolledThemes.filter(
+			(el) => el.value === theme.value
+		)[0];
 
 		return (
 			<div className='col-auto mb-4 mt-4'>
@@ -117,14 +104,11 @@ export class CourseCard extends Component {
 							<span
 								// style={{ fontSize: "13px", padding: "10px" }}
 								className={
-									isCompleted.length !== 0 &&
-									isCompleted[0].status === "IN_PROGRESS"
+									enrolledCourses.enrollment.status === "IN_PROGRESS"
 										? "float-right badge badge-secondary"
 										: "float-right badge badge-success"
 								}>
-								Status:{" "}
-								{isCompleted.length !== 0 &&
-								isCompleted[0].status === "IN_PROGRESS"
+								{enrolledCourses.enrollment.status === "IN_PROGRESS"
 									? "In progress"
 									: "Completed"}
 							</span>
@@ -138,8 +122,10 @@ export class CourseCard extends Component {
 								style={{ position: "absolute", bottom: "20px" }}>
 								{this.state.isStudent &&
 									enrolledCourses &&
-									isEnrolledToTheme.length !== 0 &&
-									isEnrolledToTheme[0].status === "ACCEPTED" && (
+									enrolledThemes &&
+									enrolledThemes.status === "ACCEPTED" && (
+										// isEnrolledToTheme.length !== 0 &&
+										// isEnrolledToTheme[0].status === "ACCEPTED" &&
 										<Link to={`/article${id}`}>
 											<button
 												type='button'

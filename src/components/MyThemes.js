@@ -10,7 +10,9 @@ export class MyThemes extends Component {
 	}
 
 	render() {
-		const enrolledThemes = this.context.enrolledThemes;
+		const enrolledThemes = this.context.enrolledThemes.filter(
+			(theme) => theme.status !== "REFUSED"
+		);
 		return (
 			<div className='container-fluid mt-5'>
 				<h4 className='center mb-5'>Subscribed Themes</h4>

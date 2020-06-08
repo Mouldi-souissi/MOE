@@ -28,22 +28,22 @@ export class Admin extends Component {
 		const students = this.context.students;
 		const instructors = this.context.instructors;
 		const courses = this.context.courses;
-		// let filteredStudents =
-		// 	students &&
-		// 	students.filter((el) =>
-		// 		el.firstName
-		// 			.trim()
-		// 			.toLocaleLowerCase()
-		// 			.includes(this.state.search.trim().toLocaleLowerCase())
-		// 	);
-		// let filteredInstructors =
-		// 	instructors &&
-		// 	instructors.filter((el) =>
-		// 		el.firstName
-		// 			.trim()
-		// 			.toLocaleLowerCase()
-		// 			.includes(this.state.search.trim().toLocaleLowerCase())
-		// 	);
+		let filteredStudents =
+			students &&
+			students.filter((el) =>
+				el.firstName
+					.trim()
+					.toLocaleLowerCase()
+					.includes(this.state.search.trim().toLocaleLowerCase())
+			);
+		let filteredInstructors =
+			instructors &&
+			instructors.filter((el) =>
+				el.firstName
+					.trim()
+					.toLocaleLowerCase()
+					.includes(this.state.search.trim().toLocaleLowerCase())
+			);
 		const enrollments = this.context.enrollments;
 		return (
 			<div className='admin'>
@@ -182,14 +182,14 @@ export class Admin extends Component {
 															<th scope='col'>Last Name</th>
 															<th scope='col'>E-mail</th>
 															<th scope='col'>State</th>
+															<th scope='col'>Last Connection</th>
 															<th scope='col'>Reset Password</th>
 															<th scope='col'>
 																<em className='fa fa-cog'></em>
 															</th>
-															<th scope='col'>Last Connection</th>
 														</tr>
 													</thead>
-													{students.map((user) => (
+													{filteredStudents.map((user) => (
 														<AdminLi key={user.id} user={user} role='student' />
 													))}
 												</table>
@@ -205,14 +205,14 @@ export class Admin extends Component {
 														<th scope='col'>Last Name</th>
 														<th scope='col'>E-mail</th>
 														<th scope='col'>State</th>
+														<th scope='col'>Last Connection</th>
 														<th scope='col'>Reset Password</th>
 														<th scope='col'>
 															<em className='fa fa-cog'></em>
 														</th>
-														<th scope='col'>Last Connection</th>
 													</tr>
 												</thead>
-												{instructors.map((user) => (
+												{filteredInstructors.map((user) => (
 													<AdminLi
 														key={user.id}
 														user={user}
@@ -250,6 +250,8 @@ export class Admin extends Component {
 														<th scope='col'>Created By</th>
 														<th scope='col'>Theme</th>
 														<th scope='col'>Sessions Stats</th>
+														<th scope='col'>Course Stats</th>
+														<th scope='col'>Exams</th>
 													</tr>
 												</thead>
 												{courses.map((course) => (

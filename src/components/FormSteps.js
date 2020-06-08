@@ -51,7 +51,7 @@ export class FormSteps extends Component {
 	handleCreateCourse = (e) => {
 		e.preventDefault();
 		let { shortDescription, title, theme, description } = this.state;
-		if (description.length > 200) {
+		if (description.length > 300) {
 			this.setState({
 				...this.state,
 				err: "Long description max characters 200",
@@ -131,7 +131,7 @@ export class FormSteps extends Component {
 			shortDescription &&
 			title &&
 			theme &&
-			description.length <= 200
+			description.length <= 300
 		) {
 			axios({
 				url: "https://app.visioconf.site/api/v1/courses",
@@ -248,7 +248,7 @@ export class FormSteps extends Component {
 											name='title'
 											onChange={this.handleInput}
 											required
-											maxLength='10'
+											maxLength='50'
 										/>
 									</div>
 									<div className='form-group'>
@@ -277,7 +277,7 @@ export class FormSteps extends Component {
 											name='shortDescription'
 											onChange={this.handleInput}
 											required
-											maxLength='30'
+											maxLength='60'
 										/>
 									</div>
 								</form>
@@ -302,7 +302,7 @@ export class FormSteps extends Component {
 								<div className='d-flex mt-2'>
 									<h6>Long Description</h6>
 									<span className='mr-5'>*</span>
-									<span>(Max Characters: 200)</span>
+									<span>(Max Characters: 300)</span>
 								</div>
 
 								<ReactQuill

@@ -1,26 +1,50 @@
 import React, { Component } from "react";
-import UserContext from "../UserContext";
 // import moment from "moment";
-// import jwt_decode from "jwt-decode";
 import { withRouter } from "react-router-dom";
+import axios from "axios";
 
 export class SessionStats extends Component {
-	static contextType = UserContext;
+	state = {
+		sessions: [],
+	};
+
+	getSessions = () => {
+		axios({
+			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/meetings`,
+			method: "get",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) =>
+				this.setState({
+					sessions: res.data.payload,
+				})
+			)
+			.catch((err) => console.log(err));
+	};
 
 	componentDidMount() {
-		this.context.getSessions();
+		this.getSessions();
 	}
 	render() {
-		// const sessions = this.context.sessions.filter(
-		// 	(el) => el.name === this.props.match.params.name
-		// );
-		const sessions = this.context.sessions;
-
+		const sessions = this.state.sessions;
 		return (
 			<div>
+				<button
+					style={{ marginTop: "100px" }}
+					className='btn btn-primary ml-5'
+					onClick={() => this.props.history.goBack()}>
+					Go Back
+				</button>
 				{sessions.map((session, i) => (
-					<div className='myExams mr-5 ml-5 mt-5' key={i}>
-						<h4 className='center mb-3'>Meeting Name:{session.name}</h4>
+					<div className='scores mr-5 ml-5' key={i}>
+						<div className='d-flex align-items-center justify-content-between mb-5'>
+							<h5>Meeting Name: {session.name}</h5>
+							<h5>Created: {session.createdDate}</h5>
+							<h5>
+								Ended: {session.endDate ? session.endDate : "Still running"}
+							</h5>
+						</div>
+						{/* <h4 className='center mb-3'>Meeting Name:{session.name}</h4> */}
 						<table className='table table-striped'>
 							<thead>
 								<tr>
