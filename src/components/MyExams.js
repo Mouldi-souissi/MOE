@@ -12,17 +12,6 @@ export class MyExams extends Component {
 			jwt_decode(localStorage.token).roles[0] === "STUDENT",
 	};
 
-	// getScore = () => {
-	// 	axios({
-	// 		url: `https://app.visioconf.site/api/v1/exams/${this.props.match.params.id}/assessments`,
-	// 		method: "get",
-	// 		headers: { authorization: localStorage.getItem("token") },
-	// 	})
-	// 		.then((res) => this.setState({ score: res.data.payload }))
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// };
 	componentDidMount() {
 		this.context.getUserExams();
 	}
@@ -48,16 +37,6 @@ export class MyExams extends Component {
 							<tbody key={i}>
 								<tr>
 									<th scope='row'>{i + 1}</th>
-
-									{/* <td>
-										{moment(new Date()).isSameOrAfter(
-											moment(exam.startDate).add(exam.durationMin, "minutes")
-										) ? (
-											<Link to={`/scores${exam.id}`}>{exam.title}</Link>
-										) : (
-											<Link to={`/exam${exam.id}`}>{exam.title}</Link>
-										)}
-									</td> */}
 									<td>
 										<Link to={`/exam${exam.id}`}>{exam.title}</Link>
 									</td>
@@ -72,9 +51,37 @@ export class MyExams extends Component {
 											: "Upcoming"}
 									</td>
 									<td>
-										<Link to={`/scores${exam.id}`}>
-											<button className='btn btn-success'>Scores</button>
-										</Link>
+										{this.state.isStudent ? (
+											<Link
+												to={
+													moment(new Date()).isSameOrAfter(
+														moment(exam.startDate).add(
+															exam.durationMin,
+															"minutes"
+														)
+													)
+														? `/scores${exam.id}`
+														: "#"
+												}>
+												<button
+													className={
+														moment(new Date()).isSameOrAfter(
+															moment(exam.startDate).add(
+																exam.durationMin,
+																"minutes"
+															)
+														)
+															? "btn btn-success"
+															: "btn btn-success disabled"
+													}>
+													Scores
+												</button>
+											</Link>
+										) : (
+											<Link to={`/scores${exam.id}`}>
+												<button className='btn btn-success'>Scores</button>
+											</Link>
+										)}
 									</td>
 								</tr>
 							</tbody>

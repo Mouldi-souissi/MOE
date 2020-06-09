@@ -125,6 +125,7 @@ export class Article extends Component {
 								<img
 									alt='hero'
 									src={`${`https://app.visioconf.site/img/${this.context.course.picture}`}`}
+									className='courseImg'
 								/>
 							)}
 						</div>
@@ -274,7 +275,7 @@ export class Article extends Component {
 												rel='noopener noreferrer'>
 												<div
 													src={`https://app.visioconf.site/attachment/${el.fileName}`}>
-													{el.title}
+													-{el.title}
 												</div>
 											</a>
 											{course.createdBy &&
@@ -318,7 +319,11 @@ export class Article extends Component {
 
 							<div className='p-3'>
 								<div className='d-flex align-items-center justify-content-between mb-5'>
-									<h4>Exams of this course</h4>
+									<div>
+										<h4>Exams</h4>
+										<div style={{ fontSize: "13px" }}>(of this course)</div>
+									</div>
+
 									{course.createdBy &&
 										course.createdBy.id ===
 											jwt_decode(localStorage.token).id && (

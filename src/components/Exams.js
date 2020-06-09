@@ -80,6 +80,14 @@ export class Exams extends Component {
 		});
 	};
 
+	calculateAndSendScore = () => {
+		this.context.calculateAndSendScore(
+			this.state.grabedAnswers,
+			this.props.match.params.id
+		);
+		this.setState({ start: false });
+	};
+
 	componentDidMount() {
 		this.state.isStudent
 			? this.context.startExam(this.props.match.params.id)
@@ -94,7 +102,7 @@ export class Exams extends Component {
 		let startDate = exam.startDate;
 		let endDate = moment(exam.startDate).add(exam.durationMin, "minutes");
 		var isbetween = moment(todaysDate).isBetween(startDate, endDate);
-
+		// console.log(moment(exam.startDate).utc());
 		return (
 			<div className='exam mt-5'>
 				<button
@@ -155,6 +163,7 @@ export class Exams extends Component {
 							<h6 className='mr-3'>Exam Date:</h6>
 							<DatePicker
 								selected={this.state.startDate}
+								// selected={moment(exam.startDate)}
 								onChange={(date) =>
 									this.setState({
 										...this.state,
@@ -232,17 +241,19 @@ export class Exams extends Component {
 						</div>
 					</div>
 				)}
-				<div className='d-flex'>
-					{this.state.isStudent && !this.state.start && (
-						<button
-							className={
-								isbetween ? "btn btn-warning" : "btn btn-warning disabled"
-							}
-							onClick={isbetween ? this.timer : undefined}>
-							Start Exam
-						</button>
-					)}
-				</div>
+
+				{this.state.isStudent && !this.state.start && !isDone && (
+					<button
+						className={
+							isbetween
+								? "btn btn-warning ml-5"
+								: "btn btn-warning disabled ml-5"
+						}
+						onClick={isbetween ? this.timer : undefined}>
+						Start Exam
+					</button>
+				)}
+
 				{this.state.isStudent && this.state.start && (
 					<div className='timer center'>
 						<p>
@@ -281,12 +292,7 @@ export class Exams extends Component {
 						this.state.start && (
 							<button
 								className='btn btn-primary godown mb-5 mt-5'
-								onClick={() =>
-									this.context.calculateAndSendScore(
-										this.state.grabedAnswers,
-										this.props.match.params.id
-									)
-								}>
+								onClick={this.calculateAndSendScore}>
 								Submit
 							</button>
 						)

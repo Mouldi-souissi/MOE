@@ -134,8 +134,8 @@ button:focus {
 	margin-bottom: 60px;
 }
 .testimonials {
-	padding-top: 100px;
-	padding-bottom: 150px;
+	padding-top: 50px;
+	padding-bottom: 50px;
 }
 .testimonials img {
 	max-width: 50%;
@@ -147,6 +147,7 @@ button:focus {
 /* .cour {
 	box-shadow: 1px 1px 1px 1px grey;
 } */
+
 .features-clean {
 	color: #313437;
 	background-color: #fff;
@@ -1200,10 +1201,10 @@ img {
 	background: #f8f9fa;
 }
 
-#nav-tab-paypal img {
+.altForm img {
 	object-fit: cover;
-	width: 100px;
-	height: 100px;
+	width: 300px;
+	height: 200px;
 }
 
 /* courses */
@@ -1338,8 +1339,9 @@ div.content {
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center center;
-	height: 100%;
+	max-height: 500px;
 	position: relative;
+	margin-left: 100px !important;
 }
 
 .article {
@@ -1377,6 +1379,10 @@ mark {
 		padding-left: 0px;
 		border: 0;
 	}
+	.jumbotron img {
+		max-width: 400px;
+		margin-left: 0 !important;
+	}
 }
 @media only screen and (max-width: 768px) {
 	/* For mobile phones: */
@@ -1386,6 +1392,10 @@ mark {
 	}
 	.wrapper {
 		padding: 5%;
+	}
+	.jumbotron img {
+		max-width: 400px;
+		margin-left: 0 !important;
 	}
 }
 

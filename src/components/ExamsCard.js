@@ -238,7 +238,7 @@ export class ExamsCard extends Component {
 														id={i}
 														name={i}
 														value='false'
-														defaultChecked
+														defaultChecked={!el.correct ? "checked" : ""}
 													/>
 													<label htmlFor='doc' className='mr-3'>
 														Wrong
@@ -252,6 +252,7 @@ export class ExamsCard extends Component {
 														id={i}
 														name={i}
 														value='true'
+														defaultChecked={el.correct ? "checked" : ""}
 													/>
 													<label htmlFor='pdf'>Correct</label>
 												</div>

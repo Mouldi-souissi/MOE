@@ -18,6 +18,7 @@ export class FormSteps extends Component {
 		loaded: 0,
 		request: "",
 		err: "",
+		step: 1,
 	};
 	modules = {
 		toolbar: [
@@ -44,6 +45,21 @@ export class FormSteps extends Component {
 		"indent",
 	];
 
+	// Proceed to next step
+	nextStep = () => {
+		const { step } = this.state;
+		this.setState({
+			step: step + 1,
+		});
+	};
+
+	// Go back to prev step
+	prevStep = () => {
+		const { step } = this.state;
+		this.setState({
+			step: step - 1,
+		});
+	};
 	handleInput = (e) => {
 		this.setState({ [e.target.name]: e.target.value });
 	};
@@ -191,53 +207,25 @@ export class FormSteps extends Component {
 
 	render() {
 		const themes = this.context.themes;
-		return (
-			<div className='altFormContainer'>
-				<div className='altForm '>
-					<div className='bg-white rounded-lg shadow-sm p-5'>
-						<h5 className='center mb-3'>Add Course</h5>
-						<ul
-							role='tablist'
-							className='nav bg-light nav-pills rounded-pill nav-fill mb-3'>
-							<li className='nav-item'>
-								<div
-									data-toggle='pill'
-									href='#nav-tab-card'
-									className='nav-link active rounded-pill'>
-									Step 1
-								</div>
-							</li>
-							<li className='nav-item'>
-								<div
-									data-toggle='pill'
-									href='#nav-tab-paypal'
-									className='nav-link rounded-pill'>
-									Step 2
-								</div>
-							</li>
-							<li className='nav-item'>
-								<div
-									data-toggle='pill'
-									href='#nav-tab-bank'
-									className='nav-link rounded-pill'>
-									Step 3
-								</div>
-							</li>
-						</ul>
+		switch (this.state.step) {
+			case 1:
+				return (
+					<div className='altFormContainer'>
+						<div className='altForm '>
+							<div className='bg-white rounded-lg shadow-sm p-5'>
+								<h5 className='center mb-3'>Add Course</h5>
 
-						<div className='tab-content'>
-							{this.state.request && (
-								<p
-									className={
-										this.state.request === "fail"
-											? "alert alert-danger"
-											: "alert alert-success"
-									}>
-									{this.state.err}
-								</p>
-							)}
+								{this.state.request && (
+									<p
+										className={
+											this.state.request === "fail"
+												? "alert alert-danger"
+												: "alert alert-success"
+										}>
+										{this.state.err}
+									</p>
+								)}
 
-							<div id='nav-tab-card' className='tab-pane fade show active'>
 								<form>
 									<div className='form-group'>
 										<label htmlFor='title'>Title </label>
@@ -280,10 +268,37 @@ export class FormSteps extends Component {
 											maxLength='60'
 										/>
 									</div>
+									<button
+										className='btn btn-primary'
+										onClick={() => this.setState({ step: 2 })}>
+										Next
+									</button>
 								</form>
 							</div>
+						</div>
 
-							<div id='nav-tab-paypal' className='tab-pane fade'>
+						<br />
+						<h5 className='center'>Required fields * </h5>
+					</div>
+				);
+			case 2:
+				return (
+					<div className='altFormContainer'>
+						<div className='altForm '>
+							<div className='bg-white rounded-lg shadow-sm p-5'>
+								<h5 className='center mb-3'>Add Course</h5>
+
+								{this.state.request && (
+									<p
+										className={
+											this.state.request === "fail"
+												? "alert alert-danger"
+												: "alert alert-success"
+										}>
+										{this.state.err}
+									</p>
+								)}
+
 								<p>Upload a cover to your course</p>
 								<div className='form-group'>
 									<input
@@ -294,11 +309,42 @@ export class FormSteps extends Component {
 									/>
 								</div>
 								<div>
-									{this.state.src && <img src={this.state.src} alt='pic' />}
+									{this.state.src && (
+										<img src={this.state.src} alt='pic' className='mb-5' />
+									)}
 								</div>
+								<button
+									className='btn btn-secondary mr-2'
+									onClick={() => this.setState({ step: 1 })}>
+									Previous
+								</button>
+								<button
+									className='btn btn-primary'
+									onClick={() => this.setState({ step: 3 })}>
+									Next
+								</button>
 							</div>
+						</div>
+					</div>
+				);
+			case 3:
+				return (
+					<div className='altFormContainer'>
+						<div className='altForm '>
+							<div className='bg-white rounded-lg shadow-sm p-5'>
+								<h5 className='center mb-3'>Add Course</h5>
 
-							<div id='nav-tab-bank' className='form-Group tab-pane fade'>
+								{this.state.request && (
+									<p
+										className={
+											this.state.request === "fail"
+												? "alert alert-danger"
+												: "alert alert-success"
+										}>
+										{this.state.err}
+									</p>
+								)}
+
 								<div className='d-flex mt-2'>
 									<h6>Long Description</h6>
 									<span className='mr-5'>*</span>
@@ -324,18 +370,23 @@ export class FormSteps extends Component {
 									</div>
 								)}
 								<button
-									className='subscribe btn btn-primary btn-block rounded-pill shadow-sm mt-3 mb-3'
+									className='btn btn-secondary mr-2'
+									onClick={() => this.setState({ step: 2 })}>
+									Previous
+								</button>
+								<button
+									className='subscribe btn btn-primary shadow-sm mt-3 mb-3'
 									onClick={this.handleCreateCourse}>
 									Create
 								</button>
 							</div>
 						</div>
 					</div>
-					<br />
-					<h5 className='center'>Required fields * </h5>
-				</div>
-			</div>
-		);
+				);
+
+			default:
+				console.log("This is a multi-step form built with React.");
+		}
 	}
 }
 

@@ -136,8 +136,8 @@ export class Landing extends Component {
 					</div>
 				</section>
 				<div className='bg-light'>
-					<div className='container py-5'>
-						<div className='row h-100 align-items-center py-5'>
+					<div className='container py-3'>
+						<div className='row h-100 align-items-center'>
 							<div className='col-lg-6 d-none d-lg-block'>
 								<img src={landing3} alt='' className='img-fluid' />
 							</div>
@@ -180,7 +180,7 @@ export class Landing extends Component {
 								/>
 							</div>
 						</div>
-						<div className='row align-items-center'>
+						<div className='row align-items-center mb-5 mt-5'>
 							<div className='col-lg-5 px-5 mx-auto'>
 								<img src={landing2} alt='' className='img-fluid mb-4 mb-lg-0' />
 							</div>
@@ -220,7 +220,7 @@ export class Landing extends Component {
 					</div>
 				</div>
 
-				<div className='article-list d-flex align-items-center'>
+				<div className='article-list d-flex align-items-center features-clean'>
 					<div className='container'>
 						<div className='intro'>
 							<h2 className='text-center'>Our Themes</h2>
@@ -236,12 +236,13 @@ export class Landing extends Component {
 									<ThemeCard key={theme.label} theme={theme} />
 								))}
 						</div>
+						<h6 className='center'>To see all our themes please sign-up.</h6>
 					</div>
 				</div>
 
 				<section className='testimonials text-center bg-light'>
-					<h2 className='text-center mb-5'>What people are saying...</h2>
 					<div className='container'>
+						<h2 className='text-center mb-5'>What people are saying...</h2>
 						<div className='row'>
 							<div className='col-lg-4'>
 								<div className='mx-auto testimonial-item mb-5 mb-lg-0'>
@@ -361,6 +362,14 @@ export class Landing extends Component {
 									</li>
 									<li className='list-inline-item'>
 										<a href='/PrivacyPolicy'>Privacy Policy</a>
+									</li>
+									<li className='list-inline-item'>
+										<span>⋅</span>
+									</li>
+									<li className='list-inline-item'>
+										<a href='https://docs.google.com/forms/d/1broNJzPzemTNhmUIJc_I-4HD7YuYDPQjSSdp16SWisY/viewform?edit_requested=true'>
+											Request Your Refund
+										</a>
 									</li>
 								</ul>
 								<p className='text-muted small mb-4 mb-lg-0'>
