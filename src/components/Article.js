@@ -11,6 +11,7 @@ import SessionModal from "./SessionModal";
 import CourseContext from "../CourseContext";
 import moment from "moment";
 import DeleteFileModal from "./DeleteFileModal";
+import AddExam from "./AddExam";
 
 export class Article extends Component {
 	static contextType = CourseContext;
@@ -109,7 +110,7 @@ export class Article extends Component {
 		const status = this.context.status;
 
 		return (
-			<div>
+			<div className='mb-5'>
 				<div className='container mt-5'>
 					<div className='jumbotron p-3 p-md-5 text-white rounded bg-dark'>
 						<div className='col-md-6 px-0'>
@@ -327,10 +328,15 @@ export class Article extends Component {
 									{course.createdBy &&
 										course.createdBy.id ===
 											jwt_decode(localStorage.token).id && (
-											<Link to={`/addExam${this.props.match.params.id}`}>
-												<button className='btn btn-primary'>Create exam</button>
-											</Link>
+											<button
+												className='btn btn-primary'
+												aria-hidden='true'
+												data-toggle='modal'
+												data-target='#addExamModal'>
+												Create exam
+											</button>
 										)}
+									<AddExam courseId={this.props.match.params.id} />
 								</div>
 
 								<ol className='list-unstyled mb-0'>
@@ -343,6 +349,7 @@ export class Article extends Component {
 													// 	course.createdBy &&
 													// 	course.createdBy.id ===
 													// 		jwt_decode(localStorage.token).id,
+													courseId: this.props.match.params.id,
 												}}>
 												-{el.title}
 											</Link>

@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import ExamContext from "../ExamContext";
+import DeleteExam from "./DeleteExam";
 
 export class Exams extends Component {
 	static contextType = ExamContext;
@@ -51,6 +52,15 @@ export class Exams extends Component {
 			this.props.match.params.id
 		);
 		this.setState({ isEditing: false });
+	};
+
+	handleDate = () => {
+		let editedData = {
+			...this.editedData,
+			startDate: moment(this.state.startDate).format("YYYY-MM-DD HH:mm:ss"),
+		};
+		!moment(this.state.startDate).isSame(new Date()) &&
+			this.context.handleEditExam(editedData, this.props.match.params.id);
 	};
 
 	grabAnswer = (grabedAnswers) => {
@@ -103,13 +113,55 @@ export class Exams extends Component {
 		let endDate = moment(exam.startDate).add(exam.durationMin, "minutes");
 		var isbetween = moment(todaysDate).isBetween(startDate, endDate);
 		// console.log(moment(exam.startDate).utc());
+
 		return (
-			<div className='exam mt-5'>
-				<button
-					className='btn btn-primary mt-5 ml-2'
-					onClick={() => this.props.history.goBack()}>
-					Go Back
-				</button>
+			<div className='exam mt-5 mb-5'>
+				<div
+					className='d-flex align-items-center'
+					style={{ marginTop: "100px" }}>
+					<button
+						className='btn btn-primary ml-2'
+						onClick={() => this.props.history.goBack()}>
+						Go Back
+					</button>
+					{!this.state.isStudent && (
+						<i
+							type='button'
+							className={
+								this.state.isEditing
+									? "fa fa-times btn btn-outline-danger ml-2"
+									: "fa fa-cog btn btn-outline-dark ml-2"
+							}
+							aria-hidden='true'
+							onClick={() =>
+								this.setState({
+									isEditing: !this.state.isEditing,
+								})
+							}
+						/>
+					)}
+					{this.state.isEditing && (
+						<i
+							type='button'
+							className='fa fa-floppy-o btn btn-outline-success ml-2'
+							aria-hidden='true'
+							onClick={this.handleEditExam}
+						/>
+					)}
+					{this.state.isEditing && (
+						<button
+							className='btn btn-outline-danger ml-2'
+							aria-hidden='true'
+							data-toggle='modal'
+							data-target='#deleteExam'>
+							Delete Exam
+						</button>
+					)}
+				</div>
+				<DeleteExam
+					id={this.props.match.params.id}
+					courseId={this.props.location.courseId}
+				/>
 				<div className='container'>
 					<div className='center title'>
 						{this.state.isEditing ? (
@@ -164,13 +216,19 @@ export class Exams extends Component {
 							<DatePicker
 								selected={this.state.startDate}
 								// selected={moment(exam.startDate)}
+								// onChange={(date) =>
+								// 	this.setState({
+								// 		...this.state,
+								// 		editedData: {
+								// 			...this.state.editedData,
+								// 			startDate: moment(date).format("YYYY-MM-DD HH:mm:ss"),
+								// 		},
+								// 	})
+								// }
 								onChange={(date) =>
 									this.setState({
 										...this.state,
-										editedData: {
-											...this.state.editedData,
-											startDate: moment(date).format("YYYY-MM-DD HH:mm:ss"),
-										},
+										startDate: date,
 									})
 								}
 								showTimeSelect
@@ -179,6 +237,11 @@ export class Exams extends Component {
 								timeCaption='time'
 								dateFormat='MMMM d, yyyy h:mm aa'
 							/>
+							<button
+								className='btn btn-primary ml-2'
+								onClick={this.handleDate}>
+								Set
+							</button>
 						</div>
 					) : (
 						<h6 className='center'>
@@ -186,32 +249,6 @@ export class Exams extends Component {
 						</h6>
 					)}
 				</div>
-
-				{!this.state.isStudent && (
-					<i
-						type='button'
-						className={
-							this.state.isEditing
-								? "fa fa-times btn btn-outline-danger ml-2"
-								: "fa fa-cog btn btn-outline-dark ml-2"
-						}
-						aria-hidden='true'
-						onClick={() =>
-							this.setState({
-								isEditing: !this.state.isEditing,
-							})
-						}
-					/>
-				)}
-
-				{this.state.isEditing && (
-					<i
-						type='button'
-						className='fa fa-floppy-o btn btn-outline-success ml-2'
-						aria-hidden='true'
-						onClick={this.handleEditExam}
-					/>
-				)}
 
 				{!this.state.isStudent && (
 					<div className='mt-5 ml-5'>
@@ -265,24 +302,30 @@ export class Exams extends Component {
 				)}
 				{exam.questions &&
 					this.state.start &&
-					exam.questions.map((el) => (
-						<ExamsCard
-							exam={el}
-							key={el.id}
-							isStudent={this.state.isStudent}
-							grabAnswer={this.grabAnswer}
-						/>
-					))}
+					exam.questions
+						.sort((a, b) => a.id - b.id)
+						.map((el, i) => (
+							<ExamsCard
+								order={i + 1}
+								exam={el}
+								key={el.id}
+								isStudent={this.state.isStudent}
+								grabAnswer={this.grabAnswer}
+							/>
+						))}
 				{exam.questions &&
 					!this.state.isStudent &&
-					exam.questions.map((el) => (
-						<ExamsCard
-							exam={el}
-							key={el.id}
-							isStudent={this.state.isStudent}
-							grabAnswer={this.grabAnswer}
-						/>
-					))}
+					exam.questions
+						.sort((a, b) => a.id - b.id)
+						.map((el, i) => (
+							<ExamsCard
+								order={i + 1}
+								exam={el}
+								key={el.id}
+								isStudent={this.state.isStudent}
+								grabAnswer={this.grabAnswer}
+							/>
+						))}
 				{this.state.isStudent &&
 					(isDone ? (
 						<h2 className='center mb-5 mt-5'>

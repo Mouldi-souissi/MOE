@@ -72,7 +72,7 @@ export class Navbar extends Component {
 											className='nav-link'
 											to='/courses'
 											activeclassname='active'>
-											COURSES
+											THEMES & COURSES
 										</NavLink>
 									</li>
 								)}

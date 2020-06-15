@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ThemeCard from "./ThemeCard";
 import CourseCard from "./CourseCard";
 import ThemeContext from "../ThemeContext";
+import Footer from "./Footer";
 const Moment = require("moment");
 
 export class CoursesDemo extends Component {
@@ -24,7 +25,10 @@ export class CoursesDemo extends Component {
 				<div className='bg bg3'></div>
 
 				<h4 className='center sectionTitle' style={{ color: "white" }}>
-					Themes: (Please Subscribe to a Theme)
+					Themes:
+					<p className='center mt-2' style={{ fontSize: "13px" }}>
+						(Please Subscribe to a Theme)
+					</p>
 				</h4>
 
 				<div className='container-fluid'>
@@ -46,6 +50,7 @@ export class CoursesDemo extends Component {
 						))}
 					</div>
 				</div>
+				<Footer />
 			</div>
 		);
 	}

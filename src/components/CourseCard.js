@@ -65,8 +65,6 @@ export class CourseCard extends Component {
 			(el) => el.value === theme.value
 		)[0];
 
-		console.log(enrolledThemes && enrolledThemes.status);
-
 		return (
 			<div className='col-auto mb-4 mt-4'>
 				<div className='card h-100 shadow-sm' style={{ width: "326px" }}>

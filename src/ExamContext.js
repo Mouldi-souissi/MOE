@@ -68,7 +68,7 @@ class ExamProvider extends Component {
 					answers: [
 						{
 							correct: false,
-							text: "test",
+							text: "First answer",
 						},
 					],
 					statement: addedQuestion,
@@ -203,6 +203,40 @@ class ExamProvider extends Component {
 				console.log(err);
 			});
 	};
+	// add exam
+	reset = () => {
+		this.setState({ exam: [] });
+	};
+
+	handleAddExam = (id, data) => {
+		axios({
+			url: `https://app.visioconf.site/api/v1/courses/${id}/exams`,
+			method: "post",
+			headers: { authorization: localStorage.getItem("token") },
+			data: data,
+		})
+			.then((res) => {
+				window.location.href = `/exam${res.data.payload.id}`;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	deleteExam = (id, courseId) => {
+		axios({
+			url: `https://app.visioconf.site/api/v1/exams/${id}`,
+			method: "delete",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => {
+				// window.location.href = `/article${courseId}`;
+				// window.location.href = `/dashboardI`;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	render() {
 		const { children } = this.props;
@@ -218,6 +252,9 @@ class ExamProvider extends Component {
 			handleDeleteQuestion,
 			handleEditAnswer,
 			handleDeleteAnswer,
+			handleAddExam,
+			reset,
+			deleteExam,
 		} = this;
 
 		return (
@@ -237,6 +274,9 @@ class ExamProvider extends Component {
 					handleDeleteQuestion,
 					handleEditAnswer,
 					handleDeleteAnswer,
+					handleAddExam,
+					reset,
+					deleteExam,
 				}}>
 				{children}
 			</ExamContext.Provider>

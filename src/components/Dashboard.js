@@ -19,6 +19,7 @@ export class Dashboard extends Component {
 	state = {
 		courses: [],
 		tabIndex: 0,
+		bonusFiles: [],
 	};
 
 	changeTab = () => {
@@ -35,7 +36,7 @@ export class Dashboard extends Component {
 				let filtered = res.data.payload.filter(
 					(el) => el.status === "ACCEPTED"
 				);
-				console.log(filtered);
+				// console.log(filtered);
 				filtered.forEach((theme) =>
 					axios({
 						url: `https://app.visioconf.site/api/v1/courses?theme=${theme.value}`,
@@ -55,6 +56,47 @@ export class Dashboard extends Component {
 			.catch((err) => console.log(err));
 	};
 
+	getEnrolledCources = () => {
+		axios({
+			url: "https://app.visioconf.site/api/v1/courses?findEnrollments=true",
+			method: "GET",
+			headers: { authorization: localStorage.getItem("token") },
+		})
+			.then((res) => {
+				let filtered = res.data.payload.filter((el) => el.enrollment);
+				filtered.forEach((course) => {
+					axios({
+						url: `https://app.visioconf.site/api/v1/courses/${course.id}/attachments`,
+						method: "get",
+						headers: { authorization: localStorage.getItem("token") },
+					})
+						.then((res) => {
+							this.setState({
+								bonusFiles: this.state.bonusFiles.concat(
+									res.data.payload
+										.filter(
+											(file) =>
+												Math.abs(
+													moment(file.createdDate).diff(
+														moment(new Date()),
+														"hours"
+													)
+												) < 24
+										)
+										.map((el) =>
+											Object.assign(el, { titleCourse: course.title })
+										)
+								),
+							});
+						})
+						.catch((err) => console.log(err));
+				});
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	componentDidMount() {
 		// toggling btn
 		$("#menu-toggle").click(function (e) {
@@ -63,6 +105,7 @@ export class Dashboard extends Component {
 		});
 
 		this.getEnrolledThemes();
+		this.getEnrolledCources();
 
 		// generatePath("/dashboard:index", {
 		// 	id: 3,
@@ -84,6 +127,11 @@ export class Dashboard extends Component {
 		let newCourses = this.state.courses.filter(
 			(course) => Math.abs(moment(course.createdDate).diff(date, "hours")) < 24
 		);
+
+		// let bonusFiles = this.state.bonusFiles.filter(
+		// 	(file) => Math.abs(moment(file.createdDate).diff(date, "hours")) < 24
+		// );
+		let bonusFiles = this.state.bonusFiles;
 
 		return (
 			<Tabs
@@ -128,11 +176,10 @@ export class Dashboard extends Component {
 										<i className='fa fa-bell mr-3' aria-hidden='true' />
 										My Notifications
 									</Tab>
-									{newCourses.length !== 0 && (
-										<span className='badge badge-secondary'>
-											{newCourses.length}
-										</span>
-									)}
+
+									<span className='badge badge-secondary'>
+										{newCourses.length + bonusFiles.length}
+									</span>
 
 									<br />
 									<Tab>
@@ -170,7 +217,7 @@ export class Dashboard extends Component {
 							<MyExams />
 						</TabPanel>
 						<TabPanel>
-							<Notifications newCourses={newCourses} />
+							<Notifications newCourses={newCourses} bonusFiles={bonusFiles} />
 						</TabPanel>
 						<TabPanel>
 							<Profile />

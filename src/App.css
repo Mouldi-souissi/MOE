@@ -389,6 +389,7 @@ button:focus {
 	width: auto;
 	background: url(./assets/signUp.jpg);
 	background-size: cover;
+	background-position: center;
 }
 
 .register-photo .form-container {
@@ -882,7 +883,7 @@ div.avatar-bg {
 
 .contact-clean {
 	background: #f8f9fa;
-	padding: 120px 0;
+	padding-top: 120px;
 }
 
 @media (max-width: 767px) {

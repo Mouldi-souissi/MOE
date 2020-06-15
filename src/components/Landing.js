@@ -7,6 +7,7 @@ import landing2 from "../assets/landing2.jpg";
 import landing3 from "../assets/landing3.jpg";
 import axios from "axios";
 import ThemeCard from "./ThemeCard";
+import Footer from "./Footer";
 
 import { Link } from "react-router-dom";
 
@@ -72,64 +73,35 @@ export class Landing extends Component {
 					<div className='container'>
 						<div className='intro'>
 							<h2 className='text-center'>Features</h2>
-							<p className='text-center'>
+							{/* <p className='text-center'>
 								Nunc luctus in metus eget fringilla. Aliquam sed justo ligula.
 								Vestibulum nibh erat, pellentesque ut laoreet vitae.{" "}
-							</p>
+							</p> */}
 						</div>
 						<div className='row features'>
 							<div className='col-sm-6 col-lg-4 item'>
-								<i className='fa fa-map-marker icon'></i>
-								<h3 className='name'>Works everywhere</h3>
+								<i className='fa fa-comments-o icon'></i>
+								<h3 className='name'>Virtual classrooms</h3>
 								<p className='description'>
-									Aenean tortor est, vulputate quis leo in, vehicula rhoncus
-									lacus. Praesent aliquam in tellus eu gravida. Aliquam varius
-									finibus est.
-								</p>
-							</div>
-							<div className='col-sm-6 col-lg-4 item'>
-								<i className='fa fa-clock-o icon'></i>
-								<h3 className='name'>Always available</h3>
-								<p className='description'>
-									Aenean tortor est, vulputate quis leo in, vehicula rhoncus
-									lacus. Praesent aliquam in tellus eu gravida. Aliquam varius
-									finibus est.
+									Teaching in an GVC-Learning Live virtual classroom provides
+									ultimate experience for both trainer and trainees.
 								</p>
 							</div>
 							<div className='col-sm-6 col-lg-4 item'>
 								<i className='fa fa-list-alt icon'></i>
 								<h3 className='name'>Customizable</h3>
 								<p className='description'>
-									Aenean tortor est, vulputate quis leo in, vehicula rhoncus
-									lacus. Praesent aliquam in tellus eu gravida. Aliquam varius
-									finibus est.
+									With GVC-Learning schools can deliver all forms of learning –
+									online, blended, synchronous and asynchronous.
 								</p>
 							</div>
-							<div className='col-sm-6 col-lg-4 item'>
-								<i className='fa fa-leaf icon'></i>
-								<h3 className='name'>Organic</h3>
-								<p className='description'>
-									Aenean tortor est, vulputate quis leo in, vehicula rhoncus
-									lacus. Praesent aliquam in tellus eu gravida. Aliquam varius
-									finibus est.
-								</p>
-							</div>
-							<div className='col-sm-6 col-lg-4 item'>
-								<i className='fa fa-plane icon'></i>
-								<h3 className='name'>Fast</h3>
-								<p className='description'>
-									Aenean tortor est, vulputate quis leo in, vehicula rhoncus
-									lacus. Praesent aliquam in tellus eu gravida. Aliquam varius
-									finibus est.
-								</p>
-							</div>
+
 							<div className='col-sm-6 col-lg-4 item'>
 								<i className='fa fa-phone icon'></i>
 								<h3 className='name'>Mobile-first</h3>
 								<p className='description'>
-									Aenean tortor est, vulputate quis leo in, vehicula rhoncus
-									lacus. Praesent aliquam in tellus eu gravida. Aliquam varius
-									finibus est.
+									GVC-Learning Virtual Classroom supports all popular mobile
+									devices.
 								</p>
 							</div>
 						</div>
@@ -147,7 +119,7 @@ export class Landing extends Component {
 									VIRTUAL CLASSROOM SOFTWARE Online Teaching & Training Software
 								</h2>
 								<p className='lead text-muted mb-0'>
-									VISIOCONF is Virtual Classroom Software and a Learning
+									GVC-Learning is Virtual Classroom Software and a Learning
 									Management System for Online Courses and Live Online Classes.
 									Teach and train in a virtual classroom - anyone, anywhere.
 								</p>
@@ -163,13 +135,14 @@ export class Landing extends Component {
 									Learning Management System
 								</h2>
 								<p className='font-italic text-muted mb-4'>
-									With VISIOCONF trainers and schools deliver educational
+									With GVC-Learning trainers and schools deliver educational
 									courses or training programs to students. A rich set of LMS
 									elements allow administration, documentation, tracking,
 									evaluation and reporting. Instructors can administer tests and
 									other assignments, track student progress, and manage
-									record-keeping. With VISIOCONF schools can deliver all forms
-									of learning – online, blended, synchronous and asynchronous.
+									record-keeping. With GVC-Learning schools can deliver all
+									forms of learning – online, blended, synchronous and
+									asynchronous.
 								</p>
 							</div>
 							<div className='col-lg-5 px-5 mx-auto order-1 order-lg-2'>
@@ -189,14 +162,14 @@ export class Landing extends Component {
 									Virtual Classroom Software
 								</h2>
 								<p className='font-italic text-muted mb-4'>
-									VISIOCONF Live virtual classroom software is an integral part
-									of the Learning Management System. It is a state-of-the-art
-									live online training classroom that with live video, crystal
-									clear audio, multiple interactive whiteboards, markup and
-									annotation tools, file and document sharing, screen sharing
-									and many other collaboration tools. Teaching in an VISIOCONF
-									Live virtual classroom provides ultimate experience for both
-									trainer and trainees.
+									GVC-Learning Live virtual classroom software is an integral
+									part of the Learning Management System. It is a
+									state-of-the-art live online training classroom that with live
+									video, crystal clear audio, multiple interactive whiteboards,
+									markup and annotation tools, file and document sharing, screen
+									sharing and many other collaboration tools. Teaching in an
+									GVC-Learning Live virtual classroom provides ultimate
+									experience for both trainer and trainees.
 								</p>
 							</div>
 						</div>
@@ -206,7 +179,7 @@ export class Landing extends Component {
 									Cross-Platform Online Teaching Software
 								</h2>
 								<p className='font-italic text-muted mb-4'>
-									Mobile Learning is just natural with VISIOCONF Virtual
+									Mobile Learning is just natural with GVC-Learning Virtual
 									Classroom as we support all popular mobile devices. You can
 									have students attending live classes and online courses using
 									tablets and phones along with students and teachers using
@@ -230,7 +203,7 @@ export class Landing extends Component {
 							</p> */}
 						</div>
 
-						<div className='row mb-5'>
+						<div className='row mb-5 justify-content-center'>
 							{this.state.themes &&
 								this.state.themes.map((theme) => (
 									<ThemeCard key={theme.label} theme={theme} />
@@ -334,70 +307,7 @@ export class Landing extends Component {
 						</div>
 					</div>
 				</section>
-
-				<footer className='footer bg-light'>
-					<div className='container'>
-						<div className='row'>
-							<div className='col-lg-6 my-auto h-100 text-center text-lg-left'>
-								<ul className='list-inline mb-2'>
-									<li className='list-inline-item'>
-										<a href='/CancellationPolicy'>
-											Cancellation and Refund Policy
-										</a>
-									</li>
-									<li className='list-inline-item'>
-										<span>⋅</span>
-									</li>
-									<li className='list-inline-item'>
-										<a href='/License'>License Agreement</a>
-									</li>
-									<li className='list-inline-item'>
-										<span>⋅</span>
-									</li>
-									<li className='list-inline-item'>
-										<a href='/TermsOfUse'>Terms of Use</a>
-									</li>
-									<li className='list-inline-item'>
-										<span>⋅</span>
-									</li>
-									<li className='list-inline-item'>
-										<a href='/PrivacyPolicy'>Privacy Policy</a>
-									</li>
-									<li className='list-inline-item'>
-										<span>⋅</span>
-									</li>
-									<li className='list-inline-item'>
-										<a href='https://docs.google.com/forms/d/1broNJzPzemTNhmUIJc_I-4HD7YuYDPQjSSdp16SWisY/viewform?edit_requested=true'>
-											Request Your Refund
-										</a>
-									</li>
-								</ul>
-								<p className='text-muted small mb-4 mb-lg-0'>
-									© Moe E-LEARNING 2020. All Rights Reserved.
-								</p>
-							</div>
-							<div className='col-lg-6 my-auto h-100 text-center text-lg-right'>
-								<ul className='list-inline mb-0'>
-									<li className='list-inline-item'>
-										<a href='/'>
-											<i className='fa fa-facebook fa-2x fa-fw'></i>
-										</a>
-									</li>
-									<li className='list-inline-item'>
-										<a href='/'>
-											<i className='fa fa-twitter fa-2x fa-fw'></i>
-										</a>
-									</li>
-									<li className='list-inline-item'>
-										<a href='/'>
-											<i className='fa fa-instagram fa-2x fa-fw'></i>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</footer>
+				<Footer />
 			</div>
 		);
 	}

@@ -29,6 +29,31 @@ export class Notifications extends Component {
 						))}
 					</table>
 				</div>
+				<div className='scores mr-5 ml-5'>
+					<h4 className='center mb-3'>New Attachments:</h4>
+					<table className='table table-striped'>
+						<thead>
+							<tr>
+								<th scope='col'>#</th>
+								<th scope='col'>Course Title</th>
+								<th scope='col'>File Title</th>
+								<th scope='col'>Type</th>
+								<th scope='col'>Date</th>
+							</tr>
+						</thead>
+						{this.props.bonusFiles.map((file, i) => (
+							<tbody key={i}>
+								<tr>
+									<th scope='row'>{i + 1}</th>
+									<td>{file.titleCourse}</td>
+									<td>{file.title}</td>
+									<td>{file.type}</td>
+									<td>{file.createdDate}</td>
+								</tr>
+							</tbody>
+						))}
+					</table>
+				</div>
 			</div>
 		);
 	}
