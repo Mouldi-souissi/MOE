@@ -44,17 +44,17 @@ const Footer = () => {
 					<div className='col-lg-6 my-auto h-100 text-center text-lg-right'>
 						<ul className='list-inline mb-0'>
 							<li className='list-inline-item'>
-								<a href='/'>
+								<a href='https://www.facebook.com/GlobalVisionAE.Camps/'>
 									<i className='fa fa-facebook fa-2x fa-fw'></i>
 								</a>
 							</li>
 							<li className='list-inline-item'>
-								<a href='/'>
+								<a href=' https://twitter.com/globalvisionae'>
 									<i className='fa fa-twitter fa-2x fa-fw'></i>
 								</a>
 							</li>
 							<li className='list-inline-item'>
-								<a href='/'>
+								<a href='https://www.instagram.com/globalvisionae/'>
 									<i className='fa fa-instagram fa-2x fa-fw'></i>
 								</a>
 							</li>

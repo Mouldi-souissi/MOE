@@ -29,11 +29,12 @@ export class ModalAdmin extends Component {
 	};
 
 	render() {
+		const alert = this.context.alert;
 		return (
 			<div>
 				<button
 					type='button'
-					className='btn btn-primary'
+					className='btn btn-primary mt-2 mb-2'
 					data-toggle='modal'
 					data-target='#exampleModal'>
 					Add User
@@ -53,6 +54,7 @@ export class ModalAdmin extends Component {
 								<h5 className='modal-title' id='exampleModalLabel'>
 									Add User
 								</h5>
+
 								<button
 									type='button'
 									className='close'
@@ -62,6 +64,7 @@ export class ModalAdmin extends Component {
 								</button>
 							</div>
 							<div className='modal-body'>
+								{alert && <p className='alert alert-success'>{alert}</p>}
 								<form onSubmit={this.handleAdd}>
 									<div className='form-group'>
 										<input
@@ -122,6 +125,7 @@ export class ModalAdmin extends Component {
 											onChange={this.handleInput}>
 											<option>student</option>
 											<option>instructor</option>
+											{/* <option>admin</option> */}
 										</select>
 									</div>
 									<button

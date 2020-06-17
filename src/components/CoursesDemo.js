@@ -3,6 +3,7 @@ import ThemeCard from "./ThemeCard";
 import CourseCard from "./CourseCard";
 import ThemeContext from "../ThemeContext";
 import Footer from "./Footer";
+import Loader from "./Loader";
 const Moment = require("moment");
 
 export class CoursesDemo extends Component {
@@ -18,6 +19,7 @@ export class CoursesDemo extends Component {
 		const courses = this.context.courses
 			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
 			.reverse();
+
 		return (
 			<div className='demo'>
 				<div className='bg'></div>
@@ -30,26 +32,32 @@ export class CoursesDemo extends Component {
 						(Please Subscribe to a Theme)
 					</p>
 				</h4>
-
-				<div className='container-fluid'>
-					<div className='row justify-content-center'>
-						{themes.map((theme) => (
-							<ThemeCard key={theme.label} theme={theme} />
-						))}
+				{themes.length === 0 ? (
+					<Loader />
+				) : (
+					<div className='container-fluid'>
+						<div className='row justify-content-center'>
+							{themes.map((theme) => (
+								<ThemeCard key={theme.label} theme={theme} />
+							))}
+						</div>
 					</div>
-				</div>
+				)}
 
 				<h4 className='center sectionTitle' style={{ color: "white" }}>
 					Courses:
 				</h4>
-
-				<div className='container-fluid'>
-					<div className='row justify-content-center'>
-						{courses.map((course) => (
-							<CourseCard key={course.id} course={course} />
-						))}
+				{courses.length === 0 ? (
+					<Loader />
+				) : (
+					<div className='container-fluid'>
+						<div className='row justify-content-center'>
+							{courses.map((course) => (
+								<CourseCard key={course.id} course={course} />
+							))}
+						</div>
 					</div>
-				</div>
+				)}
 				<Footer />
 			</div>
 		);

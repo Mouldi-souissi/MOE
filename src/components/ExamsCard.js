@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import ExamContext from "../ExamContext";
 import ExamsAnswerCard from "./ExamsAnswerCard";
+import { v4 as uuidv4 } from "uuid";
 
 export class ExamsCard extends Component {
 	static contextType = ExamContext;
@@ -147,8 +148,9 @@ export class ExamsCard extends Component {
 										<input
 											className='mr-2'
 											type='radio'
-											id={this.props.order}
-											name='drone'
+											// id={this.props.order}
+											id={uuidv4()}
+											name={this.props.exam.statement}
 											value='false'
 											defaultChecked
 										/>
@@ -160,8 +162,8 @@ export class ExamsCard extends Component {
 									<div>
 										<input
 											type='radio'
-											id='dewey'
-											name='drone'
+											id={uuidv4()}
+											name={this.props.exam.statement}
 											value='true'
 											className='mr-2'
 										/>

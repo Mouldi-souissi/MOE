@@ -12,12 +12,13 @@ export class Navbar extends Component {
 	handleLogout = () => {
 		window.localStorage.removeItem("token");
 		this.props.history.push("/");
-		window.location.reload(false);
+		// window.location.reload(false);
 	};
 
 	componentDidMount() {
 		if (localStorage.getItem("token")) {
 			this.context.getProfile();
+			console.log("done");
 		}
 
 		function checkScroll() {

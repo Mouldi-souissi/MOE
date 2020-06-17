@@ -115,7 +115,7 @@ export class Dashboard extends Component {
 	handleLogout = () => {
 		window.localStorage.removeItem("token");
 		this.props.history.push("/");
-		window.location.reload(false);
+		// window.location.reload(false);
 	};
 	render() {
 		if (jwt_decode(localStorage.token).roles[0] === "ADMIN") {

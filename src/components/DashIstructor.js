@@ -32,7 +32,7 @@ export class DashIstructor extends Component {
 	handleLogout = () => {
 		window.localStorage.removeItem("token");
 		this.props.history.push("/");
-		window.location.reload(false);
+		// window.location.reload(false);
 	};
 
 	handleScores = (id) => {

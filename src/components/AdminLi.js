@@ -123,7 +123,9 @@ export class AdminLi extends Component {
 							<div> {user.active ? "active" : "Not active"}</div>
 						</td>
 					)}
-					<td className='align-middle'>{user.lastConnectionDate}</td>
+					<td className='align-middle'>
+						{user.lastConnectionDate ? user.lastConnectionDate : "-------"}
+					</td>
 					<td className='align-middle' align='center'>
 						<button
 							className='btn btn-danger'

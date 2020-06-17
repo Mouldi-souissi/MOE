@@ -12,6 +12,7 @@ class UserProvider extends Component {
 		generatedPwd: "",
 		courses: [],
 		sessions: [],
+		alert: "",
 	};
 
 	getAllUsers = () => {
@@ -132,7 +133,13 @@ class UserProvider extends Component {
 			data: user,
 		})
 			.then(() => {
-				this.setState({});
+				this.setState({ alert: "User added" });
+				setTimeout(() => {
+					this.setState({
+						...this.state,
+						alert: "",
+					});
+				}, 6000);
 				this.getAllUsers();
 			})
 			.catch((err) => console.log(err));
@@ -193,6 +200,7 @@ class UserProvider extends Component {
 			generatedPwd,
 			courses,
 			sessions,
+			alert,
 		} = this.state;
 		const {
 			getAllUsers,
@@ -217,6 +225,7 @@ class UserProvider extends Component {
 					generatedPwd,
 					courses,
 					sessions,
+					alert,
 					getAllUsers,
 					getThemesEnrollement,
 					themeEnroll,

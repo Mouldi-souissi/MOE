@@ -3,8 +3,10 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
+import ProfileContext from "../ProfileContext";
 
 export class SignIn extends Component {
+	static contextType = ProfileContext;
 	state = {
 		email: "",
 		password: "",
@@ -25,6 +27,7 @@ export class SignIn extends Component {
 					this.setState({ alert: "invalid credentials" });
 				} else {
 					localStorage.setItem("token", res.headers.authorization);
+					this.context.getProfile();
 					const decoded = jwt_decode(localStorage.token);
 					if (decoded.sub !== "admin@moe.com") {
 						if (decoded.roles[0] === "INSTRUCTOR") {

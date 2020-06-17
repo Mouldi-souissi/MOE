@@ -21,92 +21,21 @@ export class Profile extends Component {
 
 		request: "",
 		err: "",
+
+		isStudent:
+			localStorage.getItem("token") !== null &&
+			jwt_decode(localStorage.token).roles[0] === "STUDENT",
+
+		isEditigPWD: false,
 	};
 
 	handleEdit = (e) => {
 		e.preventDefault();
 		this.setState({ ...this.state, isEditig: true });
-		let { currentPassword, password, matchingPassword } = this.state;
 
 		if (this.state.editedData.length !== 0) {
 			this.context.handleEdit(this.state.editedData);
 			this.setState({ isEditig: false });
-		}
-
-		if (currentPassword || password || matchingPassword) {
-			if (!currentPassword) {
-				this.setState({
-					...this.state,
-					err: "current Password is required",
-					request: "fail",
-				});
-				setTimeout(() => {
-					this.setState({
-						...this.state,
-						err: "",
-						request: "",
-					});
-				}, 3000);
-			}
-
-			if (!password) {
-				this.setState({
-					...this.state,
-					err: "Password is required",
-					request: "fail",
-				});
-				setTimeout(() => {
-					this.setState({
-						...this.state,
-						err: "",
-						request: "",
-					});
-				}, 3000);
-			}
-
-			if (!matchingPassword) {
-				this.setState({
-					...this.state,
-					err: "Matching password is required",
-					request: "fail",
-				});
-				setTimeout(() => {
-					this.setState({
-						...this.state,
-						err: "",
-						request: "",
-					});
-				}, 3000);
-			}
-
-			if (matchingPassword !== password) {
-				this.setState({
-					...this.state,
-					err: "Passwords should match",
-					request: "fail",
-				});
-				setTimeout(() => {
-					this.setState({
-						...this.state,
-						err: "",
-						request: "",
-					});
-				}, 3000);
-			}
-
-			if (
-				password &&
-				currentPassword &&
-				matchingPassword &&
-				matchingPassword === password
-			) {
-				this.context.handleChangePWD(
-					currentPassword,
-					password,
-					matchingPassword
-				);
-				this.setState({ isEditig: false });
-			}
 		}
 	};
 
@@ -122,18 +51,94 @@ export class Profile extends Component {
 	handleFileSend = () => {
 		if (this.state.image) {
 			this.context.handleFileSend(this.state.image);
+			// this.setState({ isEditig: false });
+		}
+	};
+
+	handleChangePWD = () => {
+		let { currentPassword, password, matchingPassword } = this.state;
+		if (!currentPassword) {
+			this.setState({
+				...this.state,
+				err: "current Password is required",
+				request: "fail",
+			});
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (!password) {
+			this.setState({
+				...this.state,
+				err: "Password is required",
+				request: "fail",
+			});
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (!matchingPassword) {
+			this.setState({
+				...this.state,
+				err: "Matching password is required",
+				request: "fail",
+			});
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (matchingPassword !== password) {
+			this.setState({
+				...this.state,
+				err: "Passwords should match",
+				request: "fail",
+			});
+			setTimeout(() => {
+				this.setState({
+					...this.state,
+					err: "",
+					request: "",
+				});
+			}, 3000);
+		}
+
+		if (
+			password &&
+			currentPassword &&
+			matchingPassword &&
+			matchingPassword === password
+		) {
+			this.context.handleChangePWD(currentPassword, password, matchingPassword);
 			this.setState({ isEditig: false });
 		}
 	};
 
 	componentDidMount() {
 		this.context.getProfile();
-		this.context.getEnrolledThemes();
+		this.state.isStudent && this.context.getEnrolledThemes();
 	}
 
 	render() {
 		const profile = this.context.profile;
 		const enrolledThemes = this.context.enrolledThemes;
+		const loaded = this.context.loaded;
+		const err = this.context.err;
+		const request = this.context.request;
 		return (
 			<div>
 				<div className='container profile profile-view' id='profile'>
@@ -153,7 +158,7 @@ export class Profile extends Component {
 					</div>
 					<form onSubmit={(e) => this.handleEdit(e)}>
 						<div className='form-row profile-row'>
-							<div className='col-md-4 relative'>
+							<div className='col-md-4 relative mr-3 mb-5'>
 								<div className='avatar'>
 									<div className='avatar-bg center' id='image-holder'>
 										{(profile.picture || this.state.src) && (
@@ -166,37 +171,39 @@ export class Profile extends Component {
 													}
 													alt='profile'
 												/>
-												{this.state.isEditig && (
-													<div className='progress'>
-														<div
-															className='progress-bar'
-															role='progressbar'
-															style={{ width: `${this.state.loaded}%` }}
-															aria-valuenow={this.state.loaded}
-															aria-valuemin='0'
-															aria-valuemax='100'></div>
-													</div>
-												)}
 											</div>
 										)}
 									</div>
 								</div>
 
 								{this.state.isEditig && (
-									<div className='d-flex'>
-										<input
-											type='file'
-											className='form-control'
-											name='avatar-file'
-											id='fileUpload'
-											onChange={this.handleFile}
-										/>
-										<button
-											type='button'
-											className='btn btn-primary ml-2'
-											onClick={this.handleFileSend}>
-											UPLOAD
-										</button>
+									<div>
+										<div className='d-flex mt-2'>
+											<input
+												type='file'
+												className='form-control'
+												name='avatar-file'
+												id='fileUpload'
+												onChange={this.handleFile}
+											/>
+											<button
+												type='button'
+												className='btn btn-primary ml-2'
+												onClick={this.handleFileSend}>
+												UPLOAD
+											</button>
+										</div>
+										{this.state.isEditig && loaded !== 0 && (
+											<div className='progress mt-2'>
+												<div
+													className='progress-bar'
+													role='progressbar'
+													style={{ width: `${loaded}%` }}
+													aria-valuenow={loaded}
+													aria-valuemin='0'
+													aria-valuemax='100'></div>
+											</div>
+										)}
 									</div>
 								)}
 							</div>
@@ -212,6 +219,16 @@ export class Profile extends Component {
 												: "alert alert-success"
 										}>
 										{this.state.err}
+									</p>
+								)}
+								{request && (
+									<p
+										className={
+											request === "fail"
+												? "alert alert-danger"
+												: "alert alert-success"
+										}>
+										{err}
 									</p>
 								)}
 								<div className='form-row'>
@@ -288,7 +305,7 @@ export class Profile extends Component {
 										)}
 									</div>
 									<div className='col-sm-12 col-md-6 mt-5'>
-										{this.state.isEditig && (
+										{this.state.isEditigPWD && (
 											<div className='form-group'>
 												<h5 className='mb-5'>Change password:</h5>
 												<h6>Current password </h6>
@@ -350,12 +367,41 @@ export class Profile extends Component {
 										</div>
 									</div>
 								) : (
-									<button
-										className='btn btn-primary form-btn'
-										type='button'
-										onClick={() => this.setState({ isEditig: true })}>
-										Edit
-									</button>
+									<div className='d-flex align-items-center'>
+										{!this.state.isEditigPWD && (
+											<button
+												className='btn btn-primary form-btn'
+												type='button'
+												onClick={() =>
+													this.setState({ ...this.state, isEditig: true })
+												}>
+												Edit
+											</button>
+										)}
+
+										<button
+											className={
+												this.state.isEditigPWD
+													? "btn btn-danger form-btn"
+													: "btn btn-secondary form-btn"
+											}
+											type='button'
+											onClick={() =>
+												this.setState({
+													...this.state,
+													isEditigPWD: !this.state.isEditigPWD,
+												})
+											}>
+											{this.state.isEditigPWD ? "CANCEL" : "Change Password"}
+										</button>
+										{this.state.isEditigPWD && (
+											<button
+												className='btn btn-primary'
+												onClick={this.handleChangePWD}>
+												SAVE
+											</button>
+										)}
+									</div>
 								)}
 							</div>
 						</div>

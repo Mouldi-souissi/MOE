@@ -7,7 +7,7 @@ export class ContactUs extends Component {
 			<div>
 				<div className='contact-clean container mb-5 pb-5'>
 					<div className='row mt-5'>
-						<div className='col-6'>
+						<div className='col-12 '>
 							<div className='center'>
 								Everyone in Global Vision is ready to help you. That is one of
 								our commitments. If you wish to inquire about any of our
@@ -28,22 +28,7 @@ export class ContactUs extends Component {
 								</div>
 							</div>
 						</div>
-
-						<div className='col-6'>
-							<iframe
-								src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7263.113412036458!2d54.33373107509156!3d24.466160686965505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5e65e0cfa0c92f%3A0x71a23fda2e5a3db!2sGlobal%20Vision%20Consultancy%20Abu%20Dhabi%20(GVC%20Abu%20Dhabi)!5e0!3m2!1sen!2sae!4v1591758282413!5m2!1sen!2sae'
-								width='500'
-								height='400'
-								frameBorder='0'
-								style={{ border: "0" }}
-								allowFullScreen=''
-								aria-hidden='false'
-								tabIndex='0'
-								title='maps'></iframe>
-						</div>
-					</div>
-					<div className='row mt-2'>
-						<form method='post' className='col-12'>
+						{/* <form method='post' className='col-6'>
 							<h2 className='text-center'>Contact us</h2>
 							<div className='form-group'>
 								<input
@@ -60,9 +45,7 @@ export class ContactUs extends Component {
 									name='email'
 									placeholder='Email'
 								/>
-								{/* <small className='form-text text-danger'>
-								Please enter a correct email address.
-							</small> */}
+							
 							</div>
 							<div className='form-group'>
 								<textarea
@@ -76,7 +59,21 @@ export class ContactUs extends Component {
 									send{" "}
 								</button>
 							</div>
-						</form>
+						</form> */}
+					</div>
+					<div className='row mt-2'>
+						<div className='col-12 center mt-5'>
+							<iframe
+								src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7263.113412036458!2d54.33373107509156!3d24.466160686965505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5e65e0cfa0c92f%3A0x71a23fda2e5a3db!2sGlobal%20Vision%20Consultancy%20Abu%20Dhabi%20(GVC%20Abu%20Dhabi)!5e0!3m2!1sen!2sae!4v1591758282413!5m2!1sen!2sae'
+								width='1000px'
+								height='400'
+								frameBorder='0'
+								style={{ border: "0" }}
+								allowFullScreen=''
+								aria-hidden='false'
+								tabIndex='0'
+								title='maps'></iframe>
+						</div>
 					</div>
 				</div>
 				<Footer />

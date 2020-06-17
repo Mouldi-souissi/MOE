@@ -148,7 +148,7 @@ export class Exams extends Component {
 							onClick={this.handleEditExam}
 						/>
 					)}
-					{this.state.isEditing && (
+					{/* {this.state.isEditing && (
 						<button
 							className='btn btn-outline-danger ml-2'
 							aria-hidden='true'
@@ -156,7 +156,7 @@ export class Exams extends Component {
 							data-target='#deleteExam'>
 							Delete Exam
 						</button>
-					)}
+					)} */}
 				</div>
 				<DeleteExam
 					id={this.props.match.params.id}

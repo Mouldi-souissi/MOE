@@ -23,7 +23,7 @@ export class ScoreList extends Component {
 	}
 	render() {
 		return (
-			<div className='scores'>
+			<div className='scores mr-5 ml-5'>
 				<button
 					className='btn btn-primary ml-5'
 					onClick={() => this.props.history.goBack()}>

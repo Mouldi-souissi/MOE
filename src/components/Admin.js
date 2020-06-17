@@ -8,6 +8,7 @@ import UserContext from "../UserContext";
 import AdminEnrollLi from "./AdminEnrollLi";
 import { v4 as uuidv4 } from "uuid";
 import CourseLi from "./CourseLi";
+const Moment = require("moment");
 
 export class Admin extends Component {
 	static contextType = UserContext;
@@ -25,26 +26,55 @@ export class Admin extends Component {
 		if (jwt_decode(localStorage.token).sub !== "admin@moe.com") {
 			return <Redirect to='/signIn' />;
 		}
-		const students = this.context.students;
-		const instructors = this.context.instructors;
-		const courses = this.context.courses;
+		const students = this.context.students
+			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
+			.reverse();
+		const instructors = this.context.instructors
+			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
+			.reverse();
+		const courses = this.context.courses
+			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
+			.reverse();
 		let filteredStudents =
 			students &&
-			students.filter((el) =>
-				el.firstName
-					.trim()
-					.toLocaleLowerCase()
-					.includes(this.state.search.trim().toLocaleLowerCase())
+			students.filter(
+				(el) =>
+					el.firstName
+						.trim()
+						.toLocaleLowerCase()
+						.includes(this.state.search.trim().toLocaleLowerCase()) ||
+					el.lastName
+						.trim()
+						.toLocaleLowerCase()
+						.includes(this.state.search.trim().toLocaleLowerCase())
 			);
 		let filteredInstructors =
 			instructors &&
-			instructors.filter((el) =>
-				el.firstName
-					.trim()
-					.toLocaleLowerCase()
-					.includes(this.state.search.trim().toLocaleLowerCase())
+			instructors.filter(
+				(el) =>
+					el.firstName
+						.trim()
+						.toLocaleLowerCase()
+						.includes(this.state.search.trim().toLocaleLowerCase()) ||
+					el.lastName
+						.trim()
+						.toLocaleLowerCase()
+						.includes(this.state.search.trim().toLocaleLowerCase())
 			);
 		const enrollments = this.context.enrollments;
+		let filteredThemesByStudent =
+			enrollments &&
+			enrollments.filter(
+				(el) =>
+					el.student.firstName
+						.trim()
+						.toLocaleLowerCase()
+						.includes(this.state.search.trim().toLocaleLowerCase()) ||
+					el.student.lastName
+						.trim()
+						.toLocaleLowerCase()
+						.includes(this.state.search.trim().toLocaleLowerCase())
+			);
 		return (
 			<div className='admin'>
 				{students.length === 0 ? (
@@ -124,7 +154,7 @@ export class Admin extends Component {
 									</ul>
 									<div className='tab-content'>
 										<div className='tab-pane active' role='tabpanel' id='tab-1'>
-											<div className='thread-list-head'>
+											{/* <div className='thread-list-head'>
 												<nav className='thread-pages mb-2'>
 													<ul className='pagination'>
 														<li className='page-item'>
@@ -170,7 +200,7 @@ export class Admin extends Component {
 														</li>
 													</ul>
 												</nav>
-											</div>
+											</div> */}
 											<ModalAdmin reload={this.reload} />
 											<div className='table-responsive-sm'>
 												<table className='table table-hover  table-bordered table-list'>
@@ -236,10 +266,9 @@ export class Admin extends Component {
 														</th>
 													</tr>
 												</thead>
-												{enrollments &&
-													enrollments.map((enroll) => (
-														<AdminEnrollLi key={uuidv4()} enroll={enroll} />
-													))}
+												{filteredThemesByStudent.map((enroll) => (
+													<AdminEnrollLi key={uuidv4()} enroll={enroll} />
+												))}
 											</table>
 										</div>
 										<div className='tab-pane' role='tabpanel' id='tab-4'>

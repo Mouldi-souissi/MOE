@@ -5,7 +5,7 @@ export const ProfileContext = React.createContext();
 
 class ProfileProvider extends Component {
 	// Context state
-	state = { profile: [], enrolledThemes: [] };
+	state = { profile: [], enrolledThemes: [], loaded: 0, err: "", request: "" };
 
 	// Method to update state
 	getProfile = () => {
@@ -47,11 +47,25 @@ class ProfileProvider extends Component {
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: formData,
-			// onUploadProgress: (ProgressEvent) => {
-			// 	this.setState({
-			// 		loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100,
-			// 	});
-			// },
+			onUploadProgress: (ProgressEvent) => {
+				this.setState({
+					loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100,
+				});
+				if (this.state.loaded === 100) {
+					this.setState({
+						...this.state,
+						err: "Image Uploaded",
+						request: "success",
+					});
+					setTimeout(() => {
+						this.setState({
+							...this.state,
+							err: "",
+							request: "",
+						});
+					}, 3000);
+				}
+			},
 		})
 			.then(() => {
 				this.setState({});
@@ -68,7 +82,18 @@ class ProfileProvider extends Component {
 			data: { currentPassword, password, matchingPassword },
 		})
 			.then((res) => {
-				this.setState({});
+				this.setState({
+					...this.state,
+					err: "Password changed",
+					request: "success",
+				});
+				setTimeout(() => {
+					this.setState({
+						...this.state,
+						err: "",
+						request: "",
+					});
+				}, 3000);
 				this.getProfile();
 			})
 			.catch((err) => {
@@ -87,7 +112,7 @@ class ProfileProvider extends Component {
 	};
 	render() {
 		const { children } = this.props;
-		const { profile, enrolledThemes } = this.state;
+		const { profile, enrolledThemes, loaded, err, request } = this.state;
 		const {
 			getProfile,
 			handleEdit,
@@ -106,6 +131,9 @@ class ProfileProvider extends Component {
 					handleFileSend,
 					handleChangePWD,
 					getEnrolledThemes,
+					loaded,
+					err,
+					request,
 				}}>
 				{children}
 			</ProfileContext.Provider>

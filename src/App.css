@@ -491,7 +491,7 @@ div.avatar-bg-dash {
 	height: 100px;
 }
 .innerbody {
-	overflow-x: hidden;
+	overflow-x: scroll;
 	padding: 80px 0;
 }
 .innerbody .fa {
@@ -1200,6 +1200,7 @@ img {
 }
 .altFormContainer {
 	background: #f8f9fa;
+	min-width: 400px;
 }
 
 .altForm img {
