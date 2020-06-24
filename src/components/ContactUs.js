@@ -7,7 +7,7 @@ export class ContactUs extends Component {
 			<div>
 				<div className='contact-clean container mb-5 pb-5'>
 					<div className='row mt-5'>
-						<div className='col-12 '>
+						<div className='col-6 mt-5'>
 							<div className='center'>
 								Everyone in Global Vision is ready to help you. That is one of
 								our commitments. If you wish to inquire about any of our
@@ -28,44 +28,10 @@ export class ContactUs extends Component {
 								</div>
 							</div>
 						</div>
-						{/* <form method='post' className='col-6'>
-							<h2 className='text-center'>Contact us</h2>
-							<div className='form-group'>
-								<input
-									className='form-control'
-									type='text'
-									name='name'
-									placeholder='Name'
-								/>
-							</div>
-							<div className='form-group'>
-								<input
-									className='form-control is-invalid'
-									type='email'
-									name='email'
-									placeholder='Email'
-								/>
-							
-							</div>
-							<div className='form-group'>
-								<textarea
-									className='form-control'
-									name='message'
-									placeholder='Message'
-									rows='14'></textarea>
-							</div>
-							<div className='form-group'>
-								<button className='btn btn-primary' type='submit'>
-									send{" "}
-								</button>
-							</div>
-						</form> */}
-					</div>
-					<div className='row mt-2'>
-						<div className='col-12 center mt-5'>
+						<div className='col-6 center'>
 							<iframe
 								src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7263.113412036458!2d54.33373107509156!3d24.466160686965505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5e65e0cfa0c92f%3A0x71a23fda2e5a3db!2sGlobal%20Vision%20Consultancy%20Abu%20Dhabi%20(GVC%20Abu%20Dhabi)!5e0!3m2!1sen!2sae!4v1591758282413!5m2!1sen!2sae'
-								width='1000px'
+								width='500px'
 								height='400'
 								frameBorder='0'
 								style={{ border: "0" }}

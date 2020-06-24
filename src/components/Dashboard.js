@@ -18,17 +18,23 @@ export class Dashboard extends Component {
 
 	state = {
 		courses: [],
-		tabIndex: 0,
+		tabIndex: localStorage.getItem("activeTab")
+			? Number(localStorage.getItem("activeTab"))
+			: 0,
 		bonusFiles: [],
+		isStudent:
+			localStorage.getItem("token") !== null &&
+			jwt_decode(localStorage.token).roles[0] === "STUDENT",
 	};
 
-	changeTab = () => {
-		this.setState({ tabIndex: 3 });
+	handleTab = (tabIndex) => {
+		this.setState({ tabIndex: tabIndex });
+		localStorage.setItem("activeTab", tabIndex);
 	};
 
 	getEnrolledThemes = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/users/themes/enrollments",
+			url: "https://api.gvclearning.site/api/v1/users/themes/enrollments",
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -39,7 +45,7 @@ export class Dashboard extends Component {
 				// console.log(filtered);
 				filtered.forEach((theme) =>
 					axios({
-						url: `https://app.visioconf.site/api/v1/courses?theme=${theme.value}`,
+						url: `https://api.gvclearning.site/api/v1/courses?theme=${theme.value}`,
 						method: "GET",
 						headers: { authorization: localStorage.getItem("token") },
 					})
@@ -58,7 +64,7 @@ export class Dashboard extends Component {
 
 	getEnrolledCources = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/courses?findEnrollments=true",
+			url: "https://api.gvclearning.site/api/v1/courses?findEnrollments=true",
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -66,7 +72,7 @@ export class Dashboard extends Component {
 				let filtered = res.data.payload.filter((el) => el.enrollment);
 				filtered.forEach((course) => {
 					axios({
-						url: `https://app.visioconf.site/api/v1/courses/${course.id}/attachments`,
+						url: `https://api.gvclearning.site/api/v1/courses/${course.id}/attachments`,
 						method: "get",
 						headers: { authorization: localStorage.getItem("token") },
 					})
@@ -103,9 +109,8 @@ export class Dashboard extends Component {
 			e.preventDefault();
 			$("#wrapper").toggleClass("toggled");
 		});
-
-		this.getEnrolledThemes();
-		this.getEnrolledCources();
+		this.state.isStudent && this.getEnrolledThemes();
+		this.state.isStudent && this.getEnrolledCources();
 
 		// generatePath("/dashboard:index", {
 		// 	id: 3,
@@ -134,9 +139,7 @@ export class Dashboard extends Component {
 		let bonusFiles = this.state.bonusFiles;
 
 		return (
-			<Tabs
-				selectedIndex={this.state.tabIndex}
-				onSelect={(tabIndex) => this.setState({ tabIndex })}>
+			<Tabs selectedIndex={this.state.tabIndex} onSelect={this.handleTab}>
 				<div className='innerbody'>
 					<div id='wrapper'>
 						<div id='sidebar-wrapper'>
@@ -152,7 +155,7 @@ export class Dashboard extends Component {
 											{picture && (
 												<img
 													alt='img'
-													src={`https://app.visioconf.site/img/${picture}`}
+													src={`https://gvclearning.site/img/${picture}`}
 												/>
 											)}
 										</div>

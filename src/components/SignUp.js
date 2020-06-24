@@ -23,7 +23,7 @@ export class SignUp extends Component {
 		if (this.state.password === this.state.matchingPassword) {
 			axios
 				.post(
-					`https://app.visioconf.site/api/v1/public/signup/${this.state.role}`,
+					`https://api.gvclearning.site/api/v1/public/signup/${this.state.role}`,
 					this.state
 				)
 				.then((res) => {
@@ -103,7 +103,7 @@ export class SignUp extends Component {
 										this.props.location.state && this.props.location.state
 									}
 									required
-									maxLength='25'
+									maxLength='50'
 								/>
 							</div>
 							<div className='form-group'>

@@ -8,7 +8,7 @@ class ExamProvider extends Component {
 
 	startExam = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/exams/${id}/start-assessment`,
+			url: `https://api.gvclearning.site/api/v1/exams/${id}/start-assessment`,
 			method: "put",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -25,7 +25,7 @@ class ExamProvider extends Component {
 
 	getExamById = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/exams/${id}`,
+			url: `https://api.gvclearning.site/api/v1/exams/${id}`,
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -43,7 +43,7 @@ class ExamProvider extends Component {
 	handleEditExam = (editedData, id) => {
 		if (editedData) {
 			axios({
-				url: `https://app.visioconf.site/api/v1/exams/${id}`,
+				url: `https://api.gvclearning.site/api/v1/exams/${id}`,
 				method: "put",
 				headers: { authorization: localStorage.getItem("token") },
 				data: editedData,
@@ -60,7 +60,7 @@ class ExamProvider extends Component {
 
 	handleAddQ = (id, addedQuestion) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/exams/${id}/questions`,
+			url: `https://api.gvclearning.site/api/v1/exams/${id}/questions`,
 			method: "post",
 			headers: { authorization: localStorage.getItem("token") },
 			data: [
@@ -110,7 +110,7 @@ class ExamProvider extends Component {
 		// sending score
 
 		axios({
-			url: `https://app.visioconf.site/api/v1/exams/${id}/submit-assessment`,
+			url: `https://api.gvclearning.site/api/v1/exams/${id}/submit-assessment`,
 			method: "put",
 			headers: { authorization: localStorage.getItem("token") },
 			data: {
@@ -128,7 +128,7 @@ class ExamProvider extends Component {
 
 	handleEditQuestion = (id, question, idExam) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/questions/${id}`,
+			url: `https://api.gvclearning.site/api/v1/questions/${id}`,
 			method: "put",
 			headers: { authorization: localStorage.getItem("token") },
 			data: { statement: question },
@@ -144,7 +144,7 @@ class ExamProvider extends Component {
 
 	handleAddA = (id, answer, answerType, idExam) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/questions/${id}/answers`,
+			url: `https://api.gvclearning.site/api/v1/questions/${id}/answers`,
 			method: "post",
 			headers: { authorization: localStorage.getItem("token") },
 			data: [{ text: answer, correct: answerType }],
@@ -160,7 +160,7 @@ class ExamProvider extends Component {
 
 	handleDeleteQuestion = (id, idExam) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/questions/${id}`,
+			url: `https://api.gvclearning.site/api/v1/questions/${id}`,
 			method: "delete",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -175,7 +175,7 @@ class ExamProvider extends Component {
 
 	handleEditAnswer = (id, editedAnswer, editedType, idExam) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/answers/${id}`,
+			url: `https://api.gvclearning.site/api/v1/answers/${id}`,
 			method: "put",
 			headers: { authorization: localStorage.getItem("token") },
 			data: { text: editedAnswer, correct: editedType },
@@ -191,7 +191,7 @@ class ExamProvider extends Component {
 
 	handleDeleteAnswer = (id, idExam) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/answers/${id}`,
+			url: `https://api.gvclearning.site/api/v1/answers/${id}`,
 			method: "delete",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -210,7 +210,7 @@ class ExamProvider extends Component {
 
 	handleAddExam = (id, data) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${id}/exams`,
+			url: `https://api.gvclearning.site/api/v1/courses/${id}/exams`,
 			method: "post",
 			headers: { authorization: localStorage.getItem("token") },
 			data: data,
@@ -225,7 +225,7 @@ class ExamProvider extends Component {
 
 	deleteExam = (id, courseId) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/exams/${id}`,
+			url: `https://api.gvclearning.site/api/v1/exams/${id}`,
 			method: "delete",
 			headers: { authorization: localStorage.getItem("token") },
 		})

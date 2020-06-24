@@ -150,7 +150,7 @@ export class FormSteps extends Component {
 			description.length <= 300
 		) {
 			axios({
-				url: "https://app.visioconf.site/api/v1/courses",
+				url: "https://api.gvclearning.site/api/v1/courses",
 				method: "post",
 				headers: { authorization: localStorage.getItem("token") },
 				data: { shortDescription, title, theme, description },
@@ -182,7 +182,7 @@ export class FormSteps extends Component {
 		formData.append("file", this.state.image);
 
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${this.state.courseID}/picture`,
+			url: `https://api.gvclearning.site/api/v1/courses/${this.state.courseID}/picture`,
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: formData,

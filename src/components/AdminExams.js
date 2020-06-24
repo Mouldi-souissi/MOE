@@ -11,7 +11,7 @@ export class AdminExams extends Component {
 
 	getExamsByCourse = () => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${this.props.match.params.id}/exams`,
+			url: `https://api.gvclearning.site/api/v1/courses/${this.props.match.params.id}/exams`,
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})

@@ -18,7 +18,6 @@ export class Navbar extends Component {
 	componentDidMount() {
 		if (localStorage.getItem("token")) {
 			this.context.getProfile();
-			console.log("done");
 		}
 
 		function checkScroll() {
@@ -36,6 +35,16 @@ export class Navbar extends Component {
 				checkScroll();
 			});
 		}
+
+		$(window).click(function (e) {
+			if ($(".navbar-collapse").hasClass("show")) {
+				$(".navbar-collapse").removeClass("show");
+				e.preventDefault();
+			}
+		});
+		$(".navbar-collapse").click(function (event) {
+			event.stopPropagation();
+		});
 	}
 
 	render() {
@@ -45,7 +54,6 @@ export class Navbar extends Component {
 			<nav className='navbar navbar-light navbar-expand-lg'>
 				<div className='container-fluid'>
 					<Link className='navbar-brand font-weight-bold' to='/'>
-						{/* <div className='layer' /> */}
 						<img alt='logo' src={logoE} className='logoE' />
 					</Link>
 					<button
@@ -106,7 +114,7 @@ export class Navbar extends Component {
 								<div className='d-flex'>
 									<Link
 										to={
-											jwt_decode(localStorage.token).sub === "admin@moe.com"
+											jwt_decode(localStorage.token).roles[0] !== "ADMIN"
 												? "/admin"
 												: jwt_decode(localStorage.token).roles[0] ===
 												  "INSTRUCTOR"
@@ -117,7 +125,7 @@ export class Navbar extends Component {
 											{profile.picture && (
 												<img
 													alt='img'
-													src={`https://app.visioconf.site/img/${profile.picture}`}
+													src={`https://gvclearning.site/img/${profile.picture}`}
 												/>
 											)}
 											<i
@@ -147,7 +155,7 @@ export class Navbar extends Component {
 											Sign In
 										</button>
 									</Link>
-									<Link to='/signUp' activeClassName='active'>
+									<Link to='/signUp'>
 										<button className='btn btn-primary' type='button'>
 											Sign up
 										</button>

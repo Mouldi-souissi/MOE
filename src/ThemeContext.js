@@ -23,7 +23,7 @@ class ThemeProvider extends Component {
 
 	getAllThemes = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/public/themes",
+			url: "https://api.gvclearning.site/api/v1/public/themes",
 			method: "get",
 		})
 			.then((res) => this.setState({ themes: res.data.payload }))
@@ -32,7 +32,7 @@ class ThemeProvider extends Component {
 
 	handleEnrollTheme = (value) => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/themes/enroll",
+			url: "https://api.gvclearning.site/api/v1/themes/enroll",
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: {
@@ -48,7 +48,7 @@ class ThemeProvider extends Component {
 
 	handleUnEnroll = (value) => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/themes/un-enroll",
+			url: "https://api.gvclearning.site/api/v1/themes/un-enroll",
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: {
@@ -65,7 +65,7 @@ class ThemeProvider extends Component {
 	// courses
 	getAllcourseByInstructor = (id) => {
 		axios({
-			url: `http://91.134.133.143:9090/api/v1/courses?instructorId=${id}`,
+			url: `https://api.gvclearning.site/api/v1/courses?instructorId=${id}`,
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -79,7 +79,7 @@ class ThemeProvider extends Component {
 
 	getAllCourses = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/courses",
+			url: "https://api.gvclearning.site/api/v1/courses",
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -93,7 +93,7 @@ class ThemeProvider extends Component {
 
 	handleEnrollCourse = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${id}/enroll`,
+			url: `https://api.gvclearning.site/api/v1/courses/${id}/enroll`,
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -106,7 +106,7 @@ class ThemeProvider extends Component {
 
 	handleUnEnrollCourse = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${id}/un-enroll`,
+			url: `https://api.gvclearning.site/api/v1/courses/${id}/un-enroll`,
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -119,7 +119,7 @@ class ThemeProvider extends Component {
 
 	getEnrolledCources = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/courses?findEnrollments=true",
+			url: "https://api.gvclearning.site/api/v1/courses?findEnrollments=true",
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -135,7 +135,7 @@ class ThemeProvider extends Component {
 
 	getEnrolledThemes = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/users/themes/enrollments",
+			url: "https://api.gvclearning.site/api/v1/users/themes/enrollments",
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -145,7 +145,7 @@ class ThemeProvider extends Component {
 
 	handleSelect = (value) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses?theme=${value}`,
+			url: `https://api.gvclearning.site/api/v1/courses?theme=${value}`,
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -164,7 +164,7 @@ class ThemeProvider extends Component {
 		this.getEnrolledThemes();
 		this.state.enrolledThemes.map((theme) =>
 			axios({
-				url: `https://app.visioconf.site/api/v1/courses?theme=${theme.value}`,
+				url: `https://api.gvclearning.site/api/v1/courses?theme=${theme.value}`,
 				method: "GET",
 				headers: { authorization: localStorage.getItem("token") },
 			})
@@ -187,7 +187,7 @@ class ThemeProvider extends Component {
 
 	getUserExams = () => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/exams`,
+			url: `https://api.gvclearning.site/api/v1/exams`,
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -201,7 +201,7 @@ class ThemeProvider extends Component {
 
 	checkCompleted = () => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/enrollments`,
+			url: `https://api.gvclearning.site/api/v1/courses/enrollments`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})

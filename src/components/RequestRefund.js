@@ -23,8 +23,10 @@ const RequestRefund = () => {
 					understand our cancellation and refund policy here:
 				</span>
 				<span className='text_2'>&nbsp;</span>
-				<a href='https://app.visioconf.site/refund-policy' className='calibre2'>
-					<span className='text_3'>https://app.visioconf.site/</span>
+				<a
+					href='https://api.gvclearning.site/refund-policy'
+					className='calibre2'>
+					<span className='text_3'>https://api.gvclearning.site/</span>
 					<span className='text_4'>refund-policy</span>
 				</a>
 				<span className='text_5'> </span>

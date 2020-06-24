@@ -13,11 +13,12 @@ class UserProvider extends Component {
 		courses: [],
 		sessions: [],
 		alert: "",
+		loader: false,
 	};
 
 	getAllUsers = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/users/student",
+			url: "https://api.gvclearning.site/api/v1/users/student",
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -25,12 +26,12 @@ class UserProvider extends Component {
 				this.setState({ students: res.data.payload });
 
 				axios({
-					url: "https://app.visioconf.site/api/v1/users/instructor",
+					url: "https://api.gvclearning.site/api/v1/users/instructor",
 					method: "GET",
 					headers: { authorization: localStorage.getItem("token") },
 				})
 					.then((res) => {
-						this.setState({ instructors: res.data.payload });
+						this.setState({ instructors: res.data.payload, loader: true });
 					})
 					.catch((err) => {
 						console.log(err);
@@ -43,7 +44,7 @@ class UserProvider extends Component {
 
 	getThemesEnrollement = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/themes/enrollments",
+			url: "https://api.gvclearning.site/api/v1/themes/enrollments",
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -57,7 +58,7 @@ class UserProvider extends Component {
 
 	themeEnroll = (themeId, studentId, status) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/themes/${themeId}/enrollments?studentId=${studentId}`,
+			url: `https://api.gvclearning.site/api/v1/themes/${themeId}/enrollments?studentId=${studentId}`,
 			method: "put",
 			headers: { authorization: localStorage.getItem("token") },
 			data: { status: status === "ACCEPTED" ? "REFUSED" : "ACCEPTED" },
@@ -73,13 +74,13 @@ class UserProvider extends Component {
 	// validate
 	handleValidate = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/users/activate/${id}`,
+			url: `https://api.gvclearning.site/api/v1/users/activate/${id}`,
 			method: "PUT",
 			headers: { authorization: localStorage.getItem("token") },
 		}).then(() => {
 			this.setState({});
 			axios({
-				url: `https://app.visioconf.site/api/v1/users/validate/${id}`,
+				url: `https://api.gvclearning.site/api/v1/users/validate/${id}`,
 				method: "PUT",
 				headers: { authorization: localStorage.getItem("token") },
 			})
@@ -95,7 +96,7 @@ class UserProvider extends Component {
 
 	handleEdit = (editedData, id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/users/${id}`,
+			url: `https://api.gvclearning.site/api/v1/users/${id}`,
 			method: "PUT",
 			headers: { authorization: localStorage.getItem("token") },
 			data: editedData,
@@ -113,7 +114,7 @@ class UserProvider extends Component {
 
 	checkEnrollment = (theme) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/users/themes/enrollments?theme=${theme}`,
+			url: `https://api.gvclearning.site/api/v1/users/themes/enrollments?theme=${theme}`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -127,7 +128,7 @@ class UserProvider extends Component {
 	// handle add user
 	handleAdd = (user, role) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/users/${role}`,
+			url: `https://api.gvclearning.site/api/v1/users/${role}`,
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: user,
@@ -147,7 +148,7 @@ class UserProvider extends Component {
 
 	handleResetPWD = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/users/${id}/reset-pwd`,
+			url: `https://api.gvclearning.site/api/v1/users/${id}/reset-pwd`,
 			method: "PUT",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -161,7 +162,7 @@ class UserProvider extends Component {
 
 	getAllCourses = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/courses",
+			url: "https://api.gvclearning.site/api/v1/courses",
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -177,7 +178,7 @@ class UserProvider extends Component {
 		this.state.courses &&
 			this.state.courses.forEach((course) => {
 				axios({
-					url: `https://app.visioconf.site/api/v1/courses/${course.id}/meetings`,
+					url: `https://api.gvclearning.site/api/v1/courses/${course.id}/meetings`,
 					method: "get",
 					headers: { authorization: localStorage.getItem("token") },
 				})
@@ -201,6 +202,7 @@ class UserProvider extends Component {
 			courses,
 			sessions,
 			alert,
+			loader,
 		} = this.state;
 		const {
 			getAllUsers,
@@ -226,6 +228,7 @@ class UserProvider extends Component {
 					courses,
 					sessions,
 					alert,
+					loader,
 					getAllUsers,
 					getThemesEnrollement,
 					themeEnroll,

@@ -28,8 +28,8 @@ const TermsOfUse = () => {
 					which you may access and use our services. By accessing or using our
 					web site at{" "}
 				</span>
-				<a href='https://app.visioconf.site/' className='text_1'>
-					https://app.visioconf.site/
+				<a href='https://api.gvclearning.site/' className='text_1'>
+					https://api.gvclearning.site/
 				</a>
 				<span className='text_'>
 					{" "}
@@ -533,8 +533,8 @@ const TermsOfUse = () => {
 					information of the course providers is displayed to the learners on
 					VISIOCONF’s website (
 				</span>
-				<a href='https://app.visioconf.site/' className='text_1'>
-					https://app.visioconf.site/
+				<a href='https://api.gvclearning.site/' className='text_1'>
+					https://api.gvclearning.site/
 				</a>
 				<span className='text_'>
 					) when learners are enrolled in a course to facilitate seamless

@@ -87,7 +87,7 @@ export class CourseCard extends Component {
 					) : (
 						<div className='img'>
 							<img
-								src={picture && `https://app.visioconf.site/img/${picture}`}
+								src={picture && `https://gvclearning.site/img/${picture}`}
 								alt='...'
 								className='img-thumbnail'
 								style={{ maxHeight: "225px", width: "100%" }}

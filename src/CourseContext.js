@@ -20,7 +20,7 @@ class CourseProvider extends Component {
 
 	getCourse = (id) => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/courses",
+			url: "https://api.gvclearning.site/api/v1/courses",
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -38,7 +38,7 @@ class CourseProvider extends Component {
 		editedData = { ...editedData, theme };
 
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${id}`,
+			url: `https://api.gvclearning.site/api/v1/courses/${id}`,
 			method: "put",
 			headers: { authorization: localStorage.getItem("token") },
 			data: editedData,
@@ -70,7 +70,7 @@ class CourseProvider extends Component {
 		formData.append("file", image);
 		image &&
 			axios({
-				url: `https://app.visioconf.site/api/v1/courses/${id}/picture`,
+				url: `https://api.gvclearning.site/api/v1/courses/${id}/picture`,
 				method: "POST",
 				headers: { authorization: localStorage.getItem("token") },
 				data: formData,
@@ -139,7 +139,7 @@ class CourseProvider extends Component {
 		textFile &&
 			title &&
 			axios({
-				url: `https://app.visioconf.site/api/v1/courses/${id}/attachments?description=${title}&title=${title}&type=${type}`,
+				url: `https://api.gvclearning.site/api/v1/courses/${id}/attachments?description=${title}&title=${title}&type=${type}`,
 				method: "POST",
 				headers: { authorization: localStorage.getItem("token") },
 				data: formData,
@@ -205,7 +205,7 @@ class CourseProvider extends Component {
 		video &&
 			videoTitle &&
 			axios({
-				url: `https://app.visioconf.site/api/v1/courses/${id}/attachments?description=${videoTitle}&title=${videoTitle}&type=VIDEO_YT`,
+				url: `https://api.gvclearning.site/api/v1/courses/${id}/attachments?description=${videoTitle}&title=${videoTitle}&type=VIDEO_YT`,
 				method: "POST",
 				headers: { authorization: localStorage.getItem("token") },
 				data: formData,
@@ -237,7 +237,7 @@ class CourseProvider extends Component {
 
 	getUploadedTextFiles = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${id}/attachments`,
+			url: `https://api.gvclearning.site/api/v1/courses/${id}/attachments`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -249,7 +249,7 @@ class CourseProvider extends Component {
 
 	handleDeleteFiles = (id, idCourse) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/attachments/${id}`,
+			url: `https://api.gvclearning.site/api/v1/attachments/${id}`,
 			method: "delete",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -261,7 +261,7 @@ class CourseProvider extends Component {
 
 	startSession = (autoStartRecording, idCourse) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${idCourse}/meetings/create?autoStartRecording=${
+			url: `https://api.gvclearning.site/api/v1/courses/${idCourse}/meetings/create?autoStartRecording=${
 				autoStartRecording === "No" ? false : true
 			}`,
 			method: "get",
@@ -276,7 +276,7 @@ class CourseProvider extends Component {
 
 	getSessions = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${id}/meetings?running=true`,
+			url: `https://api.gvclearning.site/api/v1/courses/${id}/meetings?running=true`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -286,7 +286,7 @@ class CourseProvider extends Component {
 
 	getExamsByCourse = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${id}/exams`,
+			url: `https://api.gvclearning.site/api/v1/courses/${id}/exams`,
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -302,7 +302,7 @@ class CourseProvider extends Component {
 
 	getRecordedSessions = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${id}/meetings/recordings`,
+			url: `https://api.gvclearning.site/api/v1/courses/${id}/meetings/recordings`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -316,7 +316,7 @@ class CourseProvider extends Component {
 
 	checkCompleted = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/enrollments`,
+			url: `https://api.gvclearning.site/api/v1/courses/enrollments`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -331,7 +331,7 @@ class CourseProvider extends Component {
 
 	handleCompleted = (id, studentId) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${id}/enrollments?studentId=${studentId}`,
+			url: `https://api.gvclearning.site/api/v1/courses/${id}/enrollments?studentId=${studentId}`,
 			method: "put",
 			headers: { authorization: localStorage.getItem("token") },
 			data: {

@@ -21,7 +21,7 @@ export class SignIn extends Component {
 		e.preventDefault();
 		let { email, password } = this.state;
 		axios
-			.post("https://app.visioconf.site/api/auth", { email, password })
+			.post("https://api.gvclearning.site/api/auth", { email, password })
 			.then((res) => {
 				if (res.status !== 200) {
 					this.setState({ alert: "invalid credentials" });
@@ -29,7 +29,7 @@ export class SignIn extends Component {
 					localStorage.setItem("token", res.headers.authorization);
 					this.context.getProfile();
 					const decoded = jwt_decode(localStorage.token);
-					if (decoded.sub !== "admin@moe.com") {
+					if (decoded.roles[0] !== "ADMIN") {
 						if (decoded.roles[0] === "INSTRUCTOR") {
 							this.props.history.push(`/dashboardI`);
 						} else this.props.history.push(`/dashboard`);
@@ -67,7 +67,7 @@ export class SignIn extends Component {
 								name='email'
 								placeholder='Email'
 								onChange={this.handleInput}
-								maxLength='20'
+								maxLength='50'
 								required
 							/>
 						</div>

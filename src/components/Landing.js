@@ -18,7 +18,7 @@ export class Landing extends Component {
 	};
 	getAllThemes = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/public/themes",
+			url: "https://api.gvclearning.site/api/v1/public/themes",
 			method: "get",
 		})
 			.then((res) => this.setState({ themes: res.data.payload.slice(0, 3) }))

@@ -12,7 +12,7 @@ export class AdminEnrollLi extends Component {
 							{this.props.enroll.student.picture && (
 								<img
 									alt='img'
-									src={`https://app.visioconf.site/img/${this.props.enroll.student.picture}`}
+									src={`https://gvclearning.site/img/${this.props.enroll.student.picture}`}
 								/>
 							)}
 						</div>

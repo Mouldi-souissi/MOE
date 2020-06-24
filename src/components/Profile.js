@@ -167,7 +167,7 @@ export class Profile extends Component {
 													src={
 														this.state.src
 															? this.state.src
-															: `https://app.visioconf.site/img/${profile.picture}`
+															: `https://gvclearning.site/img/${profile.picture}`
 													}
 													alt='profile'
 												/>

@@ -3,7 +3,6 @@ import ThemeCard from "./ThemeCard";
 import CourseCard from "./CourseCard";
 import ThemeContext from "../ThemeContext";
 import Footer from "./Footer";
-import Loader from "./Loader";
 const Moment = require("moment");
 
 export class CoursesDemo extends Component {
@@ -32,32 +31,25 @@ export class CoursesDemo extends Component {
 						(Please Subscribe to a Theme)
 					</p>
 				</h4>
-				{themes.length === 0 ? (
-					<Loader />
-				) : (
-					<div className='container-fluid'>
-						<div className='row justify-content-center'>
-							{themes.map((theme) => (
-								<ThemeCard key={theme.label} theme={theme} />
-							))}
-						</div>
+
+				<div className='container-fluid'>
+					<div className='row justify-content-center'>
+						{themes.map((theme) => (
+							<ThemeCard key={theme.label} theme={theme} />
+						))}
 					</div>
-				)}
+				</div>
 
 				<h4 className='center sectionTitle' style={{ color: "white" }}>
 					Courses:
 				</h4>
-				{courses.length === 0 ? (
-					<Loader />
-				) : (
-					<div className='container-fluid'>
-						<div className='row justify-content-center'>
-							{courses.map((course) => (
-								<CourseCard key={course.id} course={course} />
-							))}
-						</div>
+				<div className='container-fluid'>
+					<div className='row justify-content-center'>
+						{courses.map((course) => (
+							<CourseCard key={course.id} course={course} />
+						))}
 					</div>
-				)}
+				</div>
 				<Footer />
 			</div>
 		);

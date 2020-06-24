@@ -13,13 +13,16 @@ import MyExams from "./MyExams";
 export class DashIstructor extends Component {
 	static contextType = ProfileContext;
 	state = {
-		tabIndex: 0,
+		tabIndex: localStorage.getItem("activeTab")
+			? Number(localStorage.getItem("activeTab"))
+			: 0,
 		img: "",
 		exams: [],
 	};
 
-	changeTab = () => {
-		this.setState({ tabIndex: 3 });
+	handleTab = (tabIndex) => {
+		this.setState({ tabIndex: tabIndex });
+		localStorage.setItem("activeTab", tabIndex);
 	};
 
 	componentDidMount() {
@@ -37,7 +40,7 @@ export class DashIstructor extends Component {
 
 	handleScores = (id) => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${id}/exams`,
+			url: `https://api.gvclearning.site/api/v1/courses/${id}/exams`,
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -56,9 +59,7 @@ export class DashIstructor extends Component {
 		}
 		const picture = this.context.profile.picture;
 		return (
-			<Tabs
-				selectedIndex={this.state.tabIndex}
-				onSelect={(tabIndex) => this.setState({ tabIndex })}>
+			<Tabs selectedIndex={this.state.tabIndex} onSelect={this.handleTab}>
 				<div className='innerbody'>
 					<div id='wrapper'>
 						<div id='sidebar-wrapper'>
@@ -74,7 +75,7 @@ export class DashIstructor extends Component {
 											{picture && (
 												<img
 													alt='img'
-													src={`https://app.visioconf.site/img/${picture}`}
+													src={`https://gvclearning.site/img/${picture}`}
 												/>
 											)}
 										</div>

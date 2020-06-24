@@ -38,7 +38,7 @@ const Footer = () => {
 							</li>
 						</ul>
 						<p className='text-muted small mb-4 mb-lg-0'>
-							© Moe E-LEARNING 2020. All Rights Reserved.
+							© GvcLEARNING 2020. All Rights Reserved.
 						</p>
 					</div>
 					<div className='col-lg-6 my-auto h-100 text-center text-lg-right'>

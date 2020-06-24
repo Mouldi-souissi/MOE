@@ -38,7 +38,7 @@ export class AdminLi extends Component {
 							{user.picture && (
 								<img
 									alt='img'
-									src={`https://app.visioconf.site/img/${user.picture}`}
+									src={`https://gvclearning.site/img/${user.picture}`}
 								/>
 							)}
 						</div>

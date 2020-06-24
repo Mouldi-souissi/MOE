@@ -6,7 +6,6 @@ import ReactQuill from "react-quill";
 import ArticleModal from "./ArticleModal";
 import jwt_decode from "jwt-decode";
 import { Link } from "react-router-dom";
-import { VideoPlayer } from "./VideoPlayer";
 import SessionModal from "./SessionModal";
 import CourseContext from "../CourseContext";
 import moment from "moment";
@@ -75,7 +74,7 @@ export class Article extends Component {
 
 	joinSession = () => {
 		axios({
-			url: `https://app.visioconf.site/api/v1/courses/${this.context.course.id}/meetings/join`,
+			url: `https://api.gvclearning.site/api/v1/courses/${this.context.course.id}/meetings/join`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -125,7 +124,7 @@ export class Article extends Component {
 							{this.context.course.picture && (
 								<img
 									alt='hero'
-									src={`${`https://app.visioconf.site/img/${this.context.course.picture}`}`}
+									src={`${`https://api.gvclearning.site/img/${this.context.course.picture}`}`}
 									className='courseImg'
 								/>
 							)}
@@ -262,7 +261,9 @@ export class Article extends Component {
 								<div id='justHtml'></div>
 							</div>
 							<div className='mb-5'>
-								<h5 className='mt-5'>Download attachment files:</h5>
+								{bonusFiles.filter((el) => el.type !== "VIDEO_YT").length !==
+									0 && <h5 className='mt-5'>Download attachment files:</h5>}
+
 								{bonusFiles
 									.filter((el) => el.type !== "VIDEO_YT")
 									.map((el) => (
@@ -270,12 +271,12 @@ export class Article extends Component {
 											className='d-flex align-items-center justify-content-between'
 											key={el.id}>
 											<a
-												href={`https://app.visioconf.site/attachment/${el.fileName}`}
+												href={`https://api.gvclearning.site/attachment/${el.fileName}`}
 												download={el.title}
 												target='_blank'
 												rel='noopener noreferrer'>
 												<div
-													src={`https://app.visioconf.site/attachment/${el.fileName}`}>
+													src={`https://api.gvclearning.site/attachment/${el.fileName}`}>
 													-{el.title}
 												</div>
 											</a>
@@ -298,18 +299,24 @@ export class Article extends Component {
 												)}
 										</div>
 									))}
-								{!bonusFiles && (
-									<div className='mt-5'>No attachments found</div>
-								)}
 							</div>
-							{bonusFiles.find((el) => el.type === "VIDEO_YT") && (
-								<div className='mb-5'>
-									<h5 className='mt-5'>Attachment Video:</h5>
-									<VideoPlayer
-										videoId={bonusFiles.videoYtId && bonusFiles.videoYtId}
-									/>
-								</div>
-							)}
+							{/* <h5 className='mt-5 mb-2'>Attachment Videos:</h5> */}
+
+							{bonusFiles
+								.filter((el) => el.type === "VIDEO_YT")
+								.map((el) => (
+									<div key={el.videoYtId}>
+										<iframe
+											title='track'
+											height='300'
+											width='450'
+											src={`https://www.youtube.com/embed/${el.videoYtId}`}
+											frameBorder='0'
+											allowFullScreen
+											ng-show='showvideo'
+										/>
+									</div>
+								))}
 						</div>
 
 						<aside className='col-md-4 blog-sidebar'>
@@ -345,10 +352,6 @@ export class Article extends Component {
 											<Link
 												to={{
 													pathname: `/exam${el.id}`,
-													// isOwner:
-													// 	course.createdBy &&
-													// 	course.createdBy.id ===
-													// 		jwt_decode(localStorage.token).id,
 													courseId: this.props.match.params.id,
 												}}>
 												-{el.title}

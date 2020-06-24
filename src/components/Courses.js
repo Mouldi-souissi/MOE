@@ -41,7 +41,7 @@ export class Courses extends Component {
 					<div>
 						<h4 className='sectionTitle'>Pick a theme:</h4>
 						<select
-							className='form-control mb-5'
+							className='form-control shadow-none mb-5'
 							onChange={(e) => this.context.handleSelect(e.target.value)}
 							defaultValue='DEFAULT'>
 							<option value='DEFAULT' disabled>

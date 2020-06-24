@@ -8,22 +8,32 @@ import UserContext from "../UserContext";
 import AdminEnrollLi from "./AdminEnrollLi";
 import { v4 as uuidv4 } from "uuid";
 import CourseLi from "./CourseLi";
+import $ from "jquery";
+import Pagination from "./Pagination";
 const Moment = require("moment");
 
 export class Admin extends Component {
 	static contextType = UserContext;
 	state = {
 		search: "",
+		currentPage: 1,
+		postsPerPage: 10,
 	};
 
 	componentDidMount() {
 		this.context.getAllUsers();
 		this.context.getThemesEnrollement();
 		this.context.getAllCourses();
+		$(document).ready(function () {
+			var activeTab = localStorage.getItem("activeTab");
+			if (activeTab) {
+				return $('#myTab div[href="' + activeTab + '"]').click();
+			}
+		});
 	}
 
 	render() {
-		if (jwt_decode(localStorage.token).sub !== "admin@moe.com") {
+		if (jwt_decode(localStorage.token).roles[0] !== "ADMIN") {
 			return <Redirect to='/signIn' />;
 		}
 		const students = this.context.students
@@ -35,6 +45,24 @@ export class Admin extends Component {
 		const courses = this.context.courses
 			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
 			.reverse();
+
+		let filteredCourses =
+			courses &&
+			courses.filter(
+				(el) =>
+					el.title
+						.trim()
+						.toLocaleLowerCase()
+						.includes(this.state.search.trim().toLocaleLowerCase()) ||
+					el.createdBy.lastName
+						.trim()
+						.toLocaleLowerCase()
+						.includes(this.state.search.trim().toLocaleLowerCase()) ||
+					el.createdBy.firstName
+						.trim()
+						.toLocaleLowerCase()
+						.includes(this.state.search.trim().toLocaleLowerCase())
+			);
 		let filteredStudents =
 			students &&
 			students.filter(
@@ -75,157 +103,137 @@ export class Admin extends Component {
 						.toLocaleLowerCase()
 						.includes(this.state.search.trim().toLocaleLowerCase())
 			);
+		const loader = this.context.loader;
+
+		const indexOfLastPost = this.state.currentPage * this.state.postsPerPage;
+		const indexOfFirstPost = indexOfLastPost - this.state.postsPerPage;
+		const currentCourses = filteredCourses.slice(
+			indexOfFirstPost,
+			indexOfLastPost
+		);
+		const currentStudents = filteredStudents.slice(
+			indexOfFirstPost,
+			indexOfLastPost
+		);
+		const currentInstructors = filteredInstructors.slice(
+			indexOfFirstPost,
+			indexOfLastPost
+		);
+		const currentThemes = filteredThemesByStudent.slice(
+			indexOfFirstPost,
+			indexOfLastPost
+		);
+
+		// Change page
+		const paginate = (pageNumber) => this.setState({ currentPage: pageNumber });
+
 		return (
 			<div className='admin'>
-				{students.length === 0 ? (
-					<Loader />
-				) : (
-					<div className='container'>
-						<div className='row'>
-							<div className='col-md-12'>
-								<form>
-									<div className='form-group'>
-										<div className='input-group'>
-											<span className='input-group-addon'>
-												<i className='fa fa-search'></i>
-											</span>
-											<input
-												className='form-control'
-												type='search'
-												name='search'
-												placeholder="Type user's first name"
-												onChange={(e) =>
-													this.setState({ search: e.target.value })
-												}
-											/>
-										</div>
+				{!loader && <Loader />}
+				<div className='container'>
+					<div className='row'>
+						<div className='col-md-12'>
+							<form>
+								<div className='form-group'>
+									<div className='input-group'>
+										<span className='input-group-addon'>
+											<i className='fa fa-search'></i>
+										</span>
+										<input
+											className='form-control'
+											type='search'
+											name='search'
+											placeholder="Type user's first name"
+											onChange={(e) =>
+												this.setState({ search: e.target.value })
+											}
+										/>
 									</div>
-								</form>
-								<div>
-									<ul className='nav nav-tabs'>
-										<li className='nav-item'>
-											<div
-												className='nav-link active'
-												role='tab'
-												data-toggle='tab'
-												href='#tab-1'>
-												Students&nbsp;
-												<span className='badge badge-pill badge-primary'>
-													{students.length}
-												</span>
-											</div>
-										</li>
-										<li className='nav-item'>
-											<div
-												className='nav-link'
-												role='tab'
-												data-toggle='tab'
-												href='#tab-2'>
-												Instructors&nbsp;
-												<span className='badge badge-pill badge-primary'>
-													{instructors.length}
-												</span>
-											</div>
-										</li>
-										<li className='nav-item'>
-											<div
-												className='nav-link'
-												role='tab'
-												data-toggle='tab'
-												href='#tab-3'>
-												Themes&nbsp;
-												<span className='badge badge-pill badge-primary'>
-													{enrollments.length}
-												</span>
-											</div>
-										</li>
-										<li className='nav-item'>
-											<div
-												className='nav-link'
-												role='tab'
-												data-toggle='tab'
-												href='#tab-4'>
-												Courses&nbsp;
-												<span className='badge badge-pill badge-primary'>
-													{courses.length}
-												</span>
-											</div>
-										</li>
-									</ul>
-									<div className='tab-content'>
-										<div className='tab-pane active' role='tabpanel' id='tab-1'>
-											{/* <div className='thread-list-head'>
-												<nav className='thread-pages mb-2'>
-													<ul className='pagination'>
-														<li className='page-item'>
-															<div
-																className='page-link'
-																href='#'
-																aria-label='Previous'>
-																<span aria-hidden='true'>«</span>
-															</div>
-														</li>
-														<li className='page-item'>
-															<div className='page-link' href='#'>
-																1
-															</div>
-														</li>
-														<li className='page-item'>
-															<div className='page-link' href='#'>
-																2
-															</div>
-														</li>
-														<li className='page-item'>
-															<div className='page-link' href='#'>
-																3
-															</div>
-														</li>
-														<li className='page-item'>
-															<div className='page-link' href='#'>
-																4
-															</div>
-														</li>
-														<li className='page-item'>
-															<div className='page-link' href='#'>
-																5
-															</div>
-														</li>
-														<li className='page-item'>
-															<div
-																className='page-link'
-																href='#'
-																aria-label='Next'>
-																<span aria-hidden='true'>»</span>
-															</div>
-														</li>
-													</ul>
-												</nav>
-											</div> */}
-											<ModalAdmin reload={this.reload} />
-											<div className='table-responsive-sm'>
-												<table className='table table-hover  table-bordered table-list'>
-													<thead>
-														<tr align='center'>
-															<th scope='col'></th>
-															<th scope='col'>Created</th>
-															<th scope='col'>First Name</th>
-															<th scope='col'>Last Name</th>
-															<th scope='col'>E-mail</th>
-															<th scope='col'>State</th>
-															<th scope='col'>Last Connection</th>
-															<th scope='col'>Reset Password</th>
-															<th scope='col'>
-																<em className='fa fa-cog'></em>
-															</th>
-														</tr>
-													</thead>
-													{filteredStudents.map((user) => (
-														<AdminLi key={user.id} user={user} role='student' />
-													))}
-												</table>
-											</div>
+								</div>
+							</form>
+							<div>
+								<ul className='nav nav-tabs' id='myTab'>
+									<li className='nav-item'>
+										<div
+											onClick={(e) =>
+												localStorage.setItem(
+													"activeTab",
+													e.target.getAttribute("name")
+												)
+											}
+											name='#tab-1'
+											className='nav-link active'
+											role='tab'
+											data-toggle='tab'
+											href='#tab-1'>
+											Students&nbsp;
+											<span className='badge badge-pill badge-primary'>
+												{students.length}
+											</span>
 										</div>
-										<div className='tab-pane' role='tabpanel' id='tab-2'>
+									</li>
+									<li className='nav-item'>
+										<div
+											onClick={(e) =>
+												localStorage.setItem(
+													"activeTab",
+													e.target.getAttribute("name")
+												)
+											}
+											name='#tab-2'
+											className='nav-link'
+											role='tab'
+											data-toggle='tab'
+											href='#tab-2'>
+											Instructors&nbsp;
+											<span className='badge badge-pill badge-primary'>
+												{instructors.length}
+											</span>
+										</div>
+									</li>
+									<li className='nav-item'>
+										<div
+											onClick={(e) =>
+												localStorage.setItem(
+													"activeTab",
+													e.target.getAttribute("name")
+												)
+											}
+											name='#tab-3'
+											className='nav-link'
+											role='tab'
+											data-toggle='tab'
+											href='#tab-3'>
+											Themes&nbsp;
+											<span className='badge badge-pill badge-primary'>
+												{enrollments.length}
+											</span>
+										</div>
+									</li>
+									<li className='nav-item'>
+										<div
+											onClick={(e) =>
+												localStorage.setItem(
+													"activeTab",
+													e.target.getAttribute("name")
+												)
+											}
+											name='#tab-4'
+											className='nav-link'
+											role='tab'
+											data-toggle='tab'
+											href='#tab-4'>
+											Courses&nbsp;
+											<span className='badge badge-pill badge-primary'>
+												{courses.length}
+											</span>
+										</div>
+									</li>
+								</ul>
+								<div className='tab-content'>
+									<div className='tab-pane active' role='tabpanel' id='tab-1'>
+										<ModalAdmin reload={this.reload} />
+										<div className='table-responsive-sm mt-2'>
 											<table className='table table-hover  table-bordered table-list'>
 												<thead>
 													<tr align='center'>
@@ -242,7 +250,36 @@ export class Admin extends Component {
 														</th>
 													</tr>
 												</thead>
-												{filteredInstructors.map((user) => (
+												{currentStudents.map((user) => (
+													<AdminLi key={user.id} user={user} role='student' />
+												))}
+											</table>
+											<Pagination
+												postsPerPage={this.state.postsPerPage}
+												totalPosts={filteredStudents.length}
+												paginate={paginate}
+											/>
+										</div>
+									</div>
+									<div className='tab-pane' role='tabpanel' id='tab-2'>
+										<div className='table-responsive-sm mt-2'>
+											<table className='table table-hover  table-bordered table-list'>
+												<thead>
+													<tr align='center'>
+														<th scope='col'></th>
+														<th scope='col'>Created</th>
+														<th scope='col'>First Name</th>
+														<th scope='col'>Last Name</th>
+														<th scope='col'>E-mail</th>
+														<th scope='col'>State</th>
+														<th scope='col'>Last Connection</th>
+														<th scope='col'>Reset Password</th>
+														<th scope='col'>
+															<em className='fa fa-cog'></em>
+														</th>
+													</tr>
+												</thead>
+												{currentInstructors.map((user) => (
 													<AdminLi
 														key={user.id}
 														user={user}
@@ -250,8 +287,15 @@ export class Admin extends Component {
 													/>
 												))}
 											</table>
+											<Pagination
+												postsPerPage={this.state.postsPerPage}
+												totalPosts={filteredInstructors.length}
+												paginate={paginate}
+											/>
 										</div>
-										<div className='tab-pane' role='tabpanel' id='tab-3'>
+									</div>
+									<div className='tab-pane' role='tabpanel' id='tab-3'>
+										<div className='table-responsive-sm mt-2'>
 											<table className='table table-hover  table-bordered table-list'>
 												<thead>
 													<tr align='center'>
@@ -266,12 +310,19 @@ export class Admin extends Component {
 														</th>
 													</tr>
 												</thead>
-												{filteredThemesByStudent.map((enroll) => (
+												{currentThemes.map((enroll) => (
 													<AdminEnrollLi key={uuidv4()} enroll={enroll} />
 												))}
 											</table>
+											<Pagination
+												postsPerPage={this.state.postsPerPage}
+												totalPosts={filteredThemesByStudent.length}
+												paginate={paginate}
+											/>
 										</div>
-										<div className='tab-pane' role='tabpanel' id='tab-4'>
+									</div>
+									<div className='tab-pane' role='tabpanel' id='tab-4'>
+										<div className='table-responsive-sm mt-2'>
 											<table className='table table-hover  table-bordered table-list'>
 												<thead>
 													<tr align='center'>
@@ -283,17 +334,22 @@ export class Admin extends Component {
 														<th scope='col'>Exams</th>
 													</tr>
 												</thead>
-												{courses.map((course) => (
+												{currentCourses.map((course) => (
 													<CourseLi key={course.id} course={course} />
 												))}
 											</table>
+											<Pagination
+												postsPerPage={this.state.postsPerPage}
+												totalPosts={filteredCourses.length}
+												paginate={paginate}
+											/>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				)}
+				</div>
 			</div>
 		);
 	}

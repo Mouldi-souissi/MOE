@@ -10,7 +10,7 @@ class ProfileProvider extends Component {
 	// Method to update state
 	getProfile = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/users/profile",
+			url: "https://api.gvclearning.site/api/v1/users/profile",
 			method: "GET",
 			headers: { authorization: localStorage.getItem("token") },
 		})
@@ -25,7 +25,7 @@ class ProfileProvider extends Component {
 	};
 	handleEdit = (editedData) => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/users/profile",
+			url: "https://api.gvclearning.site/api/v1/users/profile",
 			method: "PUT",
 			headers: { authorization: localStorage.getItem("token") },
 			data: editedData,
@@ -43,7 +43,7 @@ class ProfileProvider extends Component {
 		var formData = new FormData();
 		formData.append("file", image);
 		axios({
-			url: "https://app.visioconf.site/api/v1/users/profile/photo",
+			url: "https://api.gvclearning.site/api/v1/users/profile/photo",
 			method: "POST",
 			headers: { authorization: localStorage.getItem("token") },
 			data: formData,
@@ -76,7 +76,7 @@ class ProfileProvider extends Component {
 
 	handleChangePWD = (currentPassword, password, matchingPassword) => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/users/edit-pwd",
+			url: "https://api.gvclearning.site/api/v1/users/edit-pwd",
 			method: "PUT",
 			headers: { authorization: localStorage.getItem("token") },
 			data: { currentPassword, password, matchingPassword },
@@ -103,7 +103,7 @@ class ProfileProvider extends Component {
 
 	getEnrolledThemes = () => {
 		axios({
-			url: "https://app.visioconf.site/api/v1/users/themes/enrollments",
+			url: "https://api.gvclearning.site/api/v1/users/themes/enrollments",
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
 		})
