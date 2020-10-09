@@ -24,6 +24,7 @@ export class FormSteps extends Component {
 		toolbar: [
 			[{ header: [1, 2, false] }],
 			["bold", "italic", "underline", "strike", "blockquote"],
+			["link"],
 			[
 				{ list: "ordered" },
 				{ list: "bullet" },
@@ -43,6 +44,7 @@ export class FormSteps extends Component {
 		"list",
 		"bullet",
 		"indent",
+		"link",
 	];
 
 	// Proceed to next step

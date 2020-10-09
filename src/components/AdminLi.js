@@ -14,7 +14,7 @@ export class AdminLi extends Component {
 		this.setState({ isEditing: true });
 		if (this.state.editedData.length !== 0) {
 			this.context.handleEdit(this.state.editedData, this.props.user.id);
-			this.setState({ isEditing: false });
+			this.setState({ isEditing: false, editedData: [] });
 		}
 	};
 
@@ -38,7 +38,7 @@ export class AdminLi extends Component {
 							{user.picture && (
 								<img
 									alt='img'
-									src={`https://gvclearning.site/img/${user.picture}`}
+									src={`https://api.gvclearning.siteimg/${user.picture}`}
 								/>
 							)}
 						</div>

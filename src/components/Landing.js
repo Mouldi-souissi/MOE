@@ -5,6 +5,8 @@ import testi3 from "../assets/testimonials-3.jpg";
 import landing1 from "../assets/landing1.jpg";
 import landing2 from "../assets/landing2.jpg";
 import landing3 from "../assets/landing3.jpg";
+// import logo2 from "../assets/logo2.png";
+import logo3 from "../assets/logo3.png";
 import axios from "axios";
 import ThemeCard from "./ThemeCard";
 import Footer from "./Footer";
@@ -24,47 +26,57 @@ export class Landing extends Component {
 			.then((res) => this.setState({ themes: res.data.payload.slice(0, 3) }))
 			.catch((err) => console.log(err));
 	};
+
 	componentDidMount() {
 		this.getAllThemes();
+		// console.log(process.env.REACT_APP_admin);
 	}
 	render() {
+		const isConnected = localStorage.getItem("token") !== null ? true : false;
+
 		return (
 			<div>
 				<header className='masthead text-white text-center d-flex align-items-center thunder'>
 					<div className='container'>
 						<div className='row'>
 							<div className='col-xl-9 mx-auto'>
-								<h1 className='mb-5  hero-text'>
-									Get access to all the knowledge you will ever need !
+								<img alt='pic' className='img-fluid mt-3' src={logo3} />
+								<h1 className='hero-text'>
+									Welcome To MOE-Ministry Of Education,
 								</h1>
+								<h2 className='hero-text mb-5 '>
+									Start Training with GVC-Learning
+								</h2>
 							</div>
-							<div className='col-md-10 col-lg-8 col-xl-7 mx-auto'>
-								<form>
-									<div className='form-row'>
-										<div className='col-12 col-md-9 mb-2 mb-md-0'>
-											<input
-												className='form-control form-control-lg'
-												type='email'
-												placeholder='Enter your email...'
-												onChange={(e) =>
-													this.setState({ email: e.target.value })
-												}
-											/>
+							{!isConnected && (
+								<div className='col-md-10 col-lg-8 col-xl-7 mx-auto'>
+									<form>
+										<div className='form-row'>
+											<div className='col-12 col-md-9 mb-2 mb-md-0'>
+												<input
+													className='form-control form-control-lg'
+													type='email'
+													placeholder='Enter your email...'
+													onChange={(e) =>
+														this.setState({ email: e.target.value })
+													}
+												/>
+											</div>
+											<div className='col-12 col-md-3'>
+												<Link
+													to={{
+														pathname: "/signIn",
+														state: this.state.email,
+													}}
+													className='btn btn-primary btn-block btn-lg'
+													type='submit'>
+													Sign In!
+												</Link>
+											</div>
 										</div>
-										<div className='col-12 col-md-3'>
-											<Link
-												to={{
-													pathname: "/signUp",
-													state: this.state.email,
-												}}
-												className='btn btn-primary btn-block btn-lg'
-												type='submit'>
-												Sign up!
-											</Link>
-										</div>
-									</div>
-								</form>
-							</div>
+									</form>
+								</div>
+							)}
 						</div>
 					</div>
 				</header>
@@ -107,6 +119,47 @@ export class Landing extends Component {
 						</div>
 					</div>
 				</section>
+
+				{/* <section className='clean-block clean-info dark mt-5 mb-5 pt-3 pb-3 border border-warning'>
+					<div className='container'>
+						<div className='block-heading center'>
+							<h2 className='text'>Info</h2>
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+								quam urna, dignissim nec auctor in, mattis vitae leo.
+							</p>
+						</div>
+						<div className='row align-items-center'>
+							<div className='col-md-6'>
+								<img className='img-thumbnail' src={logo2} alt='pic' />
+							</div>
+							<div className='col-md-6 center'>
+								<h4>What is AIR SERIES</h4>
+								<div className='getting-started-info'>
+									<p>
+										is a series of national and international competitions,
+										aligned with the UAE vision 2021 and the UAE Artificial
+										Intelligence (AI) Strategy 2031. The AIRseries aims at
+										investing in the future generations, by preparing them with
+										the skills and knowledge needed to face rapid changes and to
+										make the UAE the best country in the world by the next
+										centennial in 2071.
+									</p>
+								</div>
+								<a
+									href='http://www.air-series.ae'
+									target='_blank'
+									rel='noopener noreferrer'>
+									<button
+										className='btn btn-outline-primary btn-lg'
+										type='button'>
+										Subscribe
+									</button>
+								</a>
+							</div>
+						</div>
+					</div>
+				</section> */}
 				<div className='bg-light'>
 					<div className='container py-3'>
 						<div className='row h-100 align-items-center'>

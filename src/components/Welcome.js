@@ -10,7 +10,7 @@ const Welcome = () => {
 			</p>
 			<hr className='my-4' />
 			<p>Go back Home</p>
-			<a className='btn btn-primary btn-lg' href='/home' role='button'>
+			<a className='btn btn-primary btn-lg' href='/' role='button'>
 				Home
 			</a>
 		</div>

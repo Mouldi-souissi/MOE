@@ -42,9 +42,9 @@ export class Navbar extends Component {
 				e.preventDefault();
 			}
 		});
-		$(".navbar-collapse").click(function (event) {
-			event.stopPropagation();
-		});
+		// $(".navbar-collapse").click(function (event) {
+		// 	event.stopPropagation();
+		// });
 	}
 
 	render() {
@@ -114,7 +114,7 @@ export class Navbar extends Component {
 								<div className='d-flex'>
 									<Link
 										to={
-											jwt_decode(localStorage.token).roles[0] !== "ADMIN"
+											jwt_decode(localStorage.token).roles[0] === "ADMIN"
 												? "/admin"
 												: jwt_decode(localStorage.token).roles[0] ===
 												  "INSTRUCTOR"
@@ -125,7 +125,7 @@ export class Navbar extends Component {
 											{profile.picture && (
 												<img
 													alt='img'
-													src={`https://gvclearning.site/img/${profile.picture}`}
+													src={`https://api.gvclearning.site/img/${profile.picture}`}
 												/>
 											)}
 											<i

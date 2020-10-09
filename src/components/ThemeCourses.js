@@ -27,14 +27,13 @@ export class ThemeCourses extends Component {
 	render() {
 		return (
 			<div className='album py-5 bg-light mt-5'>
-				<button
+				{/* <button
 					className='btn btn-primary mt-5 ml-2'
-					onClick={() => this.props.history.goBack()}>
+					onClick={() => window.open("/courses")}>
 					Go Back
-				</button>
-				<div className='container'>
+				</button> */}
+				<div className='container mt-5 ml-2'>
 					<h3>{this.props.match.params.value}:</h3>
-
 					<div className='row'>
 						{this.state.courses &&
 							this.state.courses.map((course) => (

@@ -167,7 +167,7 @@ export class Profile extends Component {
 													src={
 														this.state.src
 															? this.state.src
-															: `https://gvclearning.site/img/${profile.picture}`
+															: `https://api.gvclearning.site/img/${profile.picture}`
 													}
 													alt='profile'
 												/>

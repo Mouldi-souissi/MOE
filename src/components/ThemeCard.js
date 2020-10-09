@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import {
 	ai,
@@ -33,6 +33,11 @@ export class ThemeCard extends Component {
 
 	handleUnEnroll = () => {
 		this.context.handleUnEnroll(this.props.theme.value);
+	};
+
+	image = () => {
+		var src = `/themeCourses/${this.props.theme.value}`;
+		window.open(src);
 	};
 
 	componentDidMount() {
@@ -90,7 +95,8 @@ export class ThemeCard extends Component {
 								backgroundRepeat: "no-repeat",
 								minHeight: "400px",
 								width: "400px",
-							}}></div>
+							}}
+							onClick={this.image}></div>
 						<figcaption>
 							<h3>{this.props.theme.label}</h3>
 							{this.state.isStudent &&
@@ -124,9 +130,9 @@ export class ThemeCard extends Component {
 						</figcaption>
 					</figure>
 				</div>
-				<Link to={`/themeCourses/${this.props.theme.value}`}>
+				{/* <Link to={`/themeCourses/${this.props.theme.value}`}>
 					<i className='fa fa-chevron-circle-right ' aria-hidden='true'></i>
-				</Link>
+				</Link> */}
 			</div>
 		);
 	}

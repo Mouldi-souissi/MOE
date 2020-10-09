@@ -19,6 +19,7 @@ export class SignIn extends Component {
 
 	handleSignIn = (e) => {
 		e.preventDefault();
+		this.setState({ email: this.state.email.toLowerCase() });
 		let { email, password } = this.state;
 		axios
 			.post("https://api.gvclearning.site/api/auth", { email, password })
@@ -67,6 +68,9 @@ export class SignIn extends Component {
 								name='email'
 								placeholder='Email'
 								onChange={this.handleInput}
+								defaultValue={
+									this.props.location.state && this.props.location.state
+								}
 								maxLength='50'
 								required
 							/>
@@ -79,7 +83,7 @@ export class SignIn extends Component {
 								name='password'
 								placeholder='Password'
 								onChange={this.handleInput}
-								maxLength='20'
+								maxLength='50'
 								required
 							/>
 						</div>

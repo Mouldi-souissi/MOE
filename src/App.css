@@ -79,12 +79,14 @@ button:focus {
 
 /* landing  */
 .thunder {
-	background-image: url("./assets/hero.jpg");
+	background-image: url("./assets/hero2.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center center;
 	height: 600px;
+	width: 100%;
 	padding-top: 100px;
+	padding-bottom: 100px;
 	position: relative;
 }
 
@@ -430,13 +432,7 @@ button:focus {
 }
 
 /* dashboard */
-/* .innerbody.badge {
-	background-color: red !important;
-	font-size: 11px !important;
-	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.199) !important;
-	-webkit-text-stroke: 1px #f8f8f8;
-	text-shadow: 0px 1px 4px #000000;
-} */
+
 div.avatar-bg-dash {
 	background: url(https://www.gravatar.com/avatar/1234566?size=200&d=mm);
 	background-position: 50% 50%;
@@ -454,7 +450,7 @@ div.avatar-bg-dash {
 	height: 100px;
 }
 .innerbody {
-	overflow-x: scroll;
+	overflow-x: hidden;
 	padding: 80px 0;
 }
 .innerbody .fa {

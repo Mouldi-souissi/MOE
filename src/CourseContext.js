@@ -266,12 +266,13 @@ class CourseProvider extends Component {
 			}`,
 			method: "get",
 			headers: { authorization: localStorage.getItem("token") },
+		
 		})
 			.then((res) => {
 				window.open(`${res.data.payload}`, "_blank");
-				this.getSessions(idCourse);
 			})
 			.catch((err) => console.log(err));
+		this.getSessions(Number(idCourse));
 	};
 
 	getSessions = (id) => {

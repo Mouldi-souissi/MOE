@@ -42,9 +42,18 @@ export class Admin extends Component {
 		const instructors = this.context.instructors
 			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
 			.reverse();
-		const courses = this.context.courses
+		let courses = this.context.courses
 			.sort((a, b) => new Moment(a.createdDate) - new Moment(b.createdDate))
 			.reverse();
+
+		if (jwt_decode(localStorage.token).sub !== "administrator@gvc.com") {
+			courses = courses.filter(
+				(course) =>
+					course.theme.label === jwt_decode(localStorage.token).firstName
+			);
+		}
+
+		console.log(jwt_decode(localStorage.token).firstName, "aaaaa");
 
 		let filteredCourses =
 			courses &&
@@ -89,7 +98,17 @@ export class Admin extends Component {
 						.toLocaleLowerCase()
 						.includes(this.state.search.trim().toLocaleLowerCase())
 			);
-		const enrollments = this.context.enrollments;
+		const enrollments = this.context.enrollments.sort(function (a, b) {
+			var nameA = a.student.firstName.toUpperCase(); // ignore upper and lowercase
+			var nameB = b.student.firstName.toUpperCase(); // ignore upper and lowercase
+			if (nameA < nameB) {
+				return -1; //nameA comes first
+			}
+			if (nameA > nameB) {
+				return 1; // nameB comes first
+			}
+			return 0; // names must be equal
+		});
 		let filteredThemesByStudent =
 			enrollments &&
 			enrollments.filter(
@@ -153,63 +172,73 @@ export class Admin extends Component {
 							</form>
 							<div>
 								<ul className='nav nav-tabs' id='myTab'>
-									<li className='nav-item'>
-										<div
-											onClick={(e) =>
-												localStorage.setItem(
-													"activeTab",
-													e.target.getAttribute("name")
-												)
-											}
-											name='#tab-1'
-											className='nav-link active'
-											role='tab'
-											data-toggle='tab'
-											href='#tab-1'>
-											Students&nbsp;
-											<span className='badge badge-pill badge-primary'>
-												{students.length}
-											</span>
-										</div>
-									</li>
-									<li className='nav-item'>
-										<div
-											onClick={(e) =>
-												localStorage.setItem(
-													"activeTab",
-													e.target.getAttribute("name")
-												)
-											}
-											name='#tab-2'
-											className='nav-link'
-											role='tab'
-											data-toggle='tab'
-											href='#tab-2'>
-											Instructors&nbsp;
-											<span className='badge badge-pill badge-primary'>
-												{instructors.length}
-											</span>
-										</div>
-									</li>
-									<li className='nav-item'>
-										<div
-											onClick={(e) =>
-												localStorage.setItem(
-													"activeTab",
-													e.target.getAttribute("name")
-												)
-											}
-											name='#tab-3'
-											className='nav-link'
-											role='tab'
-											data-toggle='tab'
-											href='#tab-3'>
-											Themes&nbsp;
-											<span className='badge badge-pill badge-primary'>
-												{enrollments.length}
-											</span>
-										</div>
-									</li>
+									{jwt_decode(localStorage.token).sub ===
+										"administrator@gvc.com" && (
+										<li className='nav-item'>
+											<div
+												onClick={(e) =>
+													localStorage.setItem(
+														"activeTab",
+														e.target.getAttribute("name")
+													)
+												}
+												name='#tab-1'
+												className='nav-link active'
+												role='tab'
+												data-toggle='tab'
+												href='#tab-1'>
+												Students&nbsp;
+												<span className='badge badge-pill badge-primary'>
+													{students.length}
+												</span>
+											</div>
+										</li>
+									)}
+									{jwt_decode(localStorage.token).sub ===
+										"administrator@gvc.com" && (
+										<li className='nav-item'>
+											<div
+												onClick={(e) =>
+													localStorage.setItem(
+														"activeTab",
+														e.target.getAttribute("name")
+													)
+												}
+												name='#tab-2'
+												className='nav-link'
+												role='tab'
+												data-toggle='tab'
+												href='#tab-2'>
+												Instructors&nbsp;
+												<span className='badge badge-pill badge-primary'>
+													{instructors.length}
+												</span>
+											</div>
+										</li>
+									)}
+									{jwt_decode(localStorage.token).sub ===
+										"administrator@gvc.com" && (
+										<li className='nav-item'>
+											<div
+												onClick={(e) =>
+													localStorage.setItem(
+														"activeTab",
+														e.target.getAttribute("name")
+													)
+												}
+												name='#tab-3'
+												className='nav-link'
+												role='tab'
+												data-toggle='tab'
+												href='#tab-3'>
+												Themes&nbsp;
+												<span className='badge badge-pill badge-primary'>
+													{enrollments.length}
+												</span>
+											</div>
+										</li>
+									)}
+
 									<li className='nav-item'>
 										<div
 											onClick={(e) =>
@@ -231,96 +260,105 @@ export class Admin extends Component {
 									</li>
 								</ul>
 								<div className='tab-content'>
-									<div className='tab-pane active' role='tabpanel' id='tab-1'>
-										<ModalAdmin reload={this.reload} />
-										<div className='table-responsive-sm mt-2'>
-											<table className='table table-hover  table-bordered table-list'>
-												<thead>
-													<tr align='center'>
-														<th scope='col'></th>
-														<th scope='col'>Created</th>
-														<th scope='col'>First Name</th>
-														<th scope='col'>Last Name</th>
-														<th scope='col'>E-mail</th>
-														<th scope='col'>State</th>
-														<th scope='col'>Last Connection</th>
-														<th scope='col'>Reset Password</th>
-														<th scope='col'>
-															<em className='fa fa-cog'></em>
-														</th>
-													</tr>
-												</thead>
-												{currentStudents.map((user) => (
-													<AdminLi key={user.id} user={user} role='student' />
-												))}
-											</table>
-											<Pagination
-												postsPerPage={this.state.postsPerPage}
-												totalPosts={filteredStudents.length}
-												paginate={paginate}
-											/>
+									{jwt_decode(localStorage.token).sub ===
+										"administrator@gvc.com" && (
+										<div className='tab-pane active' role='tabpanel' id='tab-1'>
+											<ModalAdmin reload={this.reload} />
+											<div className='table-responsive-sm mt-2'>
+												<table className='table table-hover  table-bordered table-list'>
+													<thead>
+														<tr align='center'>
+															<th scope='col'></th>
+															<th scope='col'>Created</th>
+															<th scope='col'>First Name</th>
+															<th scope='col'>Last Name</th>
+															<th scope='col'>E-mail</th>
+															<th scope='col'>State</th>
+															<th scope='col'>Last Connection</th>
+															<th scope='col'>Reset Password</th>
+															<th scope='col'>
+																<em className='fa fa-cog'></em>
+															</th>
+														</tr>
+													</thead>
+													{currentStudents.map((user) => (
+														<AdminLi key={user.id} user={user} role='student' />
+													))}
+												</table>
+												<Pagination
+													postsPerPage={this.state.postsPerPage}
+													totalPosts={filteredStudents.length}
+													paginate={paginate}
+												/>
+											</div>
 										</div>
-									</div>
-									<div className='tab-pane' role='tabpanel' id='tab-2'>
-										<div className='table-responsive-sm mt-2'>
-											<table className='table table-hover  table-bordered table-list'>
-												<thead>
-													<tr align='center'>
-														<th scope='col'></th>
-														<th scope='col'>Created</th>
-														<th scope='col'>First Name</th>
-														<th scope='col'>Last Name</th>
-														<th scope='col'>E-mail</th>
-														<th scope='col'>State</th>
-														<th scope='col'>Last Connection</th>
-														<th scope='col'>Reset Password</th>
-														<th scope='col'>
-															<em className='fa fa-cog'></em>
-														</th>
-													</tr>
-												</thead>
-												{currentInstructors.map((user) => (
-													<AdminLi
-														key={user.id}
-														user={user}
-														role='instructor'
-													/>
-												))}
-											</table>
-											<Pagination
-												postsPerPage={this.state.postsPerPage}
-												totalPosts={filteredInstructors.length}
-												paginate={paginate}
-											/>
+									)}
+									{jwt_decode(localStorage.token).sub ===
+										"administrator@gvc.com" && (
+										<div className='tab-pane' role='tabpanel' id='tab-2'>
+											<div className='table-responsive-sm mt-2'>
+												<table className='table table-hover  table-bordered table-list'>
+													<thead>
+														<tr align='center'>
+															<th scope='col'></th>
+															<th scope='col'>Created</th>
+															<th scope='col'>First Name</th>
+															<th scope='col'>Last Name</th>
+															<th scope='col'>E-mail</th>
+															<th scope='col'>State</th>
+															<th scope='col'>Last Connection</th>
+															<th scope='col'>Reset Password</th>
+															<th scope='col'>
+																<em className='fa fa-cog'></em>
+															</th>
+														</tr>
+													</thead>
+													{currentInstructors.map((user) => (
+														<AdminLi
+															key={user.id}
+															user={user}
+															role='instructor'
+														/>
+													))}
+												</table>
+												<Pagination
+													postsPerPage={this.state.postsPerPage}
+													totalPosts={filteredInstructors.length}
+													paginate={paginate}
+												/>
+											</div>
 										</div>
-									</div>
-									<div className='tab-pane' role='tabpanel' id='tab-3'>
-										<div className='table-responsive-sm mt-2'>
-											<table className='table table-hover  table-bordered table-list'>
-												<thead>
-													<tr align='center'>
-														<th scope='col'></th>
-														<th scope='col'>Student</th>
-														<th scope='col'>E-mail</th>
-														<th scope='col'>Theme</th>
-														<th scope='col'>Status</th>
+									)}
+									{jwt_decode(localStorage.token).sub ===
+										"administrator@gvc.com" && (
+										<div className='tab-pane' role='tabpanel' id='tab-3'>
+											<div className='table-responsive-sm mt-2'>
+												<table className='table table-hover  table-bordered table-list'>
+													<thead>
+														<tr align='center'>
+															<th scope='col'></th>
+															<th scope='col'>Student</th>
+															<th scope='col'>E-mail</th>
+															<th scope='col'>Theme</th>
+															<th scope='col'>Status</th>
 
-														<th scope='col'>
-															<em className='fa fa-cog'></em>
-														</th>
-													</tr>
-												</thead>
-												{currentThemes.map((enroll) => (
-													<AdminEnrollLi key={uuidv4()} enroll={enroll} />
-												))}
-											</table>
-											<Pagination
-												postsPerPage={this.state.postsPerPage}
-												totalPosts={filteredThemesByStudent.length}
-												paginate={paginate}
-											/>
+															<th scope='col'>
+																<em className='fa fa-cog'></em>
+															</th>
+														</tr>
+													</thead>
+													{currentThemes.map((enroll) => (
+														<AdminEnrollLi key={uuidv4()} enroll={enroll} />
+													))}
+												</table>
+												<Pagination
+													postsPerPage={this.state.postsPerPage}
+													totalPosts={filteredThemesByStudent.length}
+													paginate={paginate}
+												/>
+											</div>
 										</div>
-									</div>
+									)}
 									<div className='tab-pane' role='tabpanel' id='tab-4'>
 										<div className='table-responsive-sm mt-2'>
 											<table className='table table-hover  table-bordered table-list'>

@@ -11,6 +11,7 @@ import CourseContext from "../CourseContext";
 import moment from "moment";
 import DeleteFileModal from "./DeleteFileModal";
 import AddExam from "./AddExam";
+// import ArticleUploadExercise from "./ArticleUploadExercise";
 
 export class Article extends Component {
 	static contextType = CourseContext;
@@ -33,6 +34,7 @@ export class Article extends Component {
 		toolbar: [
 			[{ header: [1, 2, false] }],
 			["bold", "italic", "underline", "strike", "blockquote"],
+			["link"],
 			[
 				{ list: "ordered" },
 				{ list: "bullet" },
@@ -54,6 +56,7 @@ export class Article extends Component {
 		"list",
 		"bullet",
 		"indent",
+		"link",
 	];
 
 	handleText = (value) => {
@@ -107,7 +110,6 @@ export class Article extends Component {
 		const exams = this.context.exams;
 		const recordings = this.context.recordings;
 		const status = this.context.status;
-
 		return (
 			<div className='mb-5'>
 				<div className='container mt-5'>
@@ -213,6 +215,7 @@ export class Article extends Component {
 																	},
 																})
 															}
+															maxLength='50'
 														/>
 													</div>
 												)}
@@ -235,6 +238,7 @@ export class Article extends Component {
 																	},
 																})
 															}
+															maxLength='60'
 														/>
 													</div>
 												)}
@@ -318,13 +322,11 @@ export class Article extends Component {
 									</div>
 								))}
 						</div>
-
 						<aside className='col-md-4 blog-sidebar'>
 							<div className='p-3 mb-3 bg-light rounded'>
 								<h4 className=''>About</h4>
 								<p className='mb-0'>{course.shortDescription}</p>
 							</div>
-
 							<div className='p-3'>
 								<div className='d-flex align-items-center justify-content-between mb-5'>
 									<div>
@@ -366,6 +368,24 @@ export class Article extends Component {
 									))}
 								</ol>
 							</div>
+							{/* <div className='p-3'>
+								<div className='d-flex align-items-center justify-content-between mb-5'>
+									<h4>Exercises</h4>
+
+									{course.createdBy &&
+										course.createdBy.id ===
+											jwt_decode(localStorage.token).id && (
+											<button
+												className='btn btn-primary'
+												aria-hidden='true'
+												data-toggle='modal'
+												data-target='#uploadExercise'>
+												Upload Exercise
+											</button>
+										)}
+									<ArticleUploadExercise />
+								</div>
+							</div> */}
 							<div className='p-3'>
 								<div className='d-flex align-items-center mb-2'>
 									<h4>Live Session</h4>

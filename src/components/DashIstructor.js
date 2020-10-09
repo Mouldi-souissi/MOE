@@ -75,7 +75,7 @@ export class DashIstructor extends Component {
 											{picture && (
 												<img
 													alt='img'
-													src={`https://gvclearning.site/img/${picture}`}
+													src={`https://api.gvclearning.site/img/${picture}`}
 												/>
 											)}
 										</div>

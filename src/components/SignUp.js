@@ -20,6 +20,7 @@ export class SignUp extends Component {
 
 	handleSignUp = (e) => {
 		e.preventDefault();
+		this.setState({ email: this.state.email.toLowerCase() });
 		if (this.state.password === this.state.matchingPassword) {
 			axios
 				.post(
@@ -114,7 +115,7 @@ export class SignUp extends Component {
 									placeholder='Password'
 									onChange={this.handleInput}
 									required
-									maxLength='20'
+									maxLength='50'
 								/>
 							</div>
 							<div className='form-group'>
@@ -125,7 +126,7 @@ export class SignUp extends Component {
 									placeholder='Password (repeat)'
 									onChange={this.handleInput}
 									required
-									maxLength='20'
+									maxLength='50'
 								/>
 							</div>
 							<div className='form-group'>

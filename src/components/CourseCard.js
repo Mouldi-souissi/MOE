@@ -67,12 +67,12 @@ export class CourseCard extends Component {
 
 		return (
 			<div className='col-auto mb-4 mt-4'>
-				<div className='card h-100 shadow-sm' style={{ width: "326px" }}>
+				<div className='card h-100 shadow-sm' style={{ maxWidth: "326px" }}>
 					{!picture ? (
 						<svg
 							className='bd-placeholder-img card-img-top'
 							width='100%'
-							height='225'
+							// height='225'
 							xmlns='http://www.w3.org/2000/svg'
 							preserveAspectRatio='xMidYMid slice'
 							focusable='false'
@@ -87,7 +87,7 @@ export class CourseCard extends Component {
 					) : (
 						<div className='img'>
 							<img
-								src={picture && `https://gvclearning.site/img/${picture}`}
+								src={picture && `https://api.gvclearning.site/img/${picture}`}
 								alt='...'
 								className='img-thumbnail'
 								style={{ maxHeight: "225px", width: "100%" }}
